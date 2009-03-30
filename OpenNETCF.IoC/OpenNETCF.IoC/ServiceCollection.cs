@@ -40,34 +40,36 @@ namespace OpenNETCF.IoC
                    .Count();
         }
 
-        public void AddNew<TService>()
+        public TService AddNew<TService>()
             where TService : class
         {
-            AddNew(typeof(TService));
+            return (TService)AddNew(typeof(TService));
         }
 
-        public void AddNew<TService, TRegisterAs>()
+        public TService AddNew<TService, TRegisterAs>()
             where TRegisterAs : class
             where TService : class
         {
-            AddNew(typeof(TService), typeof(TRegisterAs));
+            return (TService)AddNew(typeof(TService), typeof(TRegisterAs));
         }
 
-        public void AddNew(Type serviceType)
+        public object AddNew(Type serviceType)
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
 
             object instance = ObjectFactory.CreateObject(serviceType, m_root);
             Add(instance, null, serviceType, null);
+            return instance;
         }
         
-        public void AddNew(Type serviceType, Type registerAs)
+        public object AddNew(Type serviceType, Type registerAs)
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
             if (registerAs == null) throw new ArgumentNullException("registerAs");
 
             object instance = ObjectFactory.CreateObject(serviceType, m_root);
             Add(instance, null, serviceType, registerAs);
+            return instance;
         }
 
         public void AddOnDemand<TService>()
