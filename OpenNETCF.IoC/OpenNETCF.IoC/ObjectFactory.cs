@@ -174,8 +174,48 @@ namespace OpenNETCF.IoC
                     foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
                     {
                         // (type, consumer instance, consumer method)
-                        Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
-                        ei.AddEventHandler(item.Value, d);
+                        try
+                        {
+                            Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
+                            ei.AddEventHandler(item.Value, d);
+                        }
+                        catch (ArgumentException)
+                        {
+                            throw new ArgumentException(string.Format("Unable to attach EventHandler '{0}' to '{1}'.\r\nDo the publisher and subscriber signatures match?", ei.Name, instance.GetType().Name));
+                        }
+                    }
+                }
+            }
+
+            foreach (var item in RootWorkItem.Services)
+            {
+                foreach (var source in sourceEvents)
+                {
+                    // TODO: check cache
+                    // wire up events
+                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
+                    {
+                        Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
+                        source.EventInfo.AddEventHandler(instance, d);
+
+                    }
+                }
+
+                // TODO: back-wire any sinks
+                foreach (var sink in eventSinks)
+                {
+                    foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
+                    {
+                        // (type, consumer instance, consumer method)
+                        try
+                        {
+                            Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
+                            ei.AddEventHandler(item.Value, d);
+                        }
+                        catch (ArgumentException)
+                        {
+                            throw new ArgumentException(string.Format("Unable to attach EventHandler '{0}' to '{1}'.\r\nDo the publisher and subscriber signatures match?", ei.Name, instance.GetType().Name));
+                        }
                     }
                 }
             }
@@ -201,7 +241,7 @@ namespace OpenNETCF.IoC
                             select c);
                 if (parameterlessCtors.Count() == 0)
                 {
-                    throw new ArgumentException(string.Format("Type '{0}' has no public parameterless constructor or injection constructor", t));
+                    throw new ArgumentException(string.Format("Type '{0}' has no public parameterless constructor or injection constructor.\r\nAre you missing the InjectionConstructor attribute?", t));
                 }
 
                 // create the object
@@ -214,7 +254,14 @@ namespace OpenNETCF.IoC
                 ConstructorInfo ci = ctors.First();
                 ParameterInfo[] paramList = ci.GetParameters();
                 object[] inputs = GetParameterObjectsForParameterList(paramList, root, t.Name);
-                instance = ci.Invoke(inputs);
+                try
+                {
+                    instance = ci.Invoke(inputs);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
             else
             {
