@@ -76,21 +76,17 @@ namespace OpenNETCF.IoC.Unit.Test
         {
             MockEventSource src = RootWorkItem.Items.AddNew<MockEventSource>();
             MockEventSink sinkA = RootWorkItem.Items.AddNew<MockEventSink>();
-//            MockEventSink sinkB = RootWorkItem.Items.AddNew<MockEventSink>();
             MockEventComposite1 composite1 = RootWorkItem.Items.AddNew<MockEventComposite1>();
 
             src.RaiseEventA();
-            Assert.IsTrue(sinkA.AEventReceived);
-//            Assert.IsTrue(sinkB.AEventReceived);
-            Assert.IsTrue(composite1.AEventReceived);
+            Assert.IsTrue(sinkA.AEventReceived, "Event A not received by sinkA");
+            Assert.IsTrue(composite1.AEventReceived, "Event A not received by composite1");
 
             composite1.RaiseEventB();
             Assert.IsTrue(sinkA.BEventReceived);
-//            Assert.IsTrue(sinkB.BEventReceived);
 
             RootWorkItem.Items.Remove(src);
             RootWorkItem.Items.Remove(sinkA);
-//            RootWorkItem.Items.Remove(sinkB);
             RootWorkItem.Items.Remove(composite1);
         }
 

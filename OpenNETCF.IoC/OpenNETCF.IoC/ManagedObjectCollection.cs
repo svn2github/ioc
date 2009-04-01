@@ -37,6 +37,7 @@ namespace OpenNETCF.IoC
             if (typeToBuild == null) throw new ArgumentNullException();
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
             Add(instance);
+            ObjectFactory.DoInjections(instance, m_root);
             return instance;
         }
 
@@ -52,6 +53,7 @@ namespace OpenNETCF.IoC
 
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
             Add(instance, id);
+            ObjectFactory.DoInjections(instance, m_root);
 
             return instance;
         }
@@ -154,10 +156,20 @@ namespace OpenNETCF.IoC
         {
             if (searchType.IsValueType) throw new ArgumentException("searchType must be a reference type");
 
-            return (from i in m_items
-                    where i.Value.GetType().Equals(searchType)
-                    select i.Value)
-                    .ToList();
+            if (searchType.IsInterface)
+            {
+                return (from i in m_items
+                        where i.Value.GetType().GetInterfaces().Contains(searchType)
+                        select i.Value)
+                        .ToList();
+            }
+            else
+            {
+                return (from i in m_items
+                        where i.Value.GetType().Equals(searchType)
+                        select i.Value)
+                        .ToList();
+            }
         }
 
         public bool Contains(string id)

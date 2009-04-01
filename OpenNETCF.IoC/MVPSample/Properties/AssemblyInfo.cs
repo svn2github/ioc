@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("OpenNETCF.IoC")]
+[assembly: AssemblyTitle("MVPSample")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("OpenNETCF Consulting, LLC")]
-[assembly: AssemblyProduct("OpenNETCF.IoC")]
-[assembly: AssemblyCopyright("Public Domain")]
+[assembly: AssemblyCompany("OpenNETCF Consulting")]
+[assembly: AssemblyProduct("MVPSample")]
+[assembly: AssemblyCopyright("Copyright © OpenNETCF Consulting 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("56681ced-172e-46f5-be28-89e047c6b3a8")]
+[assembly: Guid("691f9246-5816-4766-af29-bd3fa7da4ace")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,10 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.9.0.5")]
+[assembly: AssemblyVersion("1.0.0.0")]
 
 // Below attribute is to suppress FxCop warning "CA2232 : Microsoft.Usage : Add STAThreadAttribute to assembly"
 // as Device app does not support STA thread.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2232:MarkWindowsFormsEntryPointsWithStaThread")]
-
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenNETCF.IoC.Unit.Test")]

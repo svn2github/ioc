@@ -271,9 +271,57 @@ namespace OpenNETCF.IoC
             // TODO: cache these
 
             // see if there are any injection methods (we can inject into public *or internal/private* methods)
+            //var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            //             where c.GetCustomAttributes(typeof(InjectionMethodAttribute), false).Count() > 0
+            //             select c);
+
+            //foreach (MethodInfo mi in injectionmethods)
+            //{
+            //    ParameterInfo[] paramList = mi.GetParameters();
+            //    object[] inputs = GetParameterObjectsForParameterList(paramList, root, t.Name);
+            //    mi.Invoke(instance, inputs);
+            //}
+
+            //// TODO: cache these
+
+            //// look for service dependecy setters
+            //var serviceDependecyProperties = from p in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            //                                 where p.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Count() > 0
+            //                                 select p;
+
+            //foreach (PropertyInfo pi in serviceDependecyProperties)
+            //{
+            //    // we know this is > 0 since they came through the LINQ filter above
+            //    var attrib = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Cast<ServiceDependencyAttribute>().First();
+
+            //    if (attrib.RegistrationType == null) attrib.RegistrationType = pi.PropertyType;
+
+            //    // see if we have the service already created
+            //    if (!root.Services.Contains(attrib.RegistrationType))
+            //    {
+            //        if (!attrib.EnsureExists)
+            //        {
+            //            throw new ServiceMissingException(string.Format("Type '{0}' has a service dependency on type '{1}'",
+            //                t.Name, attrib.RegistrationType.Name));
+            //        }
+            //        // create the service
+            //        root.Services.AddNew(pi.PropertyType, attrib.RegistrationType);
+            //    }
+            //    pi.SetValue(instance, root.Services.Get(attrib.RegistrationType), null);
+            //}
+
+            //AddEventHandlers(instance);
+
+            return instance;
+        }
+
+        internal static void DoInjections(object instance, WorkItem root)
+        {
+            Type t = instance.GetType();
+
             var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                         where c.GetCustomAttributes(typeof(InjectionMethodAttribute), false).Count() > 0
-                         select c);
+                                    where c.GetCustomAttributes(typeof(InjectionMethodAttribute), false).Count() > 0
+                                    select c);
 
             foreach (MethodInfo mi in injectionmethods)
             {
@@ -311,8 +359,6 @@ namespace OpenNETCF.IoC
             }
 
             AddEventHandlers(instance);
-
-            return instance;
         }
 
         private static object[] GetParameterObjectsForParameterList(ParameterInfo[] paramList, WorkItem root, string typeName)

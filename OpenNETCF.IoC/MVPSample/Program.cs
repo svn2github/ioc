@@ -7,15 +7,18 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using OpenNETCF.IoC.UI;
 
-namespace IoCSample
+namespace MVPSample
 {
     static class Program
     {
         [MTAThread]
         static void Main()
         {
-            RootWorkItem.Items.AddNew<MenuForm>("menu");
-            Application.Run(RootWorkItem.Items["menu"] as Form);
+//            MainForm main = new MainForm();
+//            Application.Run(main);
+
+            Form form = RootWorkItem.Items.AddNew<MainForm>("container");
+            Application.Run(form);
         }
 
     }
