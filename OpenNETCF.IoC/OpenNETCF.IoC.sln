@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVPSample", "MVPSample\MVPS
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -35,6 +35,9 @@ Global
 		SccProjectUniqueName4 = MVPSample\\MVPSample.csproj
 		SccProjectName4 = MVPSample
 		SccLocalPath4 = MVPSample
+		SccProjectUniqueName5 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.csproj
+		SccProjectName5 = OpenNETCF.IoC.UI
+		SccLocalPath5 = OpenNETCF.IoC.UI
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi

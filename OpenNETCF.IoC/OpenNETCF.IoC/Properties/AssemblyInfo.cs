@@ -22,17 +22,9 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("56681ced-172e-46f5-be28-89e047c6b3a8")]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version
-//      Build Number
-//      Revision
-//
-[assembly: AssemblyVersion("0.9.0.5")]
-
 // Below attribute is to suppress FxCop warning "CA2232 : Microsoft.Usage : Add STAThreadAttribute to assembly"
 // as Device app does not support STA thread.
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2232:MarkWindowsFormsEntryPointsWithStaThread")]
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenNETCF.IoC.Unit.Test")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("OpenNETCF.IoC.UI")]

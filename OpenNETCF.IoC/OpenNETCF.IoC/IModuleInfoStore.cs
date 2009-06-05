@@ -14,26 +14,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace OpenNETCF.IoC
 {
-    public static class RootWorkItem
+    public interface IModuleInfoStore
     {
-        internal static WorkItem m_workItem;
-
-        static RootWorkItem()
-        {
-            m_workItem = new WorkItem();
-        }
-
-        public static ManagedObjectCollection Items 
-        {
-            get { return m_workItem.Items; }
-        }
-        
-        public static ServiceCollection Services
-        {
-            get { return m_workItem.Services; }
-        }
+        string GetModuleListXml();
+        string CatalogFilePath { get; set; }
     }
 }

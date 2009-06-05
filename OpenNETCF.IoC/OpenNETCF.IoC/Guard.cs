@@ -17,23 +17,17 @@ using System.Text;
 
 namespace OpenNETCF.IoC
 {
-    public static class RootWorkItem
+    internal static class Guard
     {
-        internal static WorkItem m_workItem;
-
-        static RootWorkItem()
+        public static void ArgumentNotNull(object argumentValue, string argumentName)
         {
-            m_workItem = new WorkItem();
+            if (argumentValue == null) throw new ArgumentNullException(argumentName);
         }
 
-        public static ManagedObjectCollection Items 
+        public static void ArgumentNotNullOrEmptyString(string argumentValue, string argumentName)
         {
-            get { return m_workItem.Items; }
-        }
-        
-        public static ServiceCollection Services
-        {
-            get { return m_workItem.Services; }
+            if (argumentValue == null) throw new ArgumentNullException(argumentName);
+            if (argumentValue == string.Empty) throw new ArgumentException(string.Format("Argument '{0}' cannot be an empty string.", argumentName));
         }
     }
 }

@@ -17,23 +17,11 @@ using System.Text;
 
 namespace OpenNETCF.IoC
 {
-    public static class RootWorkItem
+    public abstract class ModuleInit : IModule
     {
-        internal static WorkItem m_workItem;
+        protected ModuleInit() { }
 
-        static RootWorkItem()
-        {
-            m_workItem = new WorkItem();
-        }
-
-        public static ManagedObjectCollection Items 
-        {
-            get { return m_workItem.Items; }
-        }
-        
-        public static ServiceCollection Services
-        {
-            get { return m_workItem.Services; }
-        }
+        public virtual void AddServices() { }
+        public virtual void Load() { }
     }
 }

@@ -17,7 +17,5 @@ namespace IoCSample
             RootWorkItem.Items.AddNew<MenuForm>("menu");
             Application.Run(RootWorkItem.Items["menu"] as Form);
         }
-
     }
-
 }

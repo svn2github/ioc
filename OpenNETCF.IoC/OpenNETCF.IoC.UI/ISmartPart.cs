@@ -22,37 +22,4 @@ namespace OpenNETCF.IoC.UI
         public string Title { get; set; }
         public string Description { get; set; }
     }
-
-    public class SmartPartCollection : IEnumerable<ISmartPart>
-    {
-        private List<ISmartPart> m_smartParts = new List<ISmartPart>();
-
-        internal SmartPartCollection()
-        {
-        }
-
-        internal void Add(ISmartPart smartPart)
-        {
-            if(smartPart == null) throw new ArgumentNullException();
-
-            m_smartParts.Add(smartPart);
-        }
-
-        internal void Remove(ISmartPart smartPart)
-        {
-            if (smartPart == null) throw new ArgumentNullException();
-
-            m_smartParts.Remove(smartPart);
-        }
-
-        public IEnumerator<ISmartPart> GetEnumerator()
-        {
-            return m_smartParts.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return m_smartParts.GetEnumerator();
-        }
-    }
 }

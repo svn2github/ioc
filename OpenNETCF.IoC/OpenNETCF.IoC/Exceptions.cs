@@ -32,4 +32,12 @@ namespace OpenNETCF.IoC
         {
         }
     }
+
+    public class IOCException : Exception
+    {
+        internal IOCException(string message)
+            : base(message)
+        {
+        }
+    }
 }

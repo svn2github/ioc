@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -59,10 +59,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\OpenNETCF.IoC.Version.cs">
+      <Link>Properties\OpenNETCF.IoC.Version.cs</Link>
+    </Compile>
     <Compile Include="Attributes.cs" />
     <Compile Include="ComponentDescriptor.cs" />
     <Compile Include="DataEventArgs.cs" />
+    <Compile Include="DefaultModuleInfoStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Exceptions.cs" />
+    <Compile Include="Guard.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IModuleInfoStore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModuleInfoStoreService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModuleInit.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RootWorkItem.cs" />
     <Compile Include="ManagedObjectCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

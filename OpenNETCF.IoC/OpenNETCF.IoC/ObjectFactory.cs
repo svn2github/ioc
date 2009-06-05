@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {
@@ -63,7 +64,7 @@ namespace OpenNETCF.IoC
 
             var methods =
             from n in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where n.GetCustomAttributes(typeof(EventSubscription), false).Length > 0
+            where n.GetCustomAttributes(typeof(EventSubscription), true).Length > 0
             select n;
 
             List<SubscriptionDescriptor> descriptors = new List<SubscriptionDescriptor>();
@@ -72,7 +73,7 @@ namespace OpenNETCF.IoC
                 descriptors.Add(new SubscriptionDescriptor
                 {
                     MethodInfo = mi,
-                    Subscription = mi.GetCustomAttributes(typeof(EventSubscription), false).FirstOrDefault() as EventSubscription
+                    Subscription = mi.GetCustomAttributes(typeof(EventSubscription), true).FirstOrDefault() as EventSubscription
                 });
             }
 
@@ -92,7 +93,7 @@ namespace OpenNETCF.IoC
 
             var events =
             from n in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
-            where n.GetCustomAttributes(typeof(EventPublication), false).Length > 0
+            where n.GetCustomAttributes(typeof(EventPublication), true).Length > 0
             select n;
 
             List<PublicationDescriptor> descriptors = new List<PublicationDescriptor>();
@@ -101,7 +102,7 @@ namespace OpenNETCF.IoC
                 descriptors.Add(new PublicationDescriptor
                 {
                     EventInfo = ei,
-                    Publication = ei.GetCustomAttributes(typeof(EventPublication), false).FirstOrDefault() as EventPublication
+                    Publication = ei.GetCustomAttributes(typeof(EventPublication), true).FirstOrDefault() as EventPublication
                 });
             }
             PublicationDescriptor[] result = descriptors.ToArray();
@@ -112,14 +113,14 @@ namespace OpenNETCF.IoC
         internal static string[] GetEventSourceNames(Type type)
         {
             return (from n in (type.GetEvents(BindingFlags.Public | BindingFlags.Instance).Select(
-                e => e.GetCustomAttributes(typeof(EventPublication), false).First() as EventPublication))
+                e => e.GetCustomAttributes(typeof(EventPublication), true).First() as EventPublication))
                     select n.EventName).Distinct().ToArray();
         }
 
         internal static EventSubscription[] GetEventSinkSubscriptions(Type type)
         {
             return (from n in (type.GetMethods(BindingFlags.Public | BindingFlags.Instance).Select(
-                m => m.GetCustomAttributes(typeof(EventSubscription), false).FirstOrDefault() as EventSubscription))
+                m => m.GetCustomAttributes(typeof(EventSubscription), true).FirstOrDefault() as EventSubscription))
                     select n).Distinct().Where(e => e != null).ToArray();
         }
 
@@ -127,7 +128,7 @@ namespace OpenNETCF.IoC
         {
             return (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
                     where
-            (from a in e.GetCustomAttributes(typeof(EventPublication), false) as EventPublication[]
+            (from a in e.GetCustomAttributes(typeof(EventPublication), true) as EventPublication[]
              where a.EventName == eventName
              select a).Count() > 0
                     select e).ToArray();
@@ -137,7 +138,7 @@ namespace OpenNETCF.IoC
         {
             return (from e in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
                     where
-            (from a in e.GetCustomAttributes(typeof(EventSubscription), false) as EventSubscription[]
+            (from a in e.GetCustomAttributes(typeof(EventSubscription), true) as EventSubscription[]
              where a.EventName == eventName
              select a).Count() > 0
                     select e).ToArray();
@@ -168,7 +169,7 @@ namespace OpenNETCF.IoC
                     }
                 }
 
-                // TODO: back-wire any sinks
+                // back-wire any sinks
                 foreach (var sink in eventSinks)
                 {
                     foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
@@ -189,6 +190,13 @@ namespace OpenNETCF.IoC
 
             foreach (var item in RootWorkItem.Services)
             {
+                if (item.Value == null)
+                {
+                    // TODO: this will happen if a dependency was created with AddOnDemand.  We need to resolve this, but doing so without getting into a 
+                    //       recursive stack overflow is not simple.  For now we'll just throw an exception and the developer will have to use AddNew instead.
+                    throw new ServiceMissingException(item.Key.ToString());
+                }
+
                 foreach (var source in sourceEvents)
                 {
                     // TODO: check cache
@@ -201,7 +209,7 @@ namespace OpenNETCF.IoC
                     }
                 }
 
-                // TODO: back-wire any sinks
+                // back-wire any sinks
                 foreach (var sink in eventSinks)
                 {
                     foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
@@ -227,10 +235,15 @@ namespace OpenNETCF.IoC
 
             // TODO: build cache for ctor info by type
 
+            if (t.IsInterface)
+            {
+                throw new IOCException(string.Format("Cannot create an instance of an interface class ({0}). Check your registration code.", t.Name));
+            }
+
             // see if there is an injection ctor
             var ctors = (from c in t.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                          where c.IsPublic == true
-                         && c.GetCustomAttributes(typeof(InjectionConstructorAttribute), false).Count() > 0
+                         && c.GetCustomAttributes(typeof(InjectionConstructorAttribute), true).Count() > 0
                          select c);
 
             if (ctors.Count() == 0)
@@ -246,7 +259,14 @@ namespace OpenNETCF.IoC
 
                 // create the object
                 ConstructorInfo ci = parameterlessCtors.First();
-                instance = ci.Invoke(null);
+                try
+                {
+                    instance = ci.Invoke(null);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
+                }
             }
             else if (ctors.Count() == 1)
             {
@@ -269,6 +289,8 @@ namespace OpenNETCF.IoC
             }
 
             // TODO: cache these
+
+            DoInjections(instance, root);
 
             // see if there are any injection methods (we can inject into public *or internal/private* methods)
             //var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -320,7 +342,7 @@ namespace OpenNETCF.IoC
             Type t = instance.GetType();
 
             var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                    where c.GetCustomAttributes(typeof(InjectionMethodAttribute), false).Count() > 0
+                                    where c.GetCustomAttributes(typeof(InjectionMethodAttribute), true).Count() > 0
                                     select c);
 
             foreach (MethodInfo mi in injectionmethods)
@@ -334,13 +356,13 @@ namespace OpenNETCF.IoC
 
             // look for service dependecy setters
             var serviceDependecyProperties = from p in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                             where p.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Count() > 0
+                                             where p.GetCustomAttributes(typeof(ServiceDependencyAttribute), true).Count() > 0
                                              select p;
 
             foreach (PropertyInfo pi in serviceDependecyProperties)
             {
                 // we know this is > 0 since they came through the LINQ filter above
-                var attrib = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Cast<ServiceDependencyAttribute>().First();
+                var attrib = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), true).Cast<ServiceDependencyAttribute>().First();
 
                 if (attrib.RegistrationType == null) attrib.RegistrationType = pi.PropertyType;
 
@@ -380,10 +402,10 @@ namespace OpenNETCF.IoC
 
                 if (itemList.Length == 0)
                 {
-                    object[] sdAttribs = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), false);
+                    object[] sdAttribs = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), true);
 
                     // see if it's marked with a CreateNew attribute
-                    if (pi.GetCustomAttributes(typeof(CreateNewAttribute), false).Count() > 0)
+                    if (pi.GetCustomAttributes(typeof(CreateNewAttribute), true).Count() > 0)
                     {
                         // create a new one
                         root.Items.AddNew(pi.ParameterType);
