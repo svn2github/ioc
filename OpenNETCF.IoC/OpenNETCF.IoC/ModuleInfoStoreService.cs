@@ -77,12 +77,12 @@ namespace OpenNETCF.IoC
                 asm = null;
                 FileInfo fi = new FileInfo(Path.Combine(rootFolder, s));
 
-                if(fi.Exists)
+                if (fi.Exists)
                 {
                     // local?
                     asm = Assembly.LoadFrom(fi.FullName);
                 }
-                else if(File.Exists(s))
+                else if (File.Exists(s))
                 {
                     // fully qualified path?
                     asm = Assembly.LoadFrom(s);
@@ -97,7 +97,7 @@ namespace OpenNETCF.IoC
                     throw new IOException(string.Format("Unable to locate assembly '{0}'", s));
                 }
 
-                if(asm == null) continue;
+                if (asm == null) continue;
 
                 var imodule = (from t in asm.GetTypes()
                                where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
@@ -112,14 +112,28 @@ namespace OpenNETCF.IoC
                 var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
                 if (loadMethod != null)
                 {
-                    loadMethod.Invoke(instance, null);
+                    try
+                    {
+                        loadMethod.Invoke(instance, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex.InnerException;
+                    }
                 }
 
                 var addServices = imodule.GetMethod("AddServices", BindingFlags.Public | BindingFlags.Instance);
                 if (addServices != null)
                 {
-                    addServices.Invoke(instance, null);
-                }                      
+                    try
+                    {
+                        addServices.Invoke(instance, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
             }
         }
 
