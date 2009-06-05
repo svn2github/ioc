@@ -14,12 +14,16 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OpenNETCF.IoC.UI
 {
-    public interface IPresenter<TView> 
-        where TView : ISmartPart
+    public class DeckWorkspace : Workspace
     {
-        void Run();
+        protected override void OnShow(ISmartPart smartPart)
+        {
+            smartPart.Dock = DockStyle.Fill;
+            base.OnShow(smartPart);
+        }
     }
 }

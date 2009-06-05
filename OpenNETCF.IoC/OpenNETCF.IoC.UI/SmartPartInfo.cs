@@ -17,9 +17,9 @@ using System.Text;
 
 namespace OpenNETCF.IoC.UI
 {
-    public interface IPresenter<TView> 
-        where TView : ISmartPart
+    public class SmartPartInfo
     {
-        void Run();
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }
