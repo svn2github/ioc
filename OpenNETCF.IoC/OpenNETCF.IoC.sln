@@ -15,11 +15,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.UI", "OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.csproj", "{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVPSample", "MVPSample\MVPSample.csproj", "{BD264738-E7B7-4FF3-A38A-321AB84DEA03}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVPSample", "MVPSample", "{845E244A-BAD7-468B-81A0-3A2C9239ED93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Shell", "MVPSample\Shell\App.Shell\App.Shell.csproj", "{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shell", "Shell", "{0FFE808F-14D2-4C40-B93E-5541729001DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3C532C18-4C17-446E-BCBC-397C39E19933}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{5DEA6809-7F49-43F6-A033-B70A36FC7E54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Interface", "MVPSample\Infrastructure\Infrastructure.Interface\Infrastructure.Interface.csproj", "{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Module", "MVPSample\Infrastructure\Infrastructure.Module\Infrastructure.Module.csproj", "{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.Module", "MVPSample\DAL\DAL.Module\DAL.Module.csproj", "{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -32,12 +46,25 @@ Global
 		SccProjectUniqueName3 = OpenNETCF.IoC\\OpenNETCF.IoC.csproj
 		SccProjectName3 = OpenNETCF.IoC
 		SccLocalPath3 = OpenNETCF.IoC
-		SccProjectUniqueName4 = MVPSample\\MVPSample.csproj
-		SccProjectName4 = MVPSample
-		SccLocalPath4 = MVPSample
-		SccProjectUniqueName5 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.csproj
-		SccProjectName5 = OpenNETCF.IoC.UI
-		SccLocalPath5 = OpenNETCF.IoC.UI
+		SccProjectUniqueName4 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.csproj
+		SccProjectName4 = OpenNETCF.IoC.UI
+		SccLocalPath4 = OpenNETCF.IoC.UI
+		SccProjectUniqueName5 = MVPSample\\Shell\\App.Shell\\App.Shell.csproj
+		SccProjectTopLevelParentUniqueName5 = OpenNETCF.IoC.sln
+		SccProjectName5 = MVPSample/Shell/App.Shell
+		SccLocalPath5 = MVPSample\\Shell\\App.Shell
+		SccProjectUniqueName6 = MVPSample\\Infrastructure\\Infrastructure.Interface\\Infrastructure.Interface.csproj
+		SccProjectTopLevelParentUniqueName6 = OpenNETCF.IoC.sln
+		SccProjectName6 = MVPSample/Infrastructure/Infrastructure.Interface
+		SccLocalPath6 = MVPSample\\Infrastructure\\Infrastructure.Interface
+		SccProjectUniqueName7 = MVPSample\\Infrastructure\\Infrastructure.Module\\Infrastructure.Module.csproj
+		SccProjectTopLevelParentUniqueName7 = OpenNETCF.IoC.sln
+		SccProjectName7 = MVPSample/Infrastructure/Infrastructure.Module
+		SccLocalPath7 = MVPSample\\Infrastructure\\Infrastructure.Module
+		SccProjectUniqueName8 = MVPSample\\DAL\\DAL.Module\\DAL.Module.csproj
+		SccProjectTopLevelParentUniqueName8 = OpenNETCF.IoC.sln
+		SccProjectName8 = MVPSample/DAL/DAL.Module
+		SccLocalPath8 = MVPSample\\DAL\\DAL.Module
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -67,14 +94,37 @@ Global
 		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD264738-E7B7-4FF3-A38A-321AB84DEA03}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0FFE808F-14D2-4C40-B93E-5541729001DB} = {845E244A-BAD7-468B-81A0-3A2C9239ED93}
+		{3C532C18-4C17-446E-BCBC-397C39E19933} = {845E244A-BAD7-468B-81A0-3A2C9239ED93}
+		{5DEA6809-7F49-43F6-A033-B70A36FC7E54} = {845E244A-BAD7-468B-81A0-3A2C9239ED93}
+		{84E2CD8B-15CF-493F-A2D7-B4EBDC6BB9FE} = {0FFE808F-14D2-4C40-B93E-5541729001DB}
+		{2C9D98BD-AEF7-4C4F-9CB1-7967E66524AF} = {3C532C18-4C17-446E-BCBC-397C39E19933}
+		{AA22E865-AE2B-4969-9BEF-85D2F7E7D412} = {3C532C18-4C17-446E-BCBC-397C39E19933}
+		{96A4A954-057E-4ABC-B6BA-772DCD7ECC61} = {5DEA6809-7F49-43F6-A033-B70A36FC7E54}
 	EndGlobalSection
 EndGlobal

@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -120,6 +121,42 @@ namespace OpenNETCF.IoC.UI
             if (!SmartParts.Contains(smartPart))
             {
                 throw new Exception("ISmartPart not in Workspace");
+            }
+        }
+
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            base.OnPaintBackground(e);
+
+            if (IsDesignTime)
+            {
+                Color c = Color.FromArgb(69, 69, 69);
+                e.Graphics.DrawRectangle(
+                    new Pen(c),
+                    new Rectangle(1, 1, this.Width - 2, this.Height - 2));
+
+                string text = this.GetType().Name;
+                SizeF size = e.Graphics.MeasureString(text, this.Font);
+                int left = (int)(this.Width - size.Width) / 2;
+                int top = (int)(this.Height - size.Height) / 2;
+                e.Graphics.DrawString(text, this.Font, new SolidBrush(c), left, top);
+            }
+        }
+
+        protected bool IsDesignTime
+        {
+            get
+            {
+                // Determine if this instance is running against .NET Framework by using the MSCoreLib PublicKeyToken
+                System.Reflection.Assembly mscorlibAssembly = typeof(int).Assembly;
+                if ((mscorlibAssembly != null))
+                {
+                    if (mscorlibAssembly.FullName.ToUpper().EndsWith("B77A5C561934E089"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }
