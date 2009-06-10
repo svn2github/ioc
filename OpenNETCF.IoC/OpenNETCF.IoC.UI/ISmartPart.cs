@@ -21,11 +21,13 @@ namespace OpenNETCF.IoC.UI
     public interface ISmartPart : IDisposable
     {
 //        SmartPartInfo SmartPartInfo { get; set; }
-        bool Visible { set; }
+        bool Visible { get;  set; }
         bool Focused { get; }
         void BringToFront();
         bool Focus();
         DockStyle Dock { set; }
         string Name { get; set; }
+        Control Parent { get; }
+        bool Enabled { get; set; }
     }
 }

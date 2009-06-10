@@ -288,51 +288,7 @@ namespace OpenNETCF.IoC
                 throw new ArgumentException(string.Format("Type '{0}' has {1} defined injection constructors.  Only one is allowed", t.Name, ctors.Count()));
             }
 
-            // TODO: cache these
-
-            DoInjections(instance, root);
-
-            // see if there are any injection methods (we can inject into public *or internal/private* methods)
-            //var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-            //             where c.GetCustomAttributes(typeof(InjectionMethodAttribute), false).Count() > 0
-            //             select c);
-
-            //foreach (MethodInfo mi in injectionmethods)
-            //{
-            //    ParameterInfo[] paramList = mi.GetParameters();
-            //    object[] inputs = GetParameterObjectsForParameterList(paramList, root, t.Name);
-            //    mi.Invoke(instance, inputs);
-            //}
-
-            //// TODO: cache these
-
-            //// look for service dependecy setters
-            //var serviceDependecyProperties = from p in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-            //                                 where p.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Count() > 0
-            //                                 select p;
-
-            //foreach (PropertyInfo pi in serviceDependecyProperties)
-            //{
-            //    // we know this is > 0 since they came through the LINQ filter above
-            //    var attrib = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), false).Cast<ServiceDependencyAttribute>().First();
-
-            //    if (attrib.RegistrationType == null) attrib.RegistrationType = pi.PropertyType;
-
-            //    // see if we have the service already created
-            //    if (!root.Services.Contains(attrib.RegistrationType))
-            //    {
-            //        if (!attrib.EnsureExists)
-            //        {
-            //            throw new ServiceMissingException(string.Format("Type '{0}' has a service dependency on type '{1}'",
-            //                t.Name, attrib.RegistrationType.Name));
-            //        }
-            //        // create the service
-            //        root.Services.AddNew(pi.PropertyType, attrib.RegistrationType);
-            //    }
-            //    pi.SetValue(instance, root.Services.Get(attrib.RegistrationType), null);
-            //}
-
-            //AddEventHandlers(instance);
+            // NOTE: we don't do injections here, as if the created object has a dependency that requires this instance it would fail becasue this instance is not yet in the item list.
 
             return instance;
         }

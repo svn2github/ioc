@@ -107,7 +107,7 @@ namespace OpenNETCF.IoC.UI
             SmartPartActivated(this, new DataEventArgs<ISmartPart>(smartPart));
         }
 
-        public ISmartPart ActiveSmartPart
+        public virtual ISmartPart ActiveSmartPart
         {
             get
             {

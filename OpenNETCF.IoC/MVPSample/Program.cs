@@ -9,16 +9,13 @@ using OpenNETCF.IoC.UI;
 
 namespace MVPSample
 {
-    static class Program
+    public class Program : SmartClientApplication<MainForm> 
     {
         [MTAThread]
         static void Main()
         {
-//            MainForm main = new MainForm();
-//            Application.Run(main);
-
-            Form form = RootWorkItem.Items.AddNew<MainForm>("container");
-            Application.Run(form);
+            // this will create an instance of MainForm and load it into the RootWorkItem.Items collection
+            new Program().Start();
         }
 
     }
