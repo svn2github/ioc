@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SolutionProfile>
+  <Modules>
+    <ModuleInfo AssemblyFile="WiFiSurvey.Infrastructure.Module.dll" />
+    <ModuleInfo AssemblyFile="WiFiSurvey.DAL.Module.dll" />
+    <ModuleInfo AssemblyFile="WiFiSurvey.Configuration.Module.dll" />
+  </Modules>
+</SolutionProfile>
