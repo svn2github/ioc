@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using OpenNETCF.IoC;
+using WiFiSurvey.Infrastructure.Services;
 
 namespace WiFiSurvey.Infrastructure
 {
@@ -14,7 +15,7 @@ namespace WiFiSurvey.Infrastructure
 
         public override void AddServices()
         {
-            //RootWorkItem.Services.AddNew<TimeService, ITimeService>();
+            RootWorkItem.Services.AddNew<NetworkService, INetworkService>();
         }
     }
 }
