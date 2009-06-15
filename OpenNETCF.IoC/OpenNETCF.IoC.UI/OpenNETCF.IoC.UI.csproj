@@ -75,6 +75,9 @@
     <Compile Include="SmartClientApplication.cs" />
     <Compile Include="SmartPartCollection.cs" />
     <Compile Include="SmartPartInfo.cs" />
+    <Compile Include="TabWorkspace.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Workspace.cs">
       <SubType>Component</SubType>
     </Compile>

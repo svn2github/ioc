@@ -26,7 +26,7 @@ namespace WiFiSurvey.Shell
             InitializeComponent();
 
             // store the main workspace in the IoC framework
-            RootWorkItem.Items.Add(mainWorkspace, WorkspaceNames.MainWorkspace);
+            RootWorkItem.Items.Add(headerWorkspace, WorkspaceNames.MainWorkspace);
 
             // create the presenter for the container
             Presenter = RootWorkItem.Items.AddNew<ContainerPresenter>(PresenterNames.Container);
@@ -35,7 +35,7 @@ namespace WiFiSurvey.Shell
             ISmartPart view = RootWorkItem.Items.AddNew<APListView>(ViewNames.APList) as ISmartPart;
 
             // and show it
-            mainWorkspace.Show(view);
+            headerWorkspace.Show(view);
         }
 
         [Conditional("DEBUG")]
