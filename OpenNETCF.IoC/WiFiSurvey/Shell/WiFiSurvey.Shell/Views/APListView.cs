@@ -20,8 +20,10 @@ namespace WiFiSurvey.Shell.Views
         public APListView()
         {
             Presenter = RootWorkItem.Items.AddNew<APListPresenter>(PresenterNames.APList);
-
             InitializeComponent();
+            this.Name = "Available APs";
+
+            // TODO show list of available APs (name, MAC and signal strength)
         }
     }
 }

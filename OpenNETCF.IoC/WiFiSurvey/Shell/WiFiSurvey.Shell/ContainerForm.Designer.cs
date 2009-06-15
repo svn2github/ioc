@@ -28,29 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabWorkspace1 = new OpenNETCF.IoC.UI.TabWorkspace();
-            this.deckWorkspace1 = new OpenNETCF.IoC.UI.DeckWorkspace();
+            this.bodyWorkspace = new OpenNETCF.IoC.UI.TabWorkspace();
             this.headerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
-            this.deckWorkspace2 = new OpenNETCF.IoC.UI.DeckWorkspace();
-            this.tabWorkspace1.SuspendLayout();
+            this.footerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.SuspendLayout();
             // 
-            // tabWorkspace1
+            // bodyWorkspace
             // 
-            this.tabWorkspace1.Controls.Add(this.deckWorkspace1);
-            this.tabWorkspace1.Location = new System.Drawing.Point(3, 49);
-            this.tabWorkspace1.Name = "tabWorkspace1";
-            this.tabWorkspace1.Size = new System.Drawing.Size(234, 178);
-            this.tabWorkspace1.TabIndex = 1;
-            this.tabWorkspace1.Text = "tabWorkspace1";
-            // 
-            // deckWorkspace1
-            // 
-            this.deckWorkspace1.Location = new System.Drawing.Point(0, 175);
-            this.deckWorkspace1.Name = "deckWorkspace1";
-            this.deckWorkspace1.Size = new System.Drawing.Size(234, 40);
-            this.deckWorkspace1.TabIndex = 2;
-            this.deckWorkspace1.Text = "deckWorkspace1";
+            this.bodyWorkspace.Location = new System.Drawing.Point(3, 49);
+            this.bodyWorkspace.Name = "bodyWorkspace";
+            this.bodyWorkspace.Size = new System.Drawing.Size(234, 178);
+            this.bodyWorkspace.TabIndex = 1;
+            this.bodyWorkspace.Text = "tabWorkspace1";
             // 
             // headerWorkspace
             // 
@@ -60,13 +49,13 @@
             this.headerWorkspace.TabIndex = 0;
             this.headerWorkspace.Text = "deckWorkspace1";
             // 
-            // deckWorkspace2
+            // footerWorkspace
             // 
-            this.deckWorkspace2.Location = new System.Drawing.Point(3, 233);
-            this.deckWorkspace2.Name = "deckWorkspace2";
-            this.deckWorkspace2.Size = new System.Drawing.Size(234, 40);
-            this.deckWorkspace2.TabIndex = 2;
-            this.deckWorkspace2.Text = "deckWorkspace1";
+            this.footerWorkspace.Location = new System.Drawing.Point(3, 233);
+            this.footerWorkspace.Name = "footerWorkspace";
+            this.footerWorkspace.Size = new System.Drawing.Size(234, 40);
+            this.footerWorkspace.TabIndex = 2;
+            this.footerWorkspace.Text = "deckWorkspace1";
             // 
             // ContainerForm
             // 
@@ -74,13 +63,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 294);
-            this.Controls.Add(this.deckWorkspace2);
-            this.Controls.Add(this.tabWorkspace1);
+            this.Controls.Add(this.footerWorkspace);
+            this.Controls.Add(this.bodyWorkspace);
             this.Controls.Add(this.headerWorkspace);
             this.KeyPreview = true;
+            this.MinimizeBox = false;
             this.Name = "ContainerForm";
             this.Text = "Form1";
-            this.tabWorkspace1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -88,9 +77,8 @@
         #endregion
 
         private OpenNETCF.IoC.UI.DeckWorkspace headerWorkspace;
-        private OpenNETCF.IoC.UI.TabWorkspace tabWorkspace1;
-        private OpenNETCF.IoC.UI.DeckWorkspace deckWorkspace1;
-        private OpenNETCF.IoC.UI.DeckWorkspace deckWorkspace2;
+        private OpenNETCF.IoC.UI.TabWorkspace bodyWorkspace;
+        private OpenNETCF.IoC.UI.DeckWorkspace footerWorkspace;
     }
 }
 

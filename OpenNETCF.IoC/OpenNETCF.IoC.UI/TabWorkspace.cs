@@ -40,11 +40,17 @@ namespace OpenNETCF.IoC.UI
 
         protected override void OnActivate(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             ShowTab(smartPart, false);
+
+            RaiseSmartPartActivated(smartPart);
         }
 
         protected override void OnClose(ISmartPart smartPart)
         {
+            RaiseSmartPartClosing(smartPart);
+
             TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
 
             if (ti == null) throw new Exception("Tab not found");
@@ -71,6 +77,8 @@ namespace OpenNETCF.IoC.UI
         protected override void OnShow(ISmartPart smartPart)
         {
             ShowTab(smartPart, true);
+
+            RaiseSmartPartActivated(smartPart);
         }
 
         private void ShowTab(ISmartPart smartPart, bool createIfNew)

@@ -33,11 +33,15 @@ namespace OpenNETCF.IoC.UI
 
         public void Show(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+            
             OnShow(smartPart);
         }
 
         protected virtual void OnShow(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             Control control = smartPart as Control;
             if (control == null) throw new ArgumentException("smartPart must be a Control");
 
@@ -51,17 +55,23 @@ namespace OpenNETCF.IoC.UI
 
         public void Hide(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             CheckSmartPartExists(smartPart);
             OnHide(smartPart);
         }
 
         protected virtual void OnHide(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             smartPart.Visible = false;
         }
 
         public void Close(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             CheckSmartPartExists(smartPart);
 
             RaiseSmartPartClosing(smartPart);
@@ -71,8 +81,13 @@ namespace OpenNETCF.IoC.UI
 
         protected virtual void OnClose(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             Control control = smartPart as Control;
             if (control == null) throw new ArgumentException("smartPart must be a Control");
+            
+            RaiseSmartPartClosing(smartPart);
+
             this.Controls.Remove(control);
             SmartParts.Remove(smartPart);
             smartPart.Dispose();
@@ -87,6 +102,8 @@ namespace OpenNETCF.IoC.UI
 
         public void Activate(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             CheckSmartPartExists(smartPart);
 
             OnActivate(smartPart);
@@ -96,6 +113,8 @@ namespace OpenNETCF.IoC.UI
 
         protected virtual void OnActivate(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             smartPart.Visible = true;
             smartPart.BringToFront();
             smartPart.Focus();
@@ -118,6 +137,8 @@ namespace OpenNETCF.IoC.UI
 
         private void CheckSmartPartExists(ISmartPart smartPart)
         {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
             if (!SmartParts.Contains(smartPart))
             {
                 throw new Exception("ISmartPart not in Workspace");

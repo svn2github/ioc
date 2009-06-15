@@ -78,6 +78,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\CurrentAPHeaderView.resx">
+      <DependentUpon>CurrentAPHeaderView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\StatusFooterView.resx">
+      <DependentUpon>StatusFooterView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -87,6 +93,24 @@
     </Compile>
     <Compile Include="Views\APListView.Designer.cs">
       <DependentUpon>APListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ToolsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ToolsView.Designer.cs">
+      <DependentUpon>ToolsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CurrentAPHeaderView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\CurrentAPHeaderView.Designer.cs">
+      <DependentUpon>CurrentAPHeaderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusFooterView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\StatusFooterView.Designer.cs">
+      <DependentUpon>StatusFooterView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

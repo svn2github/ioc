@@ -26,16 +26,24 @@ namespace WiFiSurvey.Shell
             InitializeComponent();
 
             // store the main workspace in the IoC framework
-            RootWorkItem.Items.Add(headerWorkspace, WorkspaceNames.MainWorkspace);
+            RootWorkItem.Items.Add(headerWorkspace, WorkspaceNames.HeaderWorkspace);
+            RootWorkItem.Items.Add(bodyWorkspace, WorkspaceNames.BodyWorkspace);
+            RootWorkItem.Items.Add(footerWorkspace, WorkspaceNames.FooterWorkspace);
 
             // create the presenter for the container
             Presenter = RootWorkItem.Items.AddNew<ContainerPresenter>(PresenterNames.Container);
 
-            // load up the default view
+            // load up the tabs into the display
             ISmartPart view = RootWorkItem.Items.AddNew<APListView>(ViewNames.APList) as ISmartPart;
+            bodyWorkspace.Show(view);
+            view = RootWorkItem.Items.AddNew<ToolsView>(ViewNames.Tools) as ISmartPart;
+            bodyWorkspace.Show(view);
 
-            // and show it
+            view = RootWorkItem.Items.AddNew<CurrentAPHeaderView>(ViewNames.Header) as ISmartPart;
             headerWorkspace.Show(view);
+
+            view = RootWorkItem.Items.AddNew<StatusFooterView>(ViewNames.Footer) as ISmartPart;
+            footerWorkspace.Show(view);
         }
 
         [Conditional("DEBUG")]

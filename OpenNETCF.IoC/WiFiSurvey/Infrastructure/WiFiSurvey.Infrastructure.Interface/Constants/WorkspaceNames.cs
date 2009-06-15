@@ -7,6 +7,8 @@ namespace WiFiSurvey.Infrastructure.Constants
 {
     public static class WorkspaceNames
     {
-        public const string MainWorkspace = "wks:MainWorkspace";
+        public const string HeaderWorkspace = "wks:HeaderWorkspace";
+        public const string BodyWorkspace = "wks:BodyWorkspace";
+        public const string FooterWorkspace = "wks:FooterWorkspace";
     }
 }
