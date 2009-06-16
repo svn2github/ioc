@@ -13,7 +13,7 @@ using OpenNETCF.IoC.UI;
 
 namespace WiFiSurvey.Shell.Views
 {
-    public partial class APListView : UserControl, ISmartPart
+    public partial class APListView : SmartPart
     {
         public APListPresenter Presenter { get; set; }
 

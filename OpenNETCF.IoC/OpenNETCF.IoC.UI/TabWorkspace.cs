@@ -43,14 +43,10 @@ namespace OpenNETCF.IoC.UI
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
             ShowTab(smartPart, false);
-
-            RaiseSmartPartActivated(smartPart);
         }
 
         protected override void OnClose(ISmartPart smartPart)
         {
-            RaiseSmartPartClosing(smartPart);
-
             TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
 
             if (ti == null) throw new Exception("Tab not found");
@@ -59,6 +55,7 @@ namespace OpenNETCF.IoC.UI
             int index = m_tabs.TabPages.IndexOf(ti.Page);
             m_tabs.TabPages.RemoveAt(index);
 
+            RaiseSmartPartClosing(smartPart);
             m_smartParts.Remove(ti);
             ti.Page.Dispose();
         }
@@ -77,8 +74,6 @@ namespace OpenNETCF.IoC.UI
         protected override void OnShow(ISmartPart smartPart)
         {
             ShowTab(smartPart, true);
-
-            RaiseSmartPartActivated(smartPart);
         }
 
         private void ShowTab(ISmartPart smartPart, bool createIfNew)
@@ -106,6 +101,9 @@ namespace OpenNETCF.IoC.UI
                 index = m_tabs.TabPages.IndexOf(ti.Page);
             }
             m_tabs.SelectedIndex = index;
+
+            RaiseSmartPartActivated(smartPart);
+            smartPart.OnActivated();
         }
     }
 }

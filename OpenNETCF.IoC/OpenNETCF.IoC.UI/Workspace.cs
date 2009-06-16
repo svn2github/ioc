@@ -109,6 +109,7 @@ namespace OpenNETCF.IoC.UI
             OnActivate(smartPart);
 
             RaiseSmartPartActivated(smartPart);
+            smartPart.OnActivated();
         }
 
         protected virtual void OnActivate(ISmartPart smartPart)

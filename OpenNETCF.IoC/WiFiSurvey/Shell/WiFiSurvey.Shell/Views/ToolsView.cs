@@ -10,7 +10,7 @@ using OpenNETCF.IoC.UI;
 
 namespace WiFiSurvey.Shell.Views
 {
-    public partial class ToolsView : UserControl, ISmartPart
+    public partial class ToolsView : SmartPart
     {
         public ToolsView()
         {

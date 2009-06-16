@@ -59,6 +59,7 @@ namespace OpenNETCF.IoC
 
             object instance = ObjectFactory.CreateObject(serviceType, m_root);
             Add(instance, null, serviceType, null);
+            ObjectFactory.DoInjections(instance, m_root);
             return instance;
         }
         
@@ -69,6 +70,7 @@ namespace OpenNETCF.IoC
 
             object instance = ObjectFactory.CreateObject(serviceType, m_root);
             Add(instance, null, serviceType, registerAs);
+            ObjectFactory.DoInjections(instance, m_root);
             return instance;
         }
 

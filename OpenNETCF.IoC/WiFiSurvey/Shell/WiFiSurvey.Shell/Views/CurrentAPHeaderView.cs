@@ -10,7 +10,7 @@ using OpenNETCF.IoC.UI;
 
 namespace WiFiSurvey.Shell.Views
 {
-    public partial class CurrentAPHeaderView : UserControl, ISmartPart
+    public partial class CurrentAPHeaderView : SmartPart
     {
         public CurrentAPHeaderView()
         {

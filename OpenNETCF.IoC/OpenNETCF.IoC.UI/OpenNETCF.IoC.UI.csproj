@@ -73,6 +73,9 @@
     <Compile Include="ISmartPart.cs">
     </Compile>
     <Compile Include="SmartClientApplication.cs" />
+    <Compile Include="SmartPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SmartPartCollection.cs" />
     <Compile Include="SmartPartInfo.cs" />
     <Compile Include="TabWorkspace.cs">

@@ -10,7 +10,7 @@ using OpenNETCF.IoC.UI;
 
 namespace WiFiSurvey.Shell.Views
 {
-    public partial class StatusFooterView : UserControl, ISmartPart
+    public partial class StatusFooterView : SmartPart
     {
         public StatusFooterView()
         {

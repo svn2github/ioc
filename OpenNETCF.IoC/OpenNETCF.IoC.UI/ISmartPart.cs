@@ -29,5 +29,6 @@ namespace OpenNETCF.IoC.UI
         string Name { get; set; }
         Control Parent { get; }
         bool Enabled { get; set; }
+        void OnActivated();
     }
 }
