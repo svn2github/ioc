@@ -31,31 +31,52 @@
             this.footerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.bodyWorkspace = new OpenNETCF.IoC.UI.TabWorkspace();
             this.headerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
+            this.tabWorkspace1 = new OpenNETCF.IoC.UI.TabWorkspace();
+            this.headerWorkspace.SuspendLayout();
             this.SuspendLayout();
             // 
             // footerWorkspace
             // 
-            this.footerWorkspace.Location = new System.Drawing.Point(3, 233);
+            this.footerWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.footerWorkspace.Location = new System.Drawing.Point(0, 266);
             this.footerWorkspace.Name = "footerWorkspace";
-            this.footerWorkspace.Size = new System.Drawing.Size(234, 40);
+            this.footerWorkspace.Size = new System.Drawing.Size(240, 28);
             this.footerWorkspace.TabIndex = 2;
             this.footerWorkspace.Text = "deckWorkspace1";
             // 
             // bodyWorkspace
             // 
-            this.bodyWorkspace.Location = new System.Drawing.Point(3, 49);
+            this.bodyWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.bodyWorkspace.Location = new System.Drawing.Point(0, 49);
             this.bodyWorkspace.Name = "bodyWorkspace";
-            this.bodyWorkspace.Size = new System.Drawing.Size(234, 178);
+            this.bodyWorkspace.Size = new System.Drawing.Size(240, 211);
             this.bodyWorkspace.TabIndex = 1;
             this.bodyWorkspace.Text = "tabWorkspace1";
             // 
             // headerWorkspace
             // 
-            this.headerWorkspace.Location = new System.Drawing.Point(3, 3);
+            this.headerWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.headerWorkspace.Controls.Add(this.tabWorkspace1);
+            this.headerWorkspace.Location = new System.Drawing.Point(0, 3);
             this.headerWorkspace.Name = "headerWorkspace";
-            this.headerWorkspace.Size = new System.Drawing.Size(234, 40);
+            this.headerWorkspace.Size = new System.Drawing.Size(240, 40);
             this.headerWorkspace.TabIndex = 0;
             this.headerWorkspace.Text = "deckWorkspace1";
+            // 
+            // tabWorkspace1
+            // 
+            this.tabWorkspace1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabWorkspace1.Location = new System.Drawing.Point(0, 43);
+            this.tabWorkspace1.Name = "tabWorkspace1";
+            this.tabWorkspace1.Size = new System.Drawing.Size(240, 208);
+            this.tabWorkspace1.TabIndex = 1;
+            this.tabWorkspace1.Text = "tabWorkspace1";
             // 
             // ContainerForm
             // 
@@ -70,6 +91,7 @@
             this.MinimizeBox = false;
             this.Name = "ContainerForm";
             this.Text = "WiFi Survey";
+            this.headerWorkspace.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -79,6 +101,7 @@
         private OpenNETCF.IoC.UI.DeckWorkspace headerWorkspace;
         private OpenNETCF.IoC.UI.TabWorkspace bodyWorkspace;
         private OpenNETCF.IoC.UI.DeckWorkspace footerWorkspace;
+        private OpenNETCF.IoC.UI.TabWorkspace tabWorkspace1;
     }
 }
 

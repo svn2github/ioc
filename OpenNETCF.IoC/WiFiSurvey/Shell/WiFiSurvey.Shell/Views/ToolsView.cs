@@ -19,8 +19,8 @@ namespace WiFiSurvey.Shell.Views
 
             this.Name = "Tools";
 
-            btnDisableDesktop.Enabled = true;
-            btnEnableDesktop.Enabled = false;
+            btnDisableDesktop.Enabled = false;
+            btnEnableDesktop.Enabled = true;
             // TODO: allow set up of PC app IP, collection interval, etc.
         }
 

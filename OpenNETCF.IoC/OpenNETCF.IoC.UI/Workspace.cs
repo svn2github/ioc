@@ -148,10 +148,10 @@ namespace OpenNETCF.IoC.UI
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            base.OnPaintBackground(e);
-
             if (IsDesignTime)
             {
+                base.OnPaintBackground(e);
+
                 Color c = Color.FromArgb(69, 69, 69);
                 e.Graphics.DrawRectangle(
                     new Pen(c),

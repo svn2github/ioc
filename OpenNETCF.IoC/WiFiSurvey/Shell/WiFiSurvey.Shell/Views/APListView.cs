@@ -22,6 +22,7 @@ namespace WiFiSurvey.Shell.Views
         public INetworkService NetworkService { get; set; }
 
         private Timer m_apRefreshTimer = new Timer();
+        private bool m_columnWidthsSet = false;
 
         public APListView()
         {
@@ -29,66 +30,74 @@ namespace WiFiSurvey.Shell.Views
             InitializeComponent();
             this.Name = "Available APs";
 
-            listView1.FullRowSelect = true;
-            listView1.SelectedIndexChanged += new EventHandler(listView1_SelectedIndexChanged);
+            apList.FullRowSelect = true;
+            apList.SelectedIndexChanged += new EventHandler(listView1_SelectedIndexChanged);
 
             m_apRefreshTimer.Interval = 1000;
             m_apRefreshTimer.Tick += new EventHandler(m_apRefreshTimer_Tick);
             m_apRefreshTimer.Enabled = true;
-
-            UpdateColumnsWidth();
         }
+
         private void UpdateColumnsWidth()
         {
-            int totalSize = (int)(ClientRectangle.Width / listView1.Columns.Count);
-            listView1.Columns[0].Width = totalSize;
-            listView1.Columns[1].Width = totalSize;
-            listView1.Columns[2].Width = totalSize;
+            apList.Columns[0].Width = -1;
+            apList.Columns[1].Width = -2;
+            apList.Columns[2].Width = -2;
+            m_columnWidthsSet = true;
         }
 
         void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView1.SelectedIndices.Count > 0)
+            if (apList.SelectedIndices.Count > 0)
             {
-                ListViewItem item = listView1.Items[listView1.SelectedIndices[0]];
-                //Presenter.SetCurrentAP(Presenter.GetAccessPoints().FindBySSID(item.Text));
+                ListViewItem item = apList.Items[apList.SelectedIndices[0]];
             }
         }
 
         void m_apRefreshTimer_Tick(object sender, EventArgs e)
         {
-            Boolean Contains = false;
-            AccessPointCollection AccessPoints = Presenter.GetAccessPoints();
-            ListViewItem lvitem;
-            int expected = AccessPoints.Count;
-            listView1.Items.Clear();
+            m_apRefreshTimer.Enabled = false;
+            Debug.WriteLine("Timer stopped");
 
-            // TODO show list of available APs (name, MAC and signal strength)
-            foreach (AccessPoint accessPoint in AccessPoints)
+            try
             {
-                Contains = false;
-                lvitem = new ListViewItem();
-                lvitem.Text = accessPoint.Name;
-                lvitem.SubItems.Add(accessPoint.SignalStrength.Decibels.ToString());
-                lvitem.SubItems.Add(accessPoint.PhysicalAddress.ToString());
-                listView1.Items.Add(lvitem);
-                //    foreach (ListViewItem item in listView1.Items)
-                //    {
-                //        if (item.Text == lvitem.Text)
-                //        {
-                //            Contains = true;
-                //            item.SubItems[1].Text = accessPoint.SignalStrength.Decibels.ToString();
-                //        }
-                //    }
-                //    if (!Contains)
-                //    {
-                //        listView1.Items.Add(lvitem);
-                //    }
-                //}
+                int et = Environment.TickCount;
+                AccessPointCollection accessPoints = Presenter.GetAccessPoints();
+                et = Environment.TickCount - et;
+                Debug.WriteLine(string.Format(" Getting AP list took {0}ms", et));
+
+                ListViewItem lvitem;
+
+                if (accessPoints == null)
+                {
+                    return;
+                }
+
+                int expected = accessPoints.Count;
+                apList.Items.Clear();
+
+                foreach (AccessPoint accessPoint in accessPoints)
+                {
+                    lvitem = new ListViewItem();
+                    lvitem.Text = accessPoint.Name;
+                    lvitem.SubItems.Add(accessPoint.SignalStrength.Decibels.ToString());
+                    lvitem.SubItems.Add(accessPoint.PhysicalAddress.ToString());
+                    apList.Items.Add(lvitem);
+                }
+                if (apList.Items.Count != expected)
+                {
+                    Trace.WriteLine("Not What's Expected");
+                }
+                if ((!m_columnWidthsSet) && (accessPoints.Count > 0))
+                {
+                    UpdateColumnsWidth();
+                }
+
             }
-            if (listView1.Items.Count != expected)
+            finally
             {
-                Trace.WriteLine("Not Whats Expected");
+                m_apRefreshTimer.Enabled = true;
+                Debug.WriteLine("Timer restarted");
             }
         }
 

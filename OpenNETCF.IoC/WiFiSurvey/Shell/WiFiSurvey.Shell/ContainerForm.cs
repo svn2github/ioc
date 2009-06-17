@@ -57,6 +57,15 @@ namespace WiFiSurvey.Shell
             DataService.StartListening();
 
             bodyWorkspace.SelectTab(0);
+
+            this.WindowState = FormWindowState.Maximized;
+            this.Width = Screen.PrimaryScreen.WorkingArea.Width;
+            this.Height = Screen.PrimaryScreen.WorkingArea.Height;
+        }
+
+        void ContainerForm_Resize(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -83,7 +92,14 @@ namespace WiFiSurvey.Shell
         {
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
             AccessPoint accessPoint = Presenter.GetCurrentAP();
-            m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
+            if (accessPoint == null)
+            {
+                m_Header.SetCurrentAP("[none]", "-", "-");
+            }
+            else
+            {
+                m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
+            }
         }
 
         public void UpdateFooter()
