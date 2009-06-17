@@ -46,10 +46,32 @@ namespace WiFiSurvey.Shell.Views
             m_columnWidthsSet = true;
         }
 
-        private bool m_alreadyQuerying = false;
-
         [DllImport("coredll", SetLastError=true)]
         private static extern void SystemIdleTimerReset();
+
+        private void ResetBacklightTimer()
+        {
+            if (Environment.OSVersion.Version.Major <= 5)
+            {
+                SystemIdleTimerReset();
+            }
+            else
+            {
+                if (m_activityEvent == null)
+                {
+                    using (var key = Registry.LocalMachine.OpenSubKey("System\\GWE"))
+                    {
+                        object value = key.GetValue("ActivityEvent");
+                        key.Close();
+                        if (value == null) return;
+                        string activityEventName = (string)value;
+                        m_activityEvent = new EventWaitHandle(false, EventResetMode.AutoReset, activityEventName);
+                    }
+                }
+
+                m_activityEvent.Set();
+            }
+        }
 
         public void RefreshList()
         {
