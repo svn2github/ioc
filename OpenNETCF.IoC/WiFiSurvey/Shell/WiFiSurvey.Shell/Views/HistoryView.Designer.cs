@@ -1,6 +1,6 @@
 ﻿namespace WiFiSurvey.Shell.Views
 {
-    partial class StatusFooterView
+    partial class HistoryView
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,31 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.listView1 = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
-            // label1
+            // listView1
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 40);
-            this.label1.Text = "Status : Desktop Connected";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(150, 150);
+            this.listView1.TabIndex = 0;
             // 
-            // StatusFooterView
+            // HistoryView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.label1);
-            this.Name = "StatusFooterView";
-            this.Size = new System.Drawing.Size(256, 40);
+            this.Controls.Add(this.listView1);
+            this.Name = "HistoryView";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListView listView1;
     }
 }

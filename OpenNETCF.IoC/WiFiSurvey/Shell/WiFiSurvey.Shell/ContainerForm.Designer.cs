@@ -28,10 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.footerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.bodyWorkspace = new OpenNETCF.IoC.UI.TabWorkspace();
             this.headerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
-            this.footerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.SuspendLayout();
+            // 
+            // footerWorkspace
+            // 
+            this.footerWorkspace.Location = new System.Drawing.Point(3, 233);
+            this.footerWorkspace.Name = "footerWorkspace";
+            this.footerWorkspace.Size = new System.Drawing.Size(234, 40);
+            this.footerWorkspace.TabIndex = 2;
+            this.footerWorkspace.Text = "deckWorkspace1";
             // 
             // bodyWorkspace
             // 
@@ -49,14 +57,6 @@
             this.headerWorkspace.TabIndex = 0;
             this.headerWorkspace.Text = "deckWorkspace1";
             // 
-            // footerWorkspace
-            // 
-            this.footerWorkspace.Location = new System.Drawing.Point(3, 233);
-            this.footerWorkspace.Name = "footerWorkspace";
-            this.footerWorkspace.Size = new System.Drawing.Size(234, 40);
-            this.footerWorkspace.TabIndex = 2;
-            this.footerWorkspace.Text = "deckWorkspace1";
-            // 
             // ContainerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -69,7 +69,7 @@
             this.KeyPreview = true;
             this.MinimizeBox = false;
             this.Name = "ContainerForm";
-            this.Text = "Form1";
+            this.Text = "WiFi Survey";
             this.ResumeLayout(false);
 
         }

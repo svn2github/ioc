@@ -28,21 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblSSIDName = new System.Windows.Forms.Label();
+            this.lblSignalStrength = new System.Windows.Forms.Label();
+            this.lblMacAdress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // lblSSIDName
             // 
-            this.label1.Location = new System.Drawing.Point(13, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 20);
-            this.label1.Text = "Current AP";
+            this.lblSSIDName.Location = new System.Drawing.Point(4, 4);
+            this.lblSSIDName.Name = "lblSSIDName";
+            this.lblSSIDName.Size = new System.Drawing.Size(81, 20);
+            this.lblSSIDName.Text = "Current AP";
+            // 
+            // lblSignalStrength
+            // 
+            this.lblSignalStrength.Location = new System.Drawing.Point(82, 4);
+            this.lblSignalStrength.Name = "lblSignalStrength";
+            this.lblSignalStrength.Size = new System.Drawing.Size(100, 20);
+            this.lblSignalStrength.Text = "Signal : ";
+            // 
+            // lblMacAdress
+            // 
+            this.lblMacAdress.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Italic);
+            this.lblMacAdress.Location = new System.Drawing.Point(4, 20);
+            this.lblMacAdress.Name = "lblMacAdress";
+            this.lblMacAdress.Size = new System.Drawing.Size(100, 20);
+            this.lblMacAdress.Text = "label3";
             // 
             // CurrentAPHeaderView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblMacAdress);
+            this.Controls.Add(this.lblSignalStrength);
+            this.Controls.Add(this.lblSSIDName);
             this.Name = "CurrentAPHeaderView";
             this.Size = new System.Drawing.Size(234, 40);
             this.ResumeLayout(false);
@@ -51,6 +70,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblSSIDName;
+        private System.Windows.Forms.Label lblSignalStrength;
+        private System.Windows.Forms.Label lblMacAdress;
+
     }
 }

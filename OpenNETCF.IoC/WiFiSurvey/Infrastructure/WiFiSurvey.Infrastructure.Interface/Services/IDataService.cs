@@ -7,5 +7,6 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public interface IDataService
     {
+        void StartListening();
     }
 }

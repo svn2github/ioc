@@ -76,6 +76,15 @@ namespace OpenNETCF.IoC.UI
             ShowTab(smartPart, true);
         }
 
+        public void SelectTab(int index)
+        {
+            if (m_tabs.TabPages.Count > index)
+            {
+                m_tabs.TabPages[index].BringToFront();
+                m_tabs.SelectedIndex = index;
+            }
+        }
+
         private void ShowTab(ISmartPart smartPart, bool createIfNew)
         {
             TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
@@ -89,6 +98,9 @@ namespace OpenNETCF.IoC.UI
 
                 TabPage page = new TabPage();
                 page.Text = smartPart.Name;
+                smartPart.Dock = DockStyle.Fill;
+                page.ClientRectangle.Inflate(-2, -2);
+                page.Controls.Add((Control)smartPart);
                 m_tabs.TabPages.Add(page);
 
                 ti = new TabInfo { Page = page, SmartPart = smartPart };

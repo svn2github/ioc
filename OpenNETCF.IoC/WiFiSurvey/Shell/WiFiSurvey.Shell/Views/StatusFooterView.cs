@@ -18,5 +18,17 @@ namespace WiFiSurvey.Shell.Views
 
             // TODO: display current PC connection status, updates with ET for last AP and PC connection
         }
+
+        public void UpdateConnection(Boolean connected)
+        {
+            if (connected)
+            {
+                label1.Text = "Desktop Connected";
+            }
+            else
+            {
+                label1.Text = "Desktop Not Connected";
+            }
+        }
     }
 }
