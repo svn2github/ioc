@@ -47,12 +47,12 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 115;
+            this.columnHeader1.Width = 70;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Event";
-            this.columnHeader2.Width = 116;
+            this.columnHeader2.Width = 161;
             // 
             // HistoryView
             // 

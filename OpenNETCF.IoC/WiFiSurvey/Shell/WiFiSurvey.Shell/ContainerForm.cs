@@ -21,7 +21,8 @@ namespace WiFiSurvey.Shell
     public partial class ContainerForm : Form
     {
         ContainerPresenter Presenter { get; set; }
-        private IDataService DataService {get;set;}
+        private IDataService DataService { get; set; }
+        private INetworkService NetworkService { get; set; }
 
         private Timer m_containerTimer = new Timer();
 
@@ -57,8 +58,8 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<StatusFooterView>(ViewNames.Footer) as ISmartPart;
             footerWorkspace.Show(view);
 
-            DataService = RootWorkItem.Services.Get<IDataService>();
-            DataService.StartListening();
+            NetworkService = RootWorkItem.Services.Get<INetworkService>();
+            NetworkService.StartListening();
 
             bodyWorkspace.SelectTab(0);
 
@@ -100,6 +101,7 @@ namespace WiFiSurvey.Shell
             UpdateHeader();
             UpdateAPList();
             UpdateFooter();
+            UpdateTools();
         }
 
         public void UpdateHeader()
@@ -107,8 +109,6 @@ namespace WiFiSurvey.Shell
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
             AccessPoint accessPoint = Presenter.GetCurrentAP();
             WirelessUtility.CurrentAccessPoint = accessPoint;
-
-            //m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
             if (accessPoint == null)
             {
                 m_Header.SetCurrentAP("[none]", "-", "-");
@@ -121,12 +121,20 @@ namespace WiFiSurvey.Shell
 
         public void UpdateAPList()
         {
+            APListView m_APList = RootWorkItem.Items.Get<APListView>(ViewNames.APList);
+            m_APList.RefreshList();
         }
 
         public void UpdateFooter()
         {
             StatusFooterView m_footer = RootWorkItem.Items.Get<StatusFooterView>(ViewNames.Footer);
             m_footer.UpdateConnection(WirelessUtility.DesktopConnected);
+        }
+
+        public void UpdateTools()
+        {
+            ToolsView m_Tools = RootWorkItem.Items.Get<ToolsView>(ViewNames.Tools);
+            m_Tools.UpdateTools();
         }
 
         [Conditional("DEBUG")]

@@ -22,7 +22,8 @@ namespace WiFiSurveryDesktop
         private Thread m_listenThread;
         private UdpClient m_listener;
 
-        private Dictionary<string, IPAddress> m_ConnectedItems = new Dictionary<string, IPAddress>();
+        private Dictionary<IPAddress, string> ConnectedItems = new Dictionary<IPAddress, string>();
+        private Dictionary<IPAddress, UIAction> DeviceControls = new Dictionary<IPAddress, UIAction>();
 
         private int m_listenPort = 11000;
         private int m_broadcastPort = 11001;
@@ -77,16 +78,22 @@ namespace WiFiSurveryDesktop
         public void RefreshConnectedDevices()
         {
             SuspendLayout();
-            while (flowLayoutPanel1.Controls.Count > 0)
-            {
-                flowLayoutPanel1.Controls[0].Dispose();
-            }
             UIAction actionItem;
-            foreach(var item in m_ConnectedItems)
+            foreach(var item in ConnectedItems)
             {
-                actionItem = new UIAction(item.Value, item.Key);
-                actionItem.Width = flowLayoutPanel1.Width - 10;
-                flowLayoutPanel1.Controls.Add(actionItem);
+                if (DeviceControls.ContainsKey(item.Key))
+                {
+                    DeviceControls[item.Key].UpdateData(item.Value);
+                    DeviceControls[item.Key].Connected = true;
+                    DeviceControls[item.Key].Refresh();
+                }
+                else
+                {
+                    actionItem = new UIAction(item.Key, item.Value);
+                    actionItem.Width = flowLayoutPanel1.Width - 10;
+                    flowLayoutPanel1.Controls.Add(actionItem);
+                    DeviceControls.Add(item.Key, actionItem);
+                }
             }
             ResumeLayout(true);
         }
@@ -109,9 +116,14 @@ namespace WiFiSurveryDesktop
 
             Trace.WriteLine(("Sent Packet To " + m_EndPoint.ToString() + " @ " + m_EndPoint.Address));
 
-            if (!m_ConnectedItems.Values.Contains(broadcast.Address))
+            if (!ConnectedItems.Keys.Contains(broadcast.Address))
             {
-                m_ConnectedItems.Add(dataString, broadcast.Address);
+                ConnectedItems.Add(broadcast.Address, dataString);
+            }
+            else
+            {
+                ConnectedItems.Remove(broadcast.Address);
+                ConnectedItems.Add(broadcast.Address, dataString);
             }
 
         }

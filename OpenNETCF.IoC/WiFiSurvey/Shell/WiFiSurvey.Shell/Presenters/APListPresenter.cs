@@ -7,12 +7,17 @@ using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.Net.NetworkInformation;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using System.Threading;
 
 namespace WiFiSurvey.Shell.Presenters
 {
     public class APListPresenter
     {
+        public AccessPointCollection AccessPoints { get; set; }
+
         private INetworkService NetworkService { get; set; }
+        private Thread AccessPointThread;
+        private Boolean Done { get; set; }
 
         WirelessZeroConfigNetworkInterface Adapter{get;set;}
 
@@ -20,26 +25,28 @@ namespace WiFiSurvey.Shell.Presenters
         {
             NetworkService = RootWorkItem.Services.Get<INetworkService>();
             Adapter = NetworkService.Adapter;
+
+            AccessPointThread = new Thread(GetAccessPoints);
+            AccessPointThread.IsBackground = true;
+            AccessPointThread.Start();
         }
 
-        public AccessPointCollection GetAccessPoints()
+        ~APListPresenter()
         {
-            if(NetworkService == null)return null;
-
-            if (Adapter != null && Adapter.NearbyAccessPoints.Count > 0)
-            {
-                return Adapter.NearbyAccessPoints;
-            }
-            return null;
+            AccessPointThread.Abort();
+            Done = true;
         }
 
-        public void SetCurrentAP(AccessPoint accessPoint)
+        public void GetAccessPoints()
         {
-            if (Adapter != null && accessPoint != null)
+            if (Adapter != null)
             {
-                //OnNewAccessPointConnection(this, new AccessPointEventArgs(accessPoint));
+                while (!Done)
+                {
+                    AccessPoints = Adapter.NearbyAccessPoints;
+                    Thread.Sleep(1000);
+                }
             }
         }
-
     }
 }

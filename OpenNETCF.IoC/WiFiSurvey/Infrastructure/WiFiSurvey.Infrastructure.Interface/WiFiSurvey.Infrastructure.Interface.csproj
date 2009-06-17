@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjects\AccessPointEventArgs.cs" />
+    <Compile Include="BusinessObjects\DataServiceArgs.cs" />
     <Compile Include="BusinessObjects\IApplicationConfiguration.cs" />
     <Compile Include="BusinessObjects\WirelessUtility.cs" />
     <Compile Include="Constants\EventNames.cs" />

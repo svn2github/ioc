@@ -19,10 +19,10 @@ namespace WiFiSurveryDesktop.Components
         private string m_deviceName;
         private string m_accessPoint;
         private string m_signalStrength;
-
         private ToolTip tip;
-
         private IPAddress m_ipAddress;
+
+        public Boolean Connected { get; set; }
 
         protected override void Dispose(bool disposing)
         {
@@ -35,13 +35,8 @@ namespace WiFiSurveryDesktop.Components
             base.Dispose(disposing);
         }
 
-
-        public UIAction(IPAddress ipAddress, string Data)
+        public void UpdateData(string Data)
         {
-            InitializeComponent();
-
-            m_ipAddress = ipAddress;
-
             char[] split = new char[1];
             split[0] = ':';
             String[] dataArray = Data.Split(split);
@@ -57,10 +52,17 @@ namespace WiFiSurveryDesktop.Components
                 m_deviceName = "";
                 m_accessPoint = "";
                 m_signalStrength = "";
-
             }
+        }
 
-            Height = 40;
+        public UIAction(IPAddress ipAddress, string Data)
+        {
+            InitializeComponent();
+
+            m_ipAddress = ipAddress;
+
+            UpdateData(Data);
+
             SetEventHandlers();
             this.DoubleBuffered = true;
 
@@ -94,16 +96,16 @@ namespace WiFiSurveryDesktop.Components
 
             if (m_actionFont == null) m_actionFont = new Font("MicrosoftSansSerif", 12);
             if (m_controlBrush == null) m_controlBrush = new SolidBrush(SystemColors.Control);
-            if (m_selectedBrush == null) m_selectedBrush = new SolidBrush(SystemColors.Highlight);
+            if (m_selectedBrush == null) m_selectedBrush = new SolidBrush(SystemColors.ActiveCaption);
             if(m_gradientBrush == null) m_gradientBrush = new LinearGradientBrush(ActionPanel.Location, new Point(ActionPanel.Right, ActionPanel.Bottom), Color.LightBlue, Color.White);
 
-            if (this.Focused)
+            if (Connected)
             {
-                g.FillRectangle(m_selectedBrush, ActionPanel.Bounds);
+                g.FillRectangle(m_gradientBrush, ActionPanel.Bounds);
             }
             else
             {
-                g.FillRectangle(m_gradientBrush, ActionPanel.Bounds);
+                g.FillRectangle(m_selectedBrush, ActionPanel.Bounds);
             }
 
             label1.Text = m_deviceName+ "(" + m_ipAddress.ToString() + ") @ " + m_accessPoint + "(" + m_signalStrength + ")";

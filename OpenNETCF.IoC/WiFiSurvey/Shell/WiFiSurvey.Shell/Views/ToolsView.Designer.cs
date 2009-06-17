@@ -34,6 +34,9 @@
             this.lblRefresh = new System.Windows.Forms.Label();
             this.cmbRefreshRate = new System.Windows.Forms.ComboBox();
             this.lblSeconds = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnResetEvents = new System.Windows.Forms.Button();
+            this.lblEventCount = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblDesktopConnect
@@ -79,7 +82,7 @@
             this.cmbRefreshRate.Items.Add("30");
             this.cmbRefreshRate.Location = new System.Drawing.Point(86, 40);
             this.cmbRefreshRate.Name = "cmbRefreshRate";
-            this.cmbRefreshRate.Size = new System.Drawing.Size(74, 22);
+            this.cmbRefreshRate.Size = new System.Drawing.Size(74, 23);
             this.cmbRefreshRate.TabIndex = 9;
             // 
             // lblSeconds
@@ -89,10 +92,36 @@
             this.lblSeconds.Size = new System.Drawing.Size(54, 20);
             this.lblSeconds.Text = "Seconds";
             // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(3, 77);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 20);
+            this.label1.Text = "Events :";
+            // 
+            // btnResetEvents
+            // 
+            this.btnResetEvents.Location = new System.Drawing.Point(160, 77);
+            this.btnResetEvents.Name = "btnResetEvents";
+            this.btnResetEvents.Size = new System.Drawing.Size(72, 20);
+            this.btnResetEvents.TabIndex = 13;
+            this.btnResetEvents.Text = "Reset";
+            this.btnResetEvents.Click += new System.EventHandler(this.btnResetEvents_Click);
+            // 
+            // lblEventCount
+            // 
+            this.lblEventCount.Location = new System.Drawing.Point(77, 76);
+            this.lblEventCount.Name = "lblEventCount";
+            this.lblEventCount.Size = new System.Drawing.Size(48, 20);
+            this.lblEventCount.Text = "label2";
+            // 
             // ToolsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.lblEventCount);
+            this.Controls.Add(this.btnResetEvents);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblSeconds);
             this.Controls.Add(this.cmbRefreshRate);
             this.Controls.Add(this.lblRefresh);
@@ -113,6 +142,9 @@
         private System.Windows.Forms.Label lblRefresh;
         private System.Windows.Forms.ComboBox cmbRefreshRate;
         private System.Windows.Forms.Label lblSeconds;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnResetEvents;
+        private System.Windows.Forms.Label lblEventCount;
 
     }
 }

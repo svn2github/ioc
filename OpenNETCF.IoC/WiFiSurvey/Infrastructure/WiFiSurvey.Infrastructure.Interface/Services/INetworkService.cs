@@ -8,6 +8,7 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public interface INetworkService
     {
+        void StartListening();
         WirelessZeroConfigNetworkInterface Adapter { get; }
     }
 }

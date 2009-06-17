@@ -36,11 +36,6 @@ namespace WiFiSurvey.Shell.Views
             this.Name = "Available APs";
 
             apList.FullRowSelect = true;
-            apList.SelectedIndexChanged += new EventHandler(listView1_SelectedIndexChanged);
-
-            m_apRefreshTimer.Interval = 1000;
-            m_apRefreshTimer.Tick += new EventHandler(m_apRefreshTimer_Tick);
-            m_apRefreshTimer.Enabled = true;
         }
 
         private void UpdateColumnsWidth()
@@ -51,42 +46,12 @@ namespace WiFiSurvey.Shell.Views
             m_columnWidthsSet = true;
         }
 
-        void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (apList.SelectedIndices.Count > 0)
-            {
-                ListViewItem item = apList.Items[apList.SelectedIndices[0]];
-            }
-        }
+        private bool m_alreadyQuerying = false;
 
         [DllImport("coredll", SetLastError=true)]
         private static extern void SystemIdleTimerReset();
 
-        private void ResetBacklightTimer()
-        {
-            if (Environment.OSVersion.Version.Major <= 5)
-            {
-                SystemIdleTimerReset();
-            }
-            else
-            {
-                if (m_activityEvent == null)
-                {
-                    using (var key = Registry.LocalMachine.OpenSubKey("System\\GWE"))
-                    {
-                        object value = key.GetValue("ActivityEvent");
-                        key.Close();
-                        if (value == null) return;
-                        string activityEventName = (string)value;
-                        m_activityEvent = new EventWaitHandle(false, EventResetMode.AutoReset, activityEventName);
-                    }
-                }
-
-                m_activityEvent.Set();
-            }
-        }
-
-        void m_apRefreshTimer_Tick(object sender, EventArgs e)
+        public void RefreshList()
         {
             AccessPointCollection accessPoints = null;
 
@@ -104,7 +69,7 @@ namespace WiFiSurvey.Shell.Views
                 {
                     if (accessPoints == null)
                     {
-                        accessPoints = Presenter.GetAccessPoints();
+                        accessPoints = Presenter.AccessPoints;
                     }
                     else
                     {
@@ -137,10 +102,6 @@ namespace WiFiSurvey.Shell.Views
                     lvitem.SubItems.Add(accessPoint.SignalStrength.Decibels.ToString());
                     lvitem.SubItems.Add(accessPoint.PhysicalAddress.ToString());
                     apList.Items.Add(lvitem);
-                }
-                if (apList.Items.Count != expected)
-                {
-                    Trace.WriteLine("Not What's Expected");
                 }
                 if ((!m_columnWidthsSet) && (accessPoints.Count > 0))
                 {
