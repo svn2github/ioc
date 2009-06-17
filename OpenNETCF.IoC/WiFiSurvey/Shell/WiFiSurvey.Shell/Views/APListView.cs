@@ -14,6 +14,8 @@ using WiFiSurvey.Infrastructure.Services;
 using System.Diagnostics;
 using OpenNETCF.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
+using OpenNETCF.Threading;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -24,6 +26,8 @@ namespace WiFiSurvey.Shell.Views
 
         private Timer m_apRefreshTimer = new Timer();
         private bool m_columnWidthsSet = false;
+        private bool m_alreadyQuerying = false;
+        private EventWaitHandle m_activityEvent;
 
         public APListView()
         {
@@ -55,10 +59,32 @@ namespace WiFiSurvey.Shell.Views
             }
         }
 
-        private bool m_alreadyQuerying = false;
-
         [DllImport("coredll", SetLastError=true)]
         private static extern void SystemIdleTimerReset();
+
+        private void ResetBacklightTimer()
+        {
+            if (Environment.OSVersion.Version.Major <= 5)
+            {
+                SystemIdleTimerReset();
+            }
+            else
+            {
+                if (m_activityEvent == null)
+                {
+                    using (var key = Registry.LocalMachine.OpenSubKey("System\\GWE"))
+                    {
+                        object value = key.GetValue("ActivityEvent");
+                        key.Close();
+                        if (value == null) return;
+                        string activityEventName = (string)value;
+                        m_activityEvent = new EventWaitHandle(false, EventResetMode.AutoReset, activityEventName);
+                    }
+                }
+
+                m_activityEvent.Set();
+            }
+        }
 
         void m_apRefreshTimer_Tick(object sender, EventArgs e)
         {
@@ -67,8 +93,8 @@ namespace WiFiSurvey.Shell.Views
             // don't double-call
             if (m_alreadyQuerying) return;
 
-            // prevent the backlight 
-            SystemIdleTimerReset();
+            // prevent the backlight from shutting off
+            ResetBacklightTimer();
 
             try
             {
