@@ -19,39 +19,38 @@ namespace WiFiSurvey.Shell.Views
 
             this.Name = "Tools";
 
-            btnDisableDesktop.Enabled = false;
-            btnEnableDesktop.Enabled = true;
-            // TODO: allow set up of PC app IP, collection interval, etc.
+            btnDisableDesktop.Enabled = true;
+            btnEnableDesktop.Enabled = false;
+
+            cmbRefreshRate.SelectedIndex = 0;
+            cmbRefreshRate.SelectedIndexChanged += new EventHandler(cmbRefreshRate_SelectedIndexChanged);
+            // TODO: collection interval, etc.
+        }
+
+        void cmbRefreshRate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int m_Refresh = Convert.ToInt32(cmbRefreshRate.SelectedItem.ToString());
+            m_Refresh = (m_Refresh * 1000);
+            if (WirelessUtility.RefreshRate != m_Refresh)
+            {
+                WirelessUtility.RefreshRate = m_Refresh;
+            }
         }
 
         private void btnEnableDesktop_Click(object sender, EventArgs e)
         {
-            WU.DesktopAppDisabled = false;
-            if (WU.DesktopAppDisabled)
-            {
-                btnEnableDesktop.Enabled = true;
-                btnDisableDesktop.Enabled = false;
-            }
-            else
-            {
-                btnEnableDesktop.Enabled = false;
-                btnDisableDesktop.Enabled = true;
-            }
+            WirelessUtility.DesktopAppDisabled = false;
+
+            btnEnableDesktop.Enabled = WirelessUtility.DesktopAppDisabled;
+            btnDisableDesktop.Enabled = !WirelessUtility.DesktopAppDisabled;
         }
 
         private void btnDisableDesktop_Click(object sender, EventArgs e)
         {
-            WU.DesktopAppDisabled = true;
-            if (WU.DesktopAppDisabled)
-            {
-                btnDisableDesktop.Enabled = false;
-                btnEnableDesktop.Enabled = true;
-            }
-            else
-            {
-                btnDisableDesktop.Enabled = true;
-                btnEnableDesktop.Enabled = false;
-            }
+            WirelessUtility.DesktopAppDisabled = true;
+
+            btnEnableDesktop.Enabled = WirelessUtility.DesktopAppDisabled;
+            btnDisableDesktop.Enabled = !WirelessUtility.DesktopAppDisabled;
         }
     }
 }

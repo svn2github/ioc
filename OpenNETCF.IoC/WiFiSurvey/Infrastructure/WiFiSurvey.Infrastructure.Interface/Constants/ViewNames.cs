@@ -11,5 +11,6 @@ namespace WiFiSurvey.Infrastructure.Constants
         public const string Tools = "view:Tools";
         public const string Header = "view:Header";
         public const string Footer = "view:Footer";
+        public const string History = "view:History";
     }
 }

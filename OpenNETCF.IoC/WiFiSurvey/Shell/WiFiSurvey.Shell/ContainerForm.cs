@@ -47,6 +47,10 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<ToolsView>(ViewNames.Tools) as ISmartPart;
             bodyWorkspace.Show(view);
 
+            view = RootWorkItem.Items.AddNew<HistoryView>(ViewNames.History) as ISmartPart;
+            bodyWorkspace.Show(view);
+
+            //Header and Footer
             view = RootWorkItem.Items.AddNew<CurrentAPHeaderView>(ViewNames.Header) as ISmartPart;
             headerWorkspace.Show(view);
 
@@ -72,6 +76,10 @@ namespace WiFiSurvey.Shell
         {
             //WU.DesktopAppEnabled = true;
 
+            if (WirelessUtility.RefreshRate == 0)
+            {
+                WirelessUtility.RefreshRate = 0;
+            }
             m_containerTimer.Interval = 1000;
             m_containerTimer.Tick += new EventHandler(m_containerTimer_Tick);
             m_containerTimer.Enabled = true;
@@ -84,7 +92,13 @@ namespace WiFiSurvey.Shell
 
         void m_containerTimer_Tick(object sender, EventArgs e)
         {
+            if (m_containerTimer.Interval != WirelessUtility.RefreshRate)
+            {
+                m_containerTimer.Interval = WirelessUtility.RefreshRate;
+            }
+
             UpdateHeader();
+            UpdateAPList();
             UpdateFooter();
         }
 
@@ -92,6 +106,9 @@ namespace WiFiSurvey.Shell
         {
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
             AccessPoint accessPoint = Presenter.GetCurrentAP();
+            WirelessUtility.CurrentAccessPoint = accessPoint;
+
+            //m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
             if (accessPoint == null)
             {
                 m_Header.SetCurrentAP("[none]", "-", "-");
@@ -102,10 +119,14 @@ namespace WiFiSurvey.Shell
             }
         }
 
+        public void UpdateAPList()
+        {
+        }
+
         public void UpdateFooter()
         {
             StatusFooterView m_footer = RootWorkItem.Items.Get<StatusFooterView>(ViewNames.Footer);
-            m_footer.UpdateConnection(WU.DesktopConnected);
+            m_footer.UpdateConnection(WirelessUtility.DesktopConnected);
         }
 
         [Conditional("DEBUG")]

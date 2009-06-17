@@ -60,7 +60,7 @@ namespace WiFiSurvey.DAL.Services
         {
             try
             {
-                while (!WU.DesktopAppDisabled)
+                while (!WirelessUtility.DesktopAppDisabled)
                 {
                     LastRecievedWatch.Reset();
                     LastRecievedWatch.Start();
@@ -74,7 +74,7 @@ namespace WiFiSurvey.DAL.Services
                     {
                         Trace.WriteLine(("Received broadcast from " + m_endPoint.ToString() + " @ " + m_endPoint.Port));
                         LastRecievedWatch.Stop();
-                        WU.DesktopConnected = true;
+                        WirelessUtility.DesktopConnected = true;
                         //m_lastIpAdress = m_endPoint.Address;
                     }
                 }
@@ -104,17 +104,13 @@ namespace WiFiSurvey.DAL.Services
 
         public void Broadcast()
         {
+
             string[] args = new string[1];
-            args[0] = "Wifi";
-
-            //Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-            byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
             //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
             IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
 
-            //Bind the UdpClient to the Local IP for Desktop Debug
+            //Bind the UdpClient to the Local IP for Desktop DebugZ
             IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
 
             UdpClient m_BroadcastClient = new UdpClient(m_localEP);
@@ -124,13 +120,24 @@ namespace WiFiSurvey.DAL.Services
 
             while (!done)
             {
+                if (WirelessUtility.CurrentAccessPoint != null)
+                {
+                    args[0] = Dns.GetHostName() + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
+                }
+                else
+                {
+                    args[0] = "No Point";
+                }
+
+                byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
+
                 //s.Send(sendbuf);
-                m_BroadcastClient.Send(sendbuf, 4);
+                m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
                 m_dropOutSeconds = LastRecievedWatch.Elapsed.Seconds;
                 if (m_dropOutSeconds > m_dropOutSecondsMax)
                 {
-                    WU.DesktopConnected = false;
+                    WirelessUtility.DesktopConnected = false;
                 }
 
                 Trace.WriteLine("Message sent to " + m_RemoteEP.ToString());
