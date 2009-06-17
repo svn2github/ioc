@@ -13,6 +13,7 @@ using OpenNETCF.IoC.UI;
 using WiFiSurvey.Infrastructure.Services;
 using System.Diagnostics;
 using OpenNETCF.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -54,15 +55,42 @@ namespace WiFiSurvey.Shell.Views
             }
         }
 
+        private bool m_alreadyQuerying = false;
+
+        [DllImport("coredll", SetLastError=true)]
+        private static extern void SystemIdleTimerReset();
+
         void m_apRefreshTimer_Tick(object sender, EventArgs e)
         {
-            m_apRefreshTimer.Enabled = false;
-            Debug.WriteLine("Timer stopped");
+            AccessPointCollection accessPoints = null;
+
+            // don't double-call
+            if (m_alreadyQuerying) return;
+
+            // prevent the backlight 
+            SystemIdleTimerReset();
 
             try
             {
+                m_alreadyQuerying = true;
                 int et = Environment.TickCount;
-                AccessPointCollection accessPoints = Presenter.GetAccessPoints();
+                try
+                {
+                    if (accessPoints == null)
+                    {
+                        accessPoints = Presenter.GetAccessPoints();
+                    }
+                    else
+                    {
+                        accessPoints.Refresh();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(string.Format(" Exception getting AP list: {0}", ex.Message));
+                    return;
+                }
+
                 et = Environment.TickCount - et;
                 Debug.WriteLine(string.Format(" Getting AP list took {0}ms", et));
 
@@ -96,8 +124,7 @@ namespace WiFiSurvey.Shell.Views
             }
             finally
             {
-                m_apRefreshTimer.Enabled = true;
-                Debug.WriteLine("Timer restarted");
+                m_alreadyQuerying = false;
             }
         }
 
