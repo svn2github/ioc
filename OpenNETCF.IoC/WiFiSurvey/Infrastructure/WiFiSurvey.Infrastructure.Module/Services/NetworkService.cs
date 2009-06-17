@@ -42,7 +42,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         private System.Diagnostics.Stopwatch LastRecievedWatch = new System.Diagnostics.Stopwatch();
         private int m_dropOutSeconds = 0;
-        private int m_dropOutSecondsMax = 1;
+        private int m_dropOutSecondsMax = 5;
 
         private UdpClient m_listener { get; set; }
 

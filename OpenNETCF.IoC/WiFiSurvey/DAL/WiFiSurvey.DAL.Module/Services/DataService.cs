@@ -10,6 +10,7 @@ using System.Threading;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.Net.Sockets;
+using OpenNETCF.Net.NetworkInformation;
 
 namespace WiFiSurvey.DAL.Services
 {
@@ -29,6 +30,9 @@ namespace WiFiSurvey.DAL.Services
             OnNewDataEvent(this.ToString() , new DataServiceArgs<string>(Event));
             EventCount++;
         }
+
+        public AccessPointCollection AvailableAccessPoints { get; set; }
+        public int NetworkDownTime { get; set; }
 
         public void ClearEvents()
         {

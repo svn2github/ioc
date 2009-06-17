@@ -115,6 +115,7 @@ namespace WiFiSurvey.Shell.Views
                 }
 
                 int expected = accessPoints.Count;
+                apList.SuspendLayout();
                 apList.Items.Clear();
 
                 foreach (AccessPoint accessPoint in accessPoints)
@@ -129,6 +130,8 @@ namespace WiFiSurvey.Shell.Views
                 {
                     UpdateColumnsWidth();
                 }
+
+                apList.ResumeLayout(true);
 
             }
             finally
