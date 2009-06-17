@@ -26,27 +26,31 @@ namespace WiFiSurvey.Shell.Views
 
         private void btnEnableDesktop_Click(object sender, EventArgs e)
         {
-            WU.DesktopAppDisabled = true;
+            WU.DesktopAppDisabled = false;
             if (WU.DesktopAppDisabled)
             {
                 btnEnableDesktop.Enabled = true;
+                btnDisableDesktop.Enabled = false;
             }
             else
             {
                 btnEnableDesktop.Enabled = false;
+                btnDisableDesktop.Enabled = true;
             }
         }
 
         private void btnDisableDesktop_Click(object sender, EventArgs e)
         {
-            WU.DesktopAppDisabled = false;
+            WU.DesktopAppDisabled = true;
             if (WU.DesktopAppDisabled)
             {
                 btnDisableDesktop.Enabled = false;
+                btnEnableDesktop.Enabled = true;
             }
             else
             {
                 btnDisableDesktop.Enabled = true;
+                btnEnableDesktop.Enabled = false;
             }
         }
     }

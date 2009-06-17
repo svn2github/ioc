@@ -83,7 +83,7 @@ namespace WiFiSurvey.Shell
         {
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
             AccessPoint accessPoint = Presenter.GetCurrentAP();
-            m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Strength.ToString());
+            m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
         }
 
         public void UpdateFooter()
