@@ -16,6 +16,8 @@ using OpenNETCF.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using OpenNETCF.Threading;
+using WiFiSurvey.Infrastructure;
+using WiFiSurvey.Infrastructure.BusinessObjects;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -29,13 +31,52 @@ namespace WiFiSurvey.Shell.Views
         private bool m_alreadyQuerying = false;
         private EventWaitHandle m_activityEvent;
 
+        private Control m_invoker = new Control();
+
         public APListView()
         {
             Presenter = RootWorkItem.Items.AddNew<APListPresenter>(PresenterNames.APList);
+            Presenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_NetworkDataChanged);
+
             InitializeComponent();
             this.Name = "Available APs";
 
             apList.FullRowSelect = true;
+        }
+
+        void Presenter_NetworkDataChanged(object sender, GenericEventArgs<INetworkData> e)
+        {
+            if (m_invoker.InvokeRequired)
+            {
+                m_invoker.Invoke(new EventHandler<GenericEventArgs<INetworkData>>(Presenter_NetworkDataChanged), new object[] { sender, e });
+                return;
+            }
+
+            ResetBacklightTimer();
+
+            // update the UI
+            apList.SuspendLayout();
+
+            try
+            {
+                foreach (var ap in e.Value.NearbyAPs)
+                {
+                    ListViewItem lvitem = new ListViewItem();
+                    lvitem.Text = ap.Name;
+                    lvitem.SubItems.Add(ap.SignalStrength.ToString());
+                    lvitem.SubItems.Add(ap.MAC);
+                    apList.Items.Add(lvitem);
+                }
+                if ((!m_columnWidthsSet) && (e.Value.NearbyAPs.Length > 0))
+                {
+                    UpdateColumnsWidth();
+                }
+            }
+            finally
+            {
+                apList.ResumeLayout(true);
+            }
+
         }
 
         private void UpdateColumnsWidth()
@@ -72,59 +113,5 @@ namespace WiFiSurvey.Shell.Views
                 m_activityEvent.Set();
             }
         }
-
-        public void RefreshList()
-        {
-            AccessPointCollection accessPoints = null;
-
-            // don't double-call
-            if (m_alreadyQuerying) return;
-
-            // prevent the backlight from shutting off
-            ResetBacklightTimer();
-
-            try
-            {
-                m_alreadyQuerying = true;
-                int et = Environment.TickCount;
-
-                accessPoints = Presenter.AccessPoints;
-
-                et = Environment.TickCount - et;
-                Debug.WriteLine(string.Format(" Getting AP list took {0}ms", et));
-
-                et = Environment.TickCount;
-                ListViewItem lvitem;
-
-                if (accessPoints == null)
-                {
-                    return;
-                }
-
-                int expected = accessPoints.Count;
-                apList.SuspendLayout();
-                apList.Items.Clear();
-
-                foreach (AccessPoint accessPoint in accessPoints)
-                {
-                    lvitem = new ListViewItem();
-                    lvitem.Text = accessPoint.Name;
-                    lvitem.SubItems.Add(accessPoint.SignalStrength.Decibels.ToString());
-                    lvitem.SubItems.Add(accessPoint.PhysicalAddress.ToString());
-                    apList.Items.Add(lvitem);
-                }
-                if ((!m_columnWidthsSet) && (accessPoints.Count > 0))
-                {
-                    UpdateColumnsWidth();
-                }
-                apList.ResumeLayout(true);
-
-            }
-            finally
-            {
-                m_alreadyQuerying = false;
-            }
-        }
-
     }
 }

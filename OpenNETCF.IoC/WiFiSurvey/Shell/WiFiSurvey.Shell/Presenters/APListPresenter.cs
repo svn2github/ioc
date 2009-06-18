@@ -8,6 +8,7 @@ using OpenNETCF.Net.NetworkInformation;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using System.Threading;
+using WiFiSurvey.Infrastructure;
 
 namespace WiFiSurvey.Shell.Presenters
 {
@@ -19,43 +20,24 @@ namespace WiFiSurvey.Shell.Presenters
         private Thread AccessPointThread;
         private Boolean Done { get; set; }
 
-        WirelessZeroConfigNetworkInterface Adapter{get;set;}
+        public event EventHandler<GenericEventArgs<INetworkData>> NetworkDataChanged;
+
+        [ServiceDependency]
+        IAPMonitorService APMonitorService { get; set; }
+
+        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
+        public void OnNetworkDataChange(object sender, GenericEventArgs<INetworkData> args)
+        {
+            if (NetworkDataChanged != null)
+            {
+                NetworkDataChanged(this, args);
+            }
+        }
 
         public APListPresenter()
         {
-            NetworkService = RootWorkItem.Services.Get<INetworkService>();
-            Adapter = NetworkService.Adapter;
-
-            AccessPointThread = new Thread(GetAccessPoints);
-            AccessPointThread.IsBackground = true;
-            AccessPointThread.Start();
         }
 
-        ~APListPresenter()
-        {
-            AccessPointThread.Abort();
-            Done = true;
-        }
 
-        public void GetAccessPoints()
-        {
-            if (Adapter != null)
-            {
-                while (!Done)
-                {
-                    Adapter.Refresh();
-                    AccessPoints = Adapter.NearbyAccessPoints;
-                    foreach (var accessItem in AccessPoints)
-                    {
-                        if (Adapter.AssociatedAccessPoint == accessItem.Name)
-                        {
-                            WirelessUtility.CurrentAccessPoint = accessItem;
-                            continue;
-                        }
-                    }
-                    Thread.Sleep(1000);
-                }
-            }
-        }
     }
 }

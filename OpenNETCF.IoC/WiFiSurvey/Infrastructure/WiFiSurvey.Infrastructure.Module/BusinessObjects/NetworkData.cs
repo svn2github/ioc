@@ -5,8 +5,9 @@ using System.Text;
 
 namespace WiFiSurvey.Infrastructure.BusinessObjects
 {
-    public interface IApplicationConfiguration
+    internal class NetworkData : INetworkData
     {
-        int AdapterPollInterval { get; }
+        public APInfo AssociatedAP { get; set; }
+        public APInfo[] NearbyAPs { get; set; }
     }
 }

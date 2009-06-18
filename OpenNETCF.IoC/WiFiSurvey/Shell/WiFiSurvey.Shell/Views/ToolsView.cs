@@ -45,7 +45,7 @@ namespace WiFiSurvey.Shell.Views
 
         public void UpdateTools()
         {
-            lblEventCount.Text = DataService.EventCount.ToString();;
+//            lblEventCount.Text = DataService.EventCount.ToString();;
         }
 
         private void btnEnableDesktop_Click(object sender, EventArgs e)
@@ -66,8 +66,8 @@ namespace WiFiSurvey.Shell.Views
 
         private void btnResetEvents_Click(object sender, EventArgs e)
         {
-            DataService.EventCount = 0;
-            DataService.ClearEvents();
+//            DataService.EventCount = 0;
+//            DataService.ClearEvents();
         }
     }
 }

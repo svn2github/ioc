@@ -66,7 +66,7 @@ namespace WiFiSurvey.Shell
 
             bodyWorkspace.SelectTab(0);
 
-            this.WindowState = FormWindowState.Normal;
+            this.WindowState = FormWindowState.Maximized;
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
@@ -82,7 +82,7 @@ namespace WiFiSurvey.Shell
 
             if (WirelessUtility.RefreshRate == 0)
             {
-                WirelessUtility.RefreshRate = 1000;
+                WirelessUtility.RefreshRate = 0;
             }
             m_containerTimer.Interval = 1000;
             m_containerTimer.Tick += new EventHandler(m_containerTimer_Tick);
@@ -96,22 +96,22 @@ namespace WiFiSurvey.Shell
 
         void m_containerTimer_Tick(object sender, EventArgs e)
         {
-            if (m_containerTimer.Interval != WirelessUtility.RefreshRate)
-            {
-                m_containerTimer.Interval = WirelessUtility.RefreshRate;
-            }
-            UpdateHeader();
+            //if (m_containerTimer.Interval != WirelessUtility.RefreshRate)
+            //{
+            //    m_containerTimer.Interval = WirelessUtility.RefreshRate;
+            //}
+            //UpdateHeader();
 
-            APDownWatch.Reset();
-            APDownWatch.Start();
+            //APDownWatch.Reset();
+            //APDownWatch.Start();
 
-            UpdateAPList();
+            //UpdateAPList();
             
-            APDownWatch.Stop();
-            Trace.WriteLine("APList Refresh Took " + APDownWatch.ElapsedMilliseconds);
+            //APDownWatch.Stop();
+            //Trace.WriteLine("APList Took" + APDownWatch.ElapsedMilliseconds);
 
-            UpdateFooter();
-            UpdateTools();
+            //UpdateFooter();
+            //UpdateTools();
 
         }
 
@@ -123,7 +123,7 @@ namespace WiFiSurvey.Shell
             {
                 if (PreviouslyConnected)
                 {
-                    DataService.NewEvent("Current AP" , "AP Connection Lost");
+//                    DataService.NewEvent("Current AP" , "AP Connection Lost");
                     //APDownWatch.Reset();
                     //APDownWatch.Start();
                     PreviouslyConnected = false;
@@ -134,7 +134,7 @@ namespace WiFiSurvey.Shell
             {
                 if (!PreviouslyConnected)
                 {
-                    DataService.NewEvent("Current AP", "AP Connection Found");
+//                    DataService.NewEvent("Current AP", "AP Connection Found");
                     APDownWatch.Stop();
                     PreviouslyConnected = true;
                 }
@@ -145,7 +145,7 @@ namespace WiFiSurvey.Shell
         public void UpdateAPList()
         {
             APListView m_APList = RootWorkItem.Items.Get<APListView>(ViewNames.APList);
-            m_APList.RefreshList();
+//            m_APList.RefreshList();
         }
 
         public void UpdateFooter()

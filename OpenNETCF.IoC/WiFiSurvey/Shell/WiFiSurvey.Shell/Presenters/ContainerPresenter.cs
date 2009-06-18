@@ -13,12 +13,10 @@ namespace WiFiSurvey.Shell.Presenters
     public class ContainerPresenter
     {
         private INetworkService NetworkService {get;set;}
-        private WirelessZeroConfigNetworkInterface Adapter { get; set; }
 
         public ContainerPresenter()
         {
             NetworkService = RootWorkItem.Services.Get<INetworkService>();
-            Adapter = NetworkService.Adapter;
         }
 
 

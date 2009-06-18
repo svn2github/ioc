@@ -15,6 +15,7 @@ namespace WiFiSurvey.Infrastructure
 
         public override void AddServices()
         {
+            RootWorkItem.Services.AddNew<APMonitorService, IAPMonitorService>();
             RootWorkItem.Services.AddNew<NetworkService, INetworkService>();
         }
     }

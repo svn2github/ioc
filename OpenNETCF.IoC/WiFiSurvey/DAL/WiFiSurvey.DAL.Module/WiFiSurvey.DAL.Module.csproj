@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A5AF600E-F1CD-40A1-9211-47B319A7876B}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -50,6 +50,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="OpenNETCF.Core, Version=2.3.0.39, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\OpenNETCF.Core.dll</HintPath>
+    </Reference>
     <Reference Include="OpenNETCF.Net, Version=2.3.0.39, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\OpenNETCF.Net.dll</HintPath>
@@ -65,11 +69,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessObjects\ITable.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="MulticastGroupMember.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataService.cs" />
-    <Compile Include="SQLCE\SQLCEConnection.cs" />
+    <Compile Include="SQLCE\SQLCEDB.cs" />
+    <Compile Include="Tables\AssociatedAP.cs" />
+    <Compile Include="Tables\NearbyAPs.cs" />
+    <Compile Include="Tables\Table.cs" />
+    <Compile Include="Unit of Work\IUnitOfWork.cs" />
+    <Compile Include="Unit of Work\NetworkInfoUnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj">
@@ -80,9 +90,6 @@
       <Project>{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}</Project>
       <Name>WiFiSurvey.Infrastructure.Interface</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessObjects\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

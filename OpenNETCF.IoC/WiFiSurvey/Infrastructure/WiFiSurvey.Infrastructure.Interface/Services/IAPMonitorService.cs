@@ -6,8 +6,8 @@ using OpenNETCF.Net.NetworkInformation;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
-    public interface INetworkService
+    public interface IAPMonitorService
     {
-        void StartListening();
+        WirelessZeroConfigNetworkInterface Adapter { get; }
     }
 }

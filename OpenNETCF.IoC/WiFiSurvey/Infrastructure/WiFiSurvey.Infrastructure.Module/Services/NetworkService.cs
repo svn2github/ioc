@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using OpenNETCF.Net.NetworkInformation;
 using System.Net;
-using OpenNETCF.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
@@ -15,55 +14,45 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public class NetworkService : INetworkService
     {
+        private Stopwatch m_lastReceivedWatch = new Stopwatch();
+        private double m_dropOutSeconds = 0;
+        private double m_dropOutSecondsMax = 5;
+        private int m_listenReciever = 11001;
+        private int m_broadcastPort = 11000;
+        private TimeSpan m_lastRecievedTime;
+        private Thread m_broadcastThread;
+        private Thread m_listenThread;
+        private IPEndPoint m_endPoint;
+        private bool m_connected;
+        private string m_hostName;
+        private IPAddress m_ipAddress;
+
+        private UdpClient Listener { get; set; }
+        private Boolean Done { get; set; }
         private IDataService DataService { get; set; }
+        private IConfigurationService ConfigurationService { get; set; }
 
-        public NetworkService()
+        public DateTime LastSentTime { get; set; }
+
+
+        [InjectionConstructor]
+        public NetworkService([ServiceDependency]IConfigurationService configService)
         {
-            //// we'll assume that you *must* have an adapter, and we'll use the first
-            var intf = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(
-                i => i is WirelessZeroConfigNetworkInterface);
-
-            if (intf == null)
-            {
-                throw new Exception("No WZC adapter found!");
-            }
-
-            Adapter = intf as WirelessZeroConfigNetworkInterface;
-
-            LastRecievedWatch.Start();
+            ConfigurationService = configService;
+            m_lastReceivedWatch.Start();
 
             IPAddress[] array = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
             m_ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
 
-            HostName = Dns.GetHostName();
+            m_hostName = Dns.GetHostName();
         }
 
-        public WirelessZeroConfigNetworkInterface Adapter { get; set; }
-
-        public DateTime LastSentTime { get; set; }
-
-        private System.Diagnostics.Stopwatch LastRecievedWatch = new System.Diagnostics.Stopwatch();
-        private double m_dropOutSeconds = 0;
-        private double m_dropOutSecondsMax = 10;
-
-        private UdpClient m_listener { get; set; }
-
-        private Boolean done { get; set; }
-
-        private int m_listenReciever = 11001;
-
-        private int m_broadcastPort = 11000;
-
-        private TimeSpan m_lastRecievedTime;
-
-        private Thread m_broadcastThread;
-        private Thread m_listenThread;
-
-        private IPEndPoint m_endPoint;
-        private Boolean Connected;
-        private string HostName;
-
-        private IPAddress m_ipAddress;
+        ~NetworkService()
+        {
+            // TODO: fix this - it is bad, bad form.
+            m_broadcastThread.Abort();
+            m_listenThread.Abort();
+        }
 
         public void StartBroadcastProc()
         {
@@ -74,7 +63,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void StartListenerThread()
         {
-            m_listener = new UdpClient(m_listenReciever);
+            Listener = new UdpClient(m_listenReciever);
             m_listenThread = new Thread(ListenerProc);
             m_listenThread.IsBackground = true;
             m_listenThread.Start();
@@ -84,30 +73,22 @@ namespace WiFiSurvey.Infrastructure.Services
         {
             try
             {
-                while (!done)
+                while (!Done)
                 {
                     if (!WirelessUtility.DesktopAppDisabled)
                     {
-                        LastRecievedWatch.Reset();
-                        LastRecievedWatch.Start();
+                        m_lastReceivedWatch.Reset();
+                        m_lastReceivedWatch.Start();
                         m_endPoint = new IPEndPoint(IPAddress.Broadcast, m_listenReciever);
 
-                        byte[] data = m_listener.Receive(ref m_endPoint);
+                        byte[] data = Listener.Receive(ref m_endPoint);
 
                         if (data.Length > 0)
                         {
-                            LastRecievedWatch.Stop();
-                            m_lastRecievedTime = LastRecievedWatch.Elapsed;
+                            m_lastReceivedWatch.Stop();
+                            m_lastRecievedTime = m_lastReceivedWatch.Elapsed;
                             WirelessUtility.DesktopConnected = true;
                         }
-
-                        if (!Connected)
-                        {
-                            WirelessUtility.DesktopConnected = true;
-                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
-                            Connected = true;
-                        }
-
                     }
                 }
             }
@@ -117,7 +98,7 @@ namespace WiFiSurvey.Infrastructure.Services
             }
             finally
             {
-                m_listener.Close();
+                Listener.Close();
             }
         }
         public void StartListening()
@@ -126,13 +107,6 @@ namespace WiFiSurvey.Infrastructure.Services
 
             StartBroadcastProc();
             StartListenerThread();
-        }
-
-        ~NetworkService()
-        {
-            done = true;
-            m_broadcastThread.Abort();
-            m_listenThread.Abort();
         }
 
         public void Broadcast()
@@ -151,25 +125,34 @@ namespace WiFiSurvey.Infrastructure.Services
             m_BroadcastClient.Connect(m_RemoteEP);
             //s.Connect(ep);
 
-            while (!done)
+            while (!Done)
             {
                 if (WirelessUtility.CurrentAccessPoint != null && !WirelessUtility.DesktopAppDisabled)
                 {
-                    args[0] = HostName + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
+                    args[0] = m_hostName + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
                     byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
                     m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
                     //Check Connectivity to Desktop
-                    m_dropOutSeconds = LastRecievedWatch.Elapsed.TotalSeconds;
+                    m_dropOutSeconds = m_lastReceivedWatch.Elapsed.TotalSeconds;
 
                     if (m_dropOutSeconds > m_dropOutSecondsMax)
                     {
                         WirelessUtility.DesktopConnected = false;
-                        if (Connected)
+                        if (m_connected)
                         {
-                            DataService.NewEvent("Desktop Client", "Lost Desktop Connection");
-                            Connected = false;
+//                            DataService.NewEvent("Desktop Client", "Lost Desktop Connection");
+                            m_connected = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!m_connected)
+                        {
+                            WirelessUtility.DesktopConnected = true;
+//                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
+                            m_connected = true;
                         }
                     }
                 }

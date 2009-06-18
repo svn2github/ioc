@@ -12,42 +12,48 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.Net.Sockets;
 using OpenNETCF.Net.NetworkInformation;
 using WiFiSurvey.DAL.SQLCE;
+using WiFiSurvey.DAL.Unit_of_Work;
+using WiFiSurvey.Infrastructure.Constants;
+using WiFiSurvey.Infrastructure;
 
 namespace WiFiSurvey.DAL.Services
 {
     public class DataService : IDataService
     {
-        SQLCEConnection Database;
+        SQLCEDB Database;
 
         public DataService()
         {
-            Database = new SQLCEConnection();
+            Database = new SQLCEDB();
+
+            // create the DB in the background so it doesn't slow app bring-up
+            ThreadPool.QueueUserWorkItem(delegate { Database.EnsureDatabaseExists(); });
         }
 
-        public event EventHandler<DataServiceArgs<DataEvent>> OnNewDataEvent;
-        public event EventHandler<EventArgs> OnClearEvents;
-
-        public void NewEvent(string Location, string Event)
+        public void ShutDown()
         {
-            EventCount++;
-            if (OnNewDataEvent == null) return;
-            DataEvent dataEvent = new DataEvent(){Location = Location, Description = Event};
-            OnNewDataEvent(this.ToString() , new DataServiceArgs<DataEvent>(dataEvent) );
-            //Database.InsertValueIntoTable(dataEvent);
+            Database.ShutDown();
         }
 
-        public int NetworkDownTime { get; set; }
+        private NetworkInfoUnitOfWork NetworkInfoUnitOfWork { get; set; }
 
-        public void ClearEvents()
+        public void InsertNetworkData(INetworkData data)
         {
-            EventCount = 0;
-            if (OnClearEvents != null)
-            {
-                OnClearEvents(this, new EventArgs());
-            }
+            // lazy load
+            if(NetworkInfoUnitOfWork == null) NetworkInfoUnitOfWork = new NetworkInfoUnitOfWork(Database);
+
+            Debug.WriteLine("Inserting network info into database");
+            int et = Environment.TickCount;
+            NetworkInfoUnitOfWork.Insert(data);
+            NetworkInfoUnitOfWork.Commit();
+            et = Environment.TickCount - et;
+            Debug.WriteLine(string.Format("Insert took {0}ms", et));
         }
 
-        public int EventCount { get; set; }
-        //publish an Event to a DataBase
+        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
+        public void OnNetworkDataChange(object sender, GenericEventArgs<INetworkData> args)
+        {
+            InsertNetworkData(args.Value);
+        }
     }
 }
