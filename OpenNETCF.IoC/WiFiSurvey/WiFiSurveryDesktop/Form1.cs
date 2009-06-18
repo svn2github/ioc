@@ -22,7 +22,7 @@ namespace WiFiSurveryDesktop
         private Thread m_listenThread;
         private UdpClient m_listener;
 
-        private Dictionary<IPAddress, string> ConnectedItems = new Dictionary<IPAddress, string>();
+        private List<ConnectedDevice> ConnectedDevices = new List<ConnectedDevice>();
         private Dictionary<IPAddress, UIAction> DeviceControls = new Dictionary<IPAddress, UIAction>();
 
         private int m_listenPort = 11000;
@@ -79,20 +79,20 @@ namespace WiFiSurveryDesktop
         {
             SuspendLayout();
             UIAction actionItem;
-            foreach(var item in ConnectedItems)
+            foreach(var item in ConnectedDevices)
             {
-                if (DeviceControls.ContainsKey(item.Key))
+                if (DeviceControls.ContainsKey(item.IPAdress))
                 {
-                    DeviceControls[item.Key].UpdateData(item.Value);
-                    DeviceControls[item.Key].Connected = true;
-                    DeviceControls[item.Key].Refresh();
+                    DeviceControls[item.IPAdress].UpdateData(item.Data);
+                    DeviceControls[item.IPAdress].Connected = true;
+                    DeviceControls[item.IPAdress].Refresh();
                 }
                 else
                 {
-                    actionItem = new UIAction(item.Key, item.Value);
+                    actionItem = new UIAction(item.IPAdress, item.Data);
                     actionItem.Width = flowLayoutPanel1.Width - 10;
                     flowLayoutPanel1.Controls.Add(actionItem);
-                    DeviceControls.Add(item.Key, actionItem);
+                    DeviceControls.Add(item.IPAdress, actionItem);
                 }
             }
             ResumeLayout(true);
@@ -100,6 +100,7 @@ namespace WiFiSurveryDesktop
 
         public void PingDevice(IPEndPoint broadcast, byte[] data)
         {
+            Boolean foundDevice = false;
             string[] args = new string[1];
             args[0] = "Wifi";
 
@@ -116,14 +117,20 @@ namespace WiFiSurveryDesktop
 
             Trace.WriteLine(("Sent Packet To " + m_EndPoint.ToString() + " @ " + m_EndPoint.Address));
 
-            if (!ConnectedItems.Keys.Contains(broadcast.Address))
+            foreach (var item in ConnectedDevices)
             {
-                ConnectedItems.Add(broadcast.Address, dataString);
+                if (item.IPAdress.Address == broadcast.Address.Address)
+                {
+                    foundDevice = true;
+                    item.Data = dataString;
+                }
             }
-            else
+            if (!foundDevice)
             {
-                ConnectedItems.Remove(broadcast.Address);
-                ConnectedItems.Add(broadcast.Address, dataString);
+                ConnectedDevice device = new ConnectedDevice();
+                device.IPAdress = broadcast.Address;
+                device.Data = dataString;
+                ConnectedDevices.Add(device);
             }
 
         }

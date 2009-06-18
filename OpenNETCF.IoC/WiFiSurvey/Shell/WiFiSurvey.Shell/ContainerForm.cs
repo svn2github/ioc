@@ -128,10 +128,10 @@ namespace WiFiSurvey.Shell
                     {
                         DataService.NewEvent("Current AP", "AP Connection Found");
                         APDownWatch.Stop();
-                        WirelessUtility.CurrentAccessPoint = accessPoint;
                         PreviouslyConnected = true;
                         m_Header.SetCurrentAP(WirelessUtility.CurrentAccessPoint.Name, WirelessUtility.CurrentAccessPoint.PhysicalAddress.ToString(), WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString());
                     }
+                    WirelessUtility.CurrentAccessPoint = accessPoint;
                 }
                 else
                 {

@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\ConnectedDevice.cs" />
     <Compile Include="Components\UIAction.cs">
       <SubType>UserControl</SubType>
     </Compile>
