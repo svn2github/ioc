@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace WiFiSurveryDesktop.Components
 {
@@ -21,8 +22,26 @@ namespace WiFiSurveryDesktop.Components
         private string m_signalStrength;
         private ToolTip tip;
         private IPAddress m_ipAddress;
+        private Stopwatch m_downTimer = new Stopwatch();
+        private bool m_connected;
 
-        public Boolean Connected { get; set; }
+        public Boolean Connected
+        {
+            get { return m_connected; }
+            set
+            {
+                m_connected = value;
+                if (m_connected)
+                {
+                    m_downTimer.Stop();
+                }
+                else
+                {
+                    m_downTimer.Reset();
+                    m_downTimer.Start();
+                }
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -102,13 +121,15 @@ namespace WiFiSurveryDesktop.Components
             if (Connected)
             {
                 g.FillRectangle(m_gradientBrush, ActionPanel.Bounds);
+                label1.Text = m_deviceName + "(" + m_ipAddress.ToString() + ") @ " + m_accessPoint + "(" + m_signalStrength + ")";
             }
             else
             {
                 g.FillRectangle(m_selectedBrush, ActionPanel.Bounds);
+                label1.Text = m_deviceName + "(Disconnected) " + m_downTimer.Elapsed.Hours.ToString("D2") + ":" + m_downTimer.Elapsed.Minutes.ToString("D2") + ":" + m_downTimer.Elapsed.Seconds.ToString("D2");
+
             }
 
-            label1.Text = m_deviceName+ "(" + m_ipAddress.ToString() + ") @ " + m_accessPoint + "(" + m_signalStrength + ")";
             //g.DrawString(m_ipAddress.ToString(), m_actionFont, Brushes.Black, 0, 0);
             ResumeLayout(true);
         }

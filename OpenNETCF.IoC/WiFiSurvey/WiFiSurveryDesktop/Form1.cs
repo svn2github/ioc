@@ -83,14 +83,28 @@ namespace WiFiSurveryDesktop
             {
                 if (DeviceControls.ContainsKey(item.IPAdress))
                 {
-                    DeviceControls[item.IPAdress].UpdateData(item.Data);
-                    DeviceControls[item.IPAdress].Connected = true;
+                    DateTime lastPing = item.LastPing;
+                    DateTime compareTime = DateTime.Now.AddSeconds(-5);
+
+                    if (lastPing.CompareTo(compareTime) == 1)
+                    {
+                        DeviceControls[item.IPAdress].UpdateData(item.Data);
+                        DeviceControls[item.IPAdress].Connected = true;
+                    }
+                    else
+                    {
+                        if (DeviceControls[item.IPAdress].Connected == true)
+                        {
+                            DeviceControls[item.IPAdress].Connected = false;
+                        }
+                    }
                     DeviceControls[item.IPAdress].Refresh();
                 }
                 else
                 {
                     actionItem = new UIAction(item.IPAdress, item.Data);
                     actionItem.Width = flowLayoutPanel1.Width - 10;
+                    actionItem.Connected = true;
                     flowLayoutPanel1.Controls.Add(actionItem);
                     DeviceControls.Add(item.IPAdress, actionItem);
                 }
@@ -123,6 +137,7 @@ namespace WiFiSurveryDesktop
                 {
                     foundDevice = true;
                     item.Data = dataString;
+                    item.LastPing = DateTime.Now;
                     break;
                 }
             }

@@ -10,5 +10,6 @@ namespace WiFiSurveryDesktop.Components
     {
         public IPAddress IPAdress { get; set; }
         public string Data { get; set; }
+        public DateTime LastPing { get; set; }
     }
 }
