@@ -8,10 +8,10 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public interface IDataService
     {
-        event EventHandler<DataServiceArgs<string>> OnNewDataEvent;
+        event EventHandler<DataServiceArgs<DataEvent>> OnNewDataEvent;
         event EventHandler<EventArgs> OnClearEvents;
 
-        void NewEvent(string Event);
+        void NewEvent(string Location, string Event);
         void ClearEvents();
         int EventCount { get; set; }
     }

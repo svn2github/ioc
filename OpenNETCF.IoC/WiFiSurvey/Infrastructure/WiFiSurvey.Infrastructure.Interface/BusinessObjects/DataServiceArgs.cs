@@ -14,4 +14,10 @@ namespace WiFiSurvey.Infrastructure.BusinessObjects
             Value = value;
         }
     }
+
+    public class DataEvent
+    {
+        public string Location { get; set; }
+        public string Description { get; set; }
+    }
 }

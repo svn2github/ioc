@@ -40,14 +40,14 @@
             this.historyListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.historyListView.Location = new System.Drawing.Point(0, 0);
             this.historyListView.Name = "historyListView";
-            this.historyListView.Size = new System.Drawing.Size(234, 155);
+            this.historyListView.Size = new System.Drawing.Size(254, 155);
             this.historyListView.TabIndex = 0;
             this.historyListView.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 70;
+            this.columnHeader1.Width = 82;
             // 
             // columnHeader2
             // 
@@ -60,7 +60,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.historyListView);
             this.Name = "HistoryView";
-            this.Size = new System.Drawing.Size(234, 155);
+            this.Size = new System.Drawing.Size(254, 155);
             this.ResumeLayout(false);
 
         }

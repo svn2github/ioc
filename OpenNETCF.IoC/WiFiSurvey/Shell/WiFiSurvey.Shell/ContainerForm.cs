@@ -23,7 +23,8 @@ namespace WiFiSurvey.Shell
         ContainerPresenter Presenter { get; set; }
         private IDataService DataService { get; set; }
         private INetworkService NetworkService { get; set; }
-
+        private Stopwatch APDownWatch = new Stopwatch();
+        private Boolean PreviouslyConnected { get; set; }
         private Timer m_containerTimer = new Timer();
 
         public ContainerForm()
@@ -60,6 +61,8 @@ namespace WiFiSurvey.Shell
 
             NetworkService = RootWorkItem.Services.Get<INetworkService>();
             NetworkService.StartListening();
+
+            DataService = RootWorkItem.Services.Get<IDataService>();
 
             bodyWorkspace.SelectTab(0);
 
@@ -108,14 +111,35 @@ namespace WiFiSurvey.Shell
         {
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
             AccessPoint accessPoint = Presenter.GetCurrentAP();
-            WirelessUtility.CurrentAccessPoint = accessPoint;
             if (accessPoint == null)
             {
+                if (PreviouslyConnected)
+                {
+                    DataService.NewEvent("Current AP","AP Connection Lost");
+                    APDownWatch.Start();
+                }
                 m_Header.SetCurrentAP("[none]", "-", "-");
             }
             else
             {
-                m_Header.SetCurrentAP(accessPoint.Name, accessPoint.PhysicalAddress.ToString(), accessPoint.SignalStrength.Decibels.ToString());
+                if (WirelessUtility.CurrentAccessPoint != null)
+                {
+                    if (WirelessUtility.CurrentAccessPoint.Name != accessPoint.Name)
+                    {
+                        DataService.NewEvent("Current AP", "AP Connection Found");
+                        APDownWatch.Stop();
+                        WirelessUtility.CurrentAccessPoint = accessPoint;
+                        PreviouslyConnected = true;
+                        m_Header.SetCurrentAP(WirelessUtility.CurrentAccessPoint.Name, WirelessUtility.CurrentAccessPoint.PhysicalAddress.ToString(), WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString());
+                    }
+                }
+                else
+                {
+                    WirelessUtility.CurrentAccessPoint = accessPoint;
+                    DataService.NewEvent("Current AP", "AP Connection Found");
+                    PreviouslyConnected = true;
+                    m_Header.SetCurrentAP(WirelessUtility.CurrentAccessPoint.Name, WirelessUtility.CurrentAccessPoint.PhysicalAddress.ToString(), WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString());
+                }
             }
         }
 

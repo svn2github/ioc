@@ -18,16 +18,16 @@ namespace WiFiSurvey.DAL.Services
     {
         public DataService()
         {
-
         }
 
-        public event EventHandler<DataServiceArgs<string>> OnNewDataEvent;
+        public event EventHandler<DataServiceArgs<DataEvent>> OnNewDataEvent;
         public event EventHandler<EventArgs> OnClearEvents;
 
-        public void NewEvent(string Event)
+        public void NewEvent(string Location, string Event)
         {
             if (OnNewDataEvent == null) return;
-            OnNewDataEvent(this.ToString() , new DataServiceArgs<string>(Event));
+            DataEvent dataEvent = new DataEvent(){Location = Location, Description = Event};
+            OnNewDataEvent(this.ToString() , new DataServiceArgs<DataEvent>(dataEvent) );
             EventCount++;
         }
 

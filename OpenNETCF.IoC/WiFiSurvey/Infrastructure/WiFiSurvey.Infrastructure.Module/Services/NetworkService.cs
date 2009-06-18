@@ -38,11 +38,11 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public WirelessZeroConfigNetworkInterface Adapter { get; set; }
 
-                public DateTime LastSentTime { get; set; }
+        public DateTime LastSentTime { get; set; }
 
         private System.Diagnostics.Stopwatch LastRecievedWatch = new System.Diagnostics.Stopwatch();
-        private int m_dropOutSeconds = 0;
-        private int m_dropOutSecondsMax = 5;
+        private double m_dropOutSeconds = 0;
+        private double m_dropOutSecondsMax = 5;
 
         private UdpClient m_listener { get; set; }
 
@@ -146,40 +146,43 @@ namespace WiFiSurvey.Infrastructure.Services
             {
                 if (WirelessUtility.CurrentAccessPoint != null)
                 {
+
+                    if (Adapter.OperationalStatus != OperationalStatus.Up)
+                    {
+                        DataService.NewEvent("Network Conn.", Adapter.OperationalStatus.ToString());
+                    }
+
                     args[0] = Dns.GetHostName() + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
-                }
-                else
-                {
-                    args[0] = "No Point";
-                }
 
-                byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
+                    byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
-                //s.Send(sendbuf);
-                m_BroadcastClient.Send(sendbuf, sendbuf.Length);
+                    //s.Send(sendbuf);z
+                    m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
-                m_dropOutSeconds = LastRecievedWatch.Elapsed.Seconds;
+                    m_dropOutSeconds = LastRecievedWatch.Elapsed.TotalSeconds;
 
-                if (m_dropOutSeconds > m_dropOutSecondsMax)
-                {
-                    WirelessUtility.DesktopConnected = false;
-                    if (Connected)
+                    if (m_dropOutSeconds > m_dropOutSecondsMax)
                     {
-                        DataService.NewEvent("Lost Desktop Connection");
-                        Connected = false;
+                        WirelessUtility.DesktopConnected = false;
+                        if (Connected)
+                        {
+                            DataService.NewEvent("Desktop Client", "Lost Desktop Connection");
+                            Connected = false;
+                        }
                     }
-                }
-                else
-                {
-                    if (!Connected)
+                    else
                     {
-                        DataService.NewEvent("Found Desktop Connection");
-                        Connected = true;
+                        if (!Connected)
+                        {
+                            WirelessUtility.DesktopConnected = true;
+                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
+                            Connected = true;
+                        }
                     }
-                }
 
-                Trace.WriteLine("Message sent to " + m_RemoteEP.ToString());
-                Thread.Sleep(1000);
+                    Trace.WriteLine("Message sent to " + m_RemoteEP.ToString());
+                    Thread.Sleep(1000);
+                }
             }
         }
     }

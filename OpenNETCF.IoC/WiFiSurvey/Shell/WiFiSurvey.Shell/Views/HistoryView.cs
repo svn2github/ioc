@@ -28,11 +28,11 @@ namespace WiFiSurvey.Shell.Views
             InitializeComponent();
             this.Name = "History";
 
-            ResizeView();
+            //ResizeView();
 
             DataService = RootWorkItem.Services.Get<IDataService>();
 
-            DataService.OnNewDataEvent += new EventHandler<DataServiceArgs<string>>(DataService_NewDataEvent);
+            DataService.OnNewDataEvent += new EventHandler<DataServiceArgs<DataEvent>>(DataService_NewDataEvent);
             DataService.OnClearEvents += new EventHandler<EventArgs>(DataService_OnClearEvents);
         }
 
@@ -41,9 +41,9 @@ namespace WiFiSurvey.Shell.Views
             historyListView.Invoke(new ClearListView(historyListView.Items.Clear));
         }
 
-        void DataService_NewDataEvent(object sender, DataServiceArgs<string> e)
+        void DataService_NewDataEvent(object sender, DataServiceArgs<DataEvent> e)
         {
-            NewHistoryEvent("New Event", e.Value);
+            NewHistoryEvent(e.Value.Location, e.Value.Description);
         }
 
         public void ResizeView()
