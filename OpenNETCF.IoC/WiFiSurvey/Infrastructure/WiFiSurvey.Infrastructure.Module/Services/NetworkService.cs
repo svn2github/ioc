@@ -19,7 +19,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public NetworkService()
         {
-            // we'll assume that you *must* have an adapter, and we'll use the first
+            //// we'll assume that you *must* have an adapter, and we'll use the first
             var intf = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(
                 i => i is WirelessZeroConfigNetworkInterface);
 

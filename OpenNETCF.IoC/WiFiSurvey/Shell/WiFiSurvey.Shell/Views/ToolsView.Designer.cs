@@ -48,6 +48,7 @@
             // 
             // btnEnableDesktop
             // 
+            this.btnEnableDesktop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEnableDesktop.Location = new System.Drawing.Point(88, 9);
             this.btnEnableDesktop.Name = "btnEnableDesktop";
             this.btnEnableDesktop.Size = new System.Drawing.Size(72, 20);
@@ -57,6 +58,7 @@
             // 
             // btnDisableDesktop
             // 
+            this.btnDisableDesktop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDisableDesktop.Location = new System.Drawing.Point(160, 9);
             this.btnDisableDesktop.Name = "btnDisableDesktop";
             this.btnDisableDesktop.Size = new System.Drawing.Size(72, 20);
@@ -73,6 +75,7 @@
             // 
             // cmbRefreshRate
             // 
+            this.cmbRefreshRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbRefreshRate.Items.Add("1");
             this.cmbRefreshRate.Items.Add("5");
             this.cmbRefreshRate.Items.Add("10");
@@ -80,14 +83,15 @@
             this.cmbRefreshRate.Items.Add("20");
             this.cmbRefreshRate.Items.Add("25");
             this.cmbRefreshRate.Items.Add("30");
-            this.cmbRefreshRate.Location = new System.Drawing.Point(86, 40);
+            this.cmbRefreshRate.Location = new System.Drawing.Point(88, 43);
             this.cmbRefreshRate.Name = "cmbRefreshRate";
             this.cmbRefreshRate.Size = new System.Drawing.Size(74, 23);
             this.cmbRefreshRate.TabIndex = 9;
             // 
             // lblSeconds
             // 
-            this.lblSeconds.Location = new System.Drawing.Point(170, 43);
+            this.lblSeconds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblSeconds.Location = new System.Drawing.Point(168, 46);
             this.lblSeconds.Name = "lblSeconds";
             this.lblSeconds.Size = new System.Drawing.Size(54, 20);
             this.lblSeconds.Text = "Seconds";
@@ -101,6 +105,7 @@
             // 
             // btnResetEvents
             // 
+            this.btnResetEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetEvents.Location = new System.Drawing.Point(160, 77);
             this.btnResetEvents.Name = "btnResetEvents";
             this.btnResetEvents.Size = new System.Drawing.Size(72, 20);
@@ -110,7 +115,8 @@
             // 
             // lblEventCount
             // 
-            this.lblEventCount.Location = new System.Drawing.Point(77, 76);
+            this.lblEventCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEventCount.Location = new System.Drawing.Point(88, 77);
             this.lblEventCount.Name = "lblEventCount";
             this.lblEventCount.Size = new System.Drawing.Size(48, 20);
             this.lblEventCount.Text = "label2";

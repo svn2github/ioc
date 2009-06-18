@@ -66,7 +66,7 @@ namespace WiFiSurvey.Shell
 
             bodyWorkspace.SelectTab(0);
 
-            this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Normal;
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
