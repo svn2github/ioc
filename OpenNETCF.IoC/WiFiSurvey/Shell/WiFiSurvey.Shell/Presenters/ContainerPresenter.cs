@@ -21,19 +21,6 @@ namespace WiFiSurvey.Shell.Presenters
             Adapter = NetworkService.Adapter;
         }
 
-        public AccessPoint GetCurrentAP()
-        {
-            Adapter.Refresh();
-            foreach (var accessItem in Adapter.NearbyAccessPoints)
-            {
-                if (Adapter.AssociatedAccessPoint == accessItem.Name)
-                {
-                    return accessItem;
-                }
-            }
-            return null;
-        }
-
 
     }
 }

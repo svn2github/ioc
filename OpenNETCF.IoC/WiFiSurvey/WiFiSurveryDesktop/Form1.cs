@@ -58,10 +58,8 @@ namespace WiFiSurveryDesktop
             {
                 while (!done)
                 {
-                    Trace.WriteLine("Waiting for broadcast");
                     IPEndPoint m_endPoint = new IPEndPoint(IPAddress.Any, m_listenPort);
                     byte[] bytes = m_listener.Receive(ref m_endPoint);
-
                     PingDevice(m_endPoint, bytes);
                 }
             }
@@ -128,8 +126,6 @@ namespace WiFiSurveryDesktop
             s.SendTo(sendbuf, m_EndPoint);
 
             string dataString = Encoding.ASCII.GetString(data);
-
-            Trace.WriteLine(("Sent Packet To " + m_EndPoint.ToString() + " @ " + m_EndPoint.Address));
 
             foreach (var item in ConnectedDevices)
             {

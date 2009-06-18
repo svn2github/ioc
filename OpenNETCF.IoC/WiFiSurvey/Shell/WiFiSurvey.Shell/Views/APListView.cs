@@ -89,14 +89,7 @@ namespace WiFiSurvey.Shell.Views
                 int et = Environment.TickCount;
                 try
                 {
-                    if (accessPoints == null)
-                    {
-                        accessPoints = Presenter.AccessPoints;
-                    }
-                    else
-                    {
-                        accessPoints.Refresh();
-                    }
+                    accessPoints = Presenter.AccessPoints;
                 }
                 catch (Exception ex)
                 {

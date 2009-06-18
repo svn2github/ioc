@@ -74,10 +74,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void StartListenerThread()
         {
-            Trace.WriteLine("Waiting for broadcast");
-
             m_listener = new UdpClient(m_listenReciever);
-
             m_listenThread = new Thread(ListenerProc);
             m_listenThread.IsBackground = true;
             m_listenThread.Start();
@@ -99,7 +96,6 @@ namespace WiFiSurvey.Infrastructure.Services
 
                     if (data.Length > 0)
                     {
-                        Trace.WriteLine(("Received broadcast from " + m_endPoint.ToString() + " @ " + m_endPoint.Port));
                         LastRecievedWatch.Stop();
                         m_lastRecievedTime = LastRecievedWatch.Elapsed;
                         WirelessUtility.DesktopConnected = true;
@@ -147,20 +143,14 @@ namespace WiFiSurvey.Infrastructure.Services
 
             while (!done)
             {
-                if (WirelessUtility.CurrentAccessPoint != null)
+                if (WirelessUtility.CurrentAccessPoint != null && !WirelessUtility.DesktopAppDisabled)
                 {
-                    //if (Adapter.OperationalStatus != OperationalStatus.Up)
-                    //{
-                    //    DataService.NewEvent("Network Conn.", Adapter.OperationalStatus.ToString());
-                    //}
-
                     args[0] = HostName + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
-
                     byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
-                    //s.Send(sendbuf);z
                     m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
+                    //Check Connectivity to Desktop
                     m_dropOutSeconds = LastRecievedWatch.Elapsed.TotalSeconds;
 
                     if (m_dropOutSeconds > m_dropOutSecondsMax)
@@ -181,10 +171,8 @@ namespace WiFiSurvey.Infrastructure.Services
                             Connected = true;
                         }
                     }
-
-                    Trace.WriteLine("Message sent to " + m_RemoteEP.ToString());
-                    Thread.Sleep(1000);
                 }
+                Thread.Sleep(1000);
             }
         }
     }

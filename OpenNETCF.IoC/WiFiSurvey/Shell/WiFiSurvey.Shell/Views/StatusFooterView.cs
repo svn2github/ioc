@@ -7,6 +7,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using OpenNETCF.IoC.UI;
+using WiFiSurvey.Infrastructure.BusinessObjects;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -21,13 +22,20 @@ namespace WiFiSurvey.Shell.Views
 
         public void UpdateConnection(Boolean connected)
         {
-            if (connected)
+            if (WirelessUtility.DesktopAppDisabled)
             {
-                label1.Text = "Desktop Connected";
+                label1.Text = "Desktop Connection Disabled";
             }
             else
             {
-                label1.Text = "Desktop Not Connected";
+                if (connected)
+                {
+                    label1.Text = "Desktop Connected";
+                }
+                else
+                {
+                    label1.Text = "Desktop Not Connected";
+                }
             }
         }
     }

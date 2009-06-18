@@ -11,13 +11,17 @@ using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.Net.Sockets;
 using OpenNETCF.Net.NetworkInformation;
+using WiFiSurvey.DAL.SQLCE;
 
 namespace WiFiSurvey.DAL.Services
 {
     public class DataService : IDataService
     {
+        SQLCEConnection Database;
+
         public DataService()
         {
+            Database = new SQLCEConnection();
         }
 
         public event EventHandler<DataServiceArgs<DataEvent>> OnNewDataEvent;
@@ -28,6 +32,7 @@ namespace WiFiSurvey.DAL.Services
             if (OnNewDataEvent == null) return;
             DataEvent dataEvent = new DataEvent(){Location = Location, Description = Event};
             OnNewDataEvent(this.ToString() , new DataServiceArgs<DataEvent>(dataEvent) );
+            //Database.InsertValueIntoTable(dataEvent);
             EventCount++;
         }
 

@@ -43,7 +43,16 @@ namespace WiFiSurvey.Shell.Presenters
             {
                 while (!Done)
                 {
+                    Adapter.Refresh();
                     AccessPoints = Adapter.NearbyAccessPoints;
+                    foreach (var accessItem in AccessPoints)
+                    {
+                        if (Adapter.AssociatedAccessPoint == accessItem.Name)
+                        {
+                            WirelessUtility.CurrentAccessPoint = accessItem;
+                            continue;
+                        }
+                    }
                     Thread.Sleep(1000);
                 }
             }
