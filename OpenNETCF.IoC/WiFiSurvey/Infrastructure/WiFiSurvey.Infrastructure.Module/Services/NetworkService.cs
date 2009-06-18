@@ -84,21 +84,22 @@ namespace WiFiSurvey.Infrastructure.Services
         {
             try
             {
-                while (!WirelessUtility.DesktopAppDisabled)
+                while (!done)
                 {
-                    LastRecievedWatch.Reset();
-                    LastRecievedWatch.Start();
-                    m_endPoint = new IPEndPoint(IPAddress.Broadcast, m_listenReciever);
-
-                    //byte[] data = m_groupMember.Receive();
-
-                    byte[] data = m_listener.Receive(ref m_endPoint);
-
-                    if (data.Length > 0)
+                    if (!WirelessUtility.DesktopAppDisabled)
                     {
-                        LastRecievedWatch.Stop();
-                        m_lastRecievedTime = LastRecievedWatch.Elapsed;
-                        WirelessUtility.DesktopConnected = true;
+                        LastRecievedWatch.Reset();
+                        LastRecievedWatch.Start();
+                        m_endPoint = new IPEndPoint(IPAddress.Broadcast, m_listenReciever);
+
+                        byte[] data = m_listener.Receive(ref m_endPoint);
+
+                        if (data.Length > 0)
+                        {
+                            LastRecievedWatch.Stop();
+                            m_lastRecievedTime = LastRecievedWatch.Elapsed;
+                            WirelessUtility.DesktopConnected = true;
+                        }
                     }
                 }
             }
