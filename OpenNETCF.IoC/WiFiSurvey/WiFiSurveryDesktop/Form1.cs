@@ -123,6 +123,7 @@ namespace WiFiSurveryDesktop
                 {
                     foundDevice = true;
                     item.Data = dataString;
+                    break;
                 }
             }
             if (!foundDevice)

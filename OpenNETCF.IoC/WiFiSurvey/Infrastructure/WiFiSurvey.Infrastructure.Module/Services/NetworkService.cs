@@ -34,6 +34,8 @@ namespace WiFiSurvey.Infrastructure.Services
 
             IPAddress[] array = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
             m_ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
+
+            HostName = Dns.GetHostName();
         }
 
         public WirelessZeroConfigNetworkInterface Adapter { get; set; }
@@ -59,6 +61,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         private IPEndPoint m_endPoint;
         private Boolean Connected;
+        private string HostName;
 
         private IPAddress m_ipAddress;
 
@@ -146,13 +149,12 @@ namespace WiFiSurvey.Infrastructure.Services
             {
                 if (WirelessUtility.CurrentAccessPoint != null)
                 {
+                    //if (Adapter.OperationalStatus != OperationalStatus.Up)
+                    //{
+                    //    DataService.NewEvent("Network Conn.", Adapter.OperationalStatus.ToString());
+                    //}
 
-                    if (Adapter.OperationalStatus != OperationalStatus.Up)
-                    {
-                        DataService.NewEvent("Network Conn.", Adapter.OperationalStatus.ToString());
-                    }
-
-                    args[0] = Dns.GetHostName() + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
+                    args[0] = HostName + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
 
                     byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
