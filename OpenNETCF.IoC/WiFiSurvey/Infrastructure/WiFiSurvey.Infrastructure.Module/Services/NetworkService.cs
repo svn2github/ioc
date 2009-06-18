@@ -44,7 +44,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         private System.Diagnostics.Stopwatch LastRecievedWatch = new System.Diagnostics.Stopwatch();
         private double m_dropOutSeconds = 0;
-        private double m_dropOutSecondsMax = 5;
+        private double m_dropOutSecondsMax = 10;
 
         private UdpClient m_listener { get; set; }
 
@@ -122,6 +122,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
         ~NetworkService()
         {
+            done = true;
             m_broadcastThread.Abort();
             m_listenThread.Abort();
         }
@@ -152,6 +153,7 @@ namespace WiFiSurvey.Infrastructure.Services
                     m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
                     //Check Connectivity to Desktop
+
                     m_dropOutSeconds = LastRecievedWatch.Elapsed.TotalSeconds;
 
                     if (m_dropOutSeconds > m_dropOutSecondsMax)

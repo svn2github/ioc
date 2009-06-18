@@ -82,7 +82,7 @@ namespace WiFiSurvey.Shell
 
             if (WirelessUtility.RefreshRate == 0)
             {
-                WirelessUtility.RefreshRate = 0;
+                WirelessUtility.RefreshRate = 1000;
             }
             m_containerTimer.Interval = 1000;
             m_containerTimer.Tick += new EventHandler(m_containerTimer_Tick);
@@ -108,7 +108,7 @@ namespace WiFiSurvey.Shell
             UpdateAPList();
             
             APDownWatch.Stop();
-            Trace.WriteLine("APList Took" + APDownWatch.ElapsedMilliseconds);
+            Trace.WriteLine("APList Refresh Took " + APDownWatch.ElapsedMilliseconds);
 
             UpdateFooter();
             UpdateTools();

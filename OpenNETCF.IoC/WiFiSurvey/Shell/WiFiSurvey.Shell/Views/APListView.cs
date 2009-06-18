@@ -87,19 +87,13 @@ namespace WiFiSurvey.Shell.Views
             {
                 m_alreadyQuerying = true;
                 int et = Environment.TickCount;
-                try
-                {
-                    accessPoints = Presenter.AccessPoints;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(string.Format(" Exception getting AP list: {0}", ex.Message));
-                    return;
-                }
+
+                accessPoints = Presenter.AccessPoints;
 
                 et = Environment.TickCount - et;
                 Debug.WriteLine(string.Format(" Getting AP list took {0}ms", et));
 
+                et = Environment.TickCount;
                 ListViewItem lvitem;
 
                 if (accessPoints == null)
@@ -124,6 +118,10 @@ namespace WiFiSurvey.Shell.Views
                     UpdateColumnsWidth();
                 }
 
+                et = Environment.TickCount - et;
+                Debug.WriteLine(string.Format(" Updating AP list took {0}ms", et));
+
+                et = Environment.TickCount;
                 apList.ResumeLayout(true);
 
             }
@@ -131,6 +129,9 @@ namespace WiFiSurvey.Shell.Views
             {
                 m_alreadyQuerying = false;
             }
+
+            et = Environment.TickCount - et;
+            Debug.WriteLine(string.Format("Finally AP list took {0}ms", et));
         }
 
     }
