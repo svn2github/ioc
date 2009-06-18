@@ -100,6 +100,14 @@ namespace WiFiSurvey.Infrastructure.Services
                             m_lastRecievedTime = LastRecievedWatch.Elapsed;
                             WirelessUtility.DesktopConnected = true;
                         }
+
+                        if (!Connected)
+                        {
+                            WirelessUtility.DesktopConnected = true;
+                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
+                            Connected = true;
+                        }
+
                     }
                 }
             }
@@ -153,7 +161,6 @@ namespace WiFiSurvey.Infrastructure.Services
                     m_BroadcastClient.Send(sendbuf, sendbuf.Length);
 
                     //Check Connectivity to Desktop
-
                     m_dropOutSeconds = LastRecievedWatch.Elapsed.TotalSeconds;
 
                     if (m_dropOutSeconds > m_dropOutSecondsMax)
@@ -163,15 +170,6 @@ namespace WiFiSurvey.Infrastructure.Services
                         {
                             DataService.NewEvent("Desktop Client", "Lost Desktop Connection");
                             Connected = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!Connected)
-                        {
-                            WirelessUtility.DesktopConnected = true;
-                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
-                            Connected = true;
                         }
                     }
                 }

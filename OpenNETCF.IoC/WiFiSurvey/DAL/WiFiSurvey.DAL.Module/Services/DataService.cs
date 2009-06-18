@@ -36,7 +36,6 @@ namespace WiFiSurvey.DAL.Services
             EventCount++;
         }
 
-        public AccessPointCollection AvailableAccessPoints { get; set; }
         public int NetworkDownTime { get; set; }
 
         public void ClearEvents()
@@ -47,6 +46,7 @@ namespace WiFiSurvey.DAL.Services
                 OnClearEvents(this, new EventArgs());
             }
         }
+
         public int EventCount { get; set; }
         //publish an Event to a DataBase
     }

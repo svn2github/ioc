@@ -117,11 +117,6 @@ namespace WiFiSurvey.Shell.Views
                 {
                     UpdateColumnsWidth();
                 }
-
-                et = Environment.TickCount - et;
-                Debug.WriteLine(string.Format(" Updating AP list took {0}ms", et));
-
-                et = Environment.TickCount;
                 apList.ResumeLayout(true);
 
             }
@@ -129,9 +124,6 @@ namespace WiFiSurvey.Shell.Views
             {
                 m_alreadyQuerying = false;
             }
-
-            et = Environment.TickCount - et;
-            Debug.WriteLine(string.Format("Finally AP list took {0}ms", et));
         }
 
     }
