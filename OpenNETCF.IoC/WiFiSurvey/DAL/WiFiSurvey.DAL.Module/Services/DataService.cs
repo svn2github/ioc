@@ -29,11 +29,11 @@ namespace WiFiSurvey.DAL.Services
 
         public void NewEvent(string Location, string Event)
         {
+            EventCount++;
             if (OnNewDataEvent == null) return;
             DataEvent dataEvent = new DataEvent(){Location = Location, Description = Event};
             OnNewDataEvent(this.ToString() , new DataServiceArgs<DataEvent>(dataEvent) );
             //Database.InsertValueIntoTable(dataEvent);
-            EventCount++;
         }
 
         public int NetworkDownTime { get; set; }

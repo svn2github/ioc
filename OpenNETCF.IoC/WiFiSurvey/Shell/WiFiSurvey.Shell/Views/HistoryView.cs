@@ -16,11 +16,7 @@ namespace WiFiSurvey.Shell.Views
     public partial class HistoryView : SmartPart
     {
         private ListViewItem item;
-
-        public int EventCount;
-
         private IDataService DataService { get; set; }
-
         private Dictionary<string, string> Events = new Dictionary<string, string>();
 
         public HistoryView()
@@ -72,8 +68,10 @@ namespace WiFiSurvey.Shell.Views
             item.Text = Name;
             item.SubItems.Add(Event);
 
-            //Events.Add(Name, Event);
-            historyListView.Invoke(new AddListItem(historyListView.Items.Add), new object[] { item });
+            if (DataService.EventCount == historyListView.Items.Count + 1)
+            {
+                historyListView.Invoke(new AddListItem(historyListView.Items.Add), new object[] { item });
+            }
         }
     }
 }
