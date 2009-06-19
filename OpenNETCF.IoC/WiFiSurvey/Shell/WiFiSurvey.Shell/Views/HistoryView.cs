@@ -32,16 +32,24 @@ namespace WiFiSurvey.Shell.Views
             this.Name = "History";
 
             Presenter.OnNewHistoryEvent += new EventHandler<GenericEventArgs<IStatisticsData>>(Presenter_OnNewHistoryEvent);
+            Presenter.ClearEvents += new EventHandler<EventArgs>(Presenter_ClearEvents);
+        }
+
+        void Presenter_ClearEvents(object sender, EventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                historyListView.Invoke(new ClearListView(historyListView.Items.Clear));
+            }
+            else
+            {
+                historyListView.Items.Clear();
+            }
         }
 
         void Presenter_OnNewHistoryEvent(object sender, GenericEventArgs<IStatisticsData> e)
         {
             NewHistoryEvent(DateTime.Now, e.Value.Description);
-        }
-
-        void DataService_OnClearEvents(object sender, EventArgs e)
-        {
-            historyListView.Invoke(new ClearListView(historyListView.Items.Clear));
         }
 
         public void ResizeView()

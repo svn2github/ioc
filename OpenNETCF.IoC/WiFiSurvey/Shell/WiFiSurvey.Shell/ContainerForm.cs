@@ -81,12 +81,6 @@ namespace WiFiSurvey.Shell
             base.OnLoad(e);
         }
 
-        public void UpdateTools()
-        {
-            ConfigurationView m_Tools = RootWorkItem.Items.Get<ConfigurationView>(ViewNames.Tools);
-            m_Tools.UpdateTools();
-        }
-
         [Conditional("DEBUG")]
         private void DoModuleDump()
         {

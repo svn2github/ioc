@@ -10,5 +10,6 @@ namespace WiFiSurvey.Infrastructure.Constants
         public const string Container = "presenter:Container";
         public const string APList = "presenter:APList";
         public const string History = "presenter:History";
+        public const string Desktop = "presenter:Desktop";
     }
 }

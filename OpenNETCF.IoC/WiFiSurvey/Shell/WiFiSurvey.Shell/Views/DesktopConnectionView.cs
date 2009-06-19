@@ -25,7 +25,7 @@ namespace WiFiSurvey.Shell.Views
 
             label1.Text = "Desktop Not Connected";
 
-            Presenter = RootWorkItem.Items.AddNew<DesktopPresenter>();
+            Presenter = RootWorkItem.Items.AddNew<DesktopPresenter>(PresenterNames.Desktop);
             Presenter.DesktopConnectionChange += new EventHandler<GenericEventArgs<IDesktopData>>(Presenter_DesktopConnectionChange);
         }
 
@@ -45,9 +45,10 @@ namespace WiFiSurvey.Shell.Views
             }
             switch (data.Status)
             {
-                case DesktopStatus.Connected:    label1.Text = "Desktop Connected";           break;
-                case DesktopStatus.Disabled:     label1.Text = "Desktop Connection Disabled"; break;
+                case DesktopStatus.Connected   : label1.Text = "Desktop Connected";           break;
+                case DesktopStatus.Disabled    : label1.Text = "Desktop Connection Disabled"; break;
                 case DesktopStatus.Disconnected: label1.Text = "Desktop Not Connected";       break;
+                case DesktopStatus.Enabled     : label1.Text = "Desktop Connection Enabled"; break;
             }
         }
     }

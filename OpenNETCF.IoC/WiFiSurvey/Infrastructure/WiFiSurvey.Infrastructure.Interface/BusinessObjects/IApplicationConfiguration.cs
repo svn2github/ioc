@@ -7,6 +7,6 @@ namespace WiFiSurvey.Infrastructure.BusinessObjects
 {
     public interface IApplicationConfiguration
     {
-        int AdapterPollInterval { get; }
+        int AdapterPollInterval { get; set; }
     }
 }

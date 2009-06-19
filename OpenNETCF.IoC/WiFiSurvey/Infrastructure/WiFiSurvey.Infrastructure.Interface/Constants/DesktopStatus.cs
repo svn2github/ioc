@@ -9,6 +9,7 @@ namespace WiFiSurvey.Infrastructure.Constants
     {
         Connected = 1,
         Disconnected = 2,
-        Disabled = 3
+        Disabled = 3,
+        Enabled = 4
     }
 }
