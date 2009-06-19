@@ -71,7 +71,7 @@ namespace WiFiSurvey.Infrastructure.Services
             NetworkDownTime = m_NetworkWatch.Elapsed;
 
             IStatisticsData stats = new StatisticsData();
-            stats.Event = StatsEvent.LostDesktop;
+            stats.Event = StatsEvent.GainDesktop;
             stats.EventTime =  (int)NetworkDownTime.TotalSeconds;
             stats.Description = "Desktop Connection to " + IPAddress + " Found";
 
@@ -97,7 +97,7 @@ namespace WiFiSurvey.Infrastructure.Services
             AcessPointDownTime = m_AccessPointWatch.Elapsed;
 
             IStatisticsData stats = new StatisticsData();
-            stats.Event = StatsEvent.LostDesktop;
+            stats.Event = StatsEvent.APConnectionChange;
             stats.EventTime = (int)AcessPointDownTime.TotalSeconds;
             if (m_previousAP == null)
             {
