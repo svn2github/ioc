@@ -38,14 +38,14 @@
             this.lblSSIDName.Location = new System.Drawing.Point(4, 4);
             this.lblSSIDName.Name = "lblSSIDName";
             this.lblSSIDName.Size = new System.Drawing.Size(81, 20);
-            this.lblSSIDName.Text = "Current AP";
+            this.lblSSIDName.Text = "Locating AP";
             // 
             // lblSignalStrength
             // 
-            this.lblSignalStrength.Location = new System.Drawing.Point(82, 4);
+            this.lblSignalStrength.Location = new System.Drawing.Point(91, 4);
             this.lblSignalStrength.Name = "lblSignalStrength";
             this.lblSignalStrength.Size = new System.Drawing.Size(100, 20);
-            this.lblSignalStrength.Text = "Signal : ";
+            this.lblSignalStrength.Text = "-";
             // 
             // lblMacAdress
             // 
@@ -53,7 +53,7 @@
             this.lblMacAdress.Location = new System.Drawing.Point(4, 20);
             this.lblMacAdress.Name = "lblMacAdress";
             this.lblMacAdress.Size = new System.Drawing.Size(100, 20);
-            this.lblMacAdress.Text = "label3";
+            this.lblMacAdress.Text = "-";
             // 
             // CurrentAPHeaderView
             // 
