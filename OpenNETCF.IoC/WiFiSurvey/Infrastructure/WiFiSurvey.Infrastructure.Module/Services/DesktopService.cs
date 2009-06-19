@@ -178,6 +178,10 @@ namespace WiFiSurvey.Infrastructure.Services
                         }
                     }
                 }
+                else
+                {
+                    m_connected = false;
+                }
                 Thread.Sleep(1000);
             }
         }
