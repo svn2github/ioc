@@ -72,27 +72,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\CurrentAP.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Components\CurrentAP.Designer.cs">
-      <DependentUpon>CurrentAP.cs</DependentUpon>
-    </Compile>
     <Compile Include="ContainerForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ContainerForm.Designer.cs">
       <DependentUpon>ContainerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenters\APListPresenter.cs" />
+    <Compile Include="Presenters\AccessPointPresenter.cs" />
     <Compile Include="Presenters\ContainerPresenter.cs" />
+    <Compile Include="Presenters\DesktopPresenter.cs" />
     <Compile Include="Presenters\HistoryPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Components\CurrentAP.resx">
-      <DependentUpon>CurrentAP.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="ContainerForm.resx">
       <DependentUpon>ContainerForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -114,12 +105,12 @@
       <DependentUpon>HistoryView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\StatusFooterView.resx">
-      <DependentUpon>StatusFooterView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\DesktopConnectionView.resx">
+      <DependentUpon>DesktopConnectionView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\ToolsView.resx">
-      <DependentUpon>ToolsView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\ConfigurationView.resx">
+      <DependentUpon>ConfigurationView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
@@ -138,11 +129,11 @@
     <Compile Include="Views\HistoryView.Designer.cs">
       <DependentUpon>HistoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\ToolsView.cs">
+    <Compile Include="Views\ConfigurationView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\ToolsView.Designer.cs">
-      <DependentUpon>ToolsView.cs</DependentUpon>
+    <Compile Include="Views\ConfigurationView.Designer.cs">
+      <DependentUpon>ConfigurationView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\CurrentAPHeaderView.cs">
       <SubType>UserControl</SubType>
@@ -150,11 +141,11 @@
     <Compile Include="Views\CurrentAPHeaderView.Designer.cs">
       <DependentUpon>CurrentAPHeaderView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\StatusFooterView.cs">
+    <Compile Include="Views\DesktopConnectionView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\StatusFooterView.Designer.cs">
-      <DependentUpon>StatusFooterView.cs</DependentUpon>
+    <Compile Include="Views\DesktopConnectionView.Designer.cs">
+      <DependentUpon>DesktopConnectionView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

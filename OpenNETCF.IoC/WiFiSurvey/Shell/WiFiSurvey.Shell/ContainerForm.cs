@@ -22,8 +22,8 @@ namespace WiFiSurvey.Shell
     public partial class ContainerForm : Form
     {
         ContainerPresenter Presenter { get; set; }
-        IDataService DataService { get; set; }
-        INetworkService NetworkService { get; set; }
+        IHistoricEventService DataService { get; set; }
+        IDesktopService NetworkService { get; set; }
         IStatisticsService StatisticsService { get; set; }
 
         private Stopwatch APDownWatch = new Stopwatch();
@@ -48,7 +48,7 @@ namespace WiFiSurvey.Shell
             ISmartPart view = RootWorkItem.Items.AddNew<APListView>(ViewNames.APList) as ISmartPart;
             bodyWorkspace.Show(view);
 
-            view = RootWorkItem.Items.AddNew<ToolsView>(ViewNames.Tools) as ISmartPart;
+            view = RootWorkItem.Items.AddNew<ConfigurationView>(ViewNames.Tools) as ISmartPart;
             bodyWorkspace.Show(view);
 
             view = RootWorkItem.Items.AddNew<HistoryView>(ViewNames.History) as ISmartPart;
@@ -58,27 +58,14 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<CurrentAPHeaderView>(ViewNames.Header) as ISmartPart;
             headerWorkspace.Show(view);
 
-            view = RootWorkItem.Items.AddNew<StatusFooterView>(ViewNames.Footer) as ISmartPart;
+            view = RootWorkItem.Items.AddNew<DesktopConnectionView>(ViewNames.Footer) as ISmartPart;
             footerWorkspace.Show(view);
 
             bodyWorkspace.SelectTab(0);
 
-            Presenter.APConnectionChanged += new EventHandler<WiFiSurvey.Infrastructure.GenericEventArgs<INetworkData>>(Presenter_APConnectionChanged);
-            Presenter.DesktopConnectionChanged += new EventHandler<GenericEventArgs<IDesktopData>>(Presenter_DesktopConnectionChanged);
-
             this.WindowState = FormWindowState.Normal;
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
-        }
-
-        void Presenter_DesktopConnectionChanged(object sender, GenericEventArgs<IDesktopData> e)
-        {
-            UpdateFooter(e.Value);
-        }
-
-        void Presenter_APConnectionChanged(object sender, GenericEventArgs<INetworkData> e)
-        {
-            UpdateHeader(e.Value);
         }
 
         void ContainerForm_Resize(object sender, EventArgs e)
@@ -88,49 +75,15 @@ namespace WiFiSurvey.Shell
 
         protected override void OnLoad(EventArgs e)
         {
-            NetworkService = RootWorkItem.Services.Get<INetworkService>();
+            NetworkService = RootWorkItem.Services.Get<IDesktopService>();
             NetworkService.StartListening();
 
-            DataService = RootWorkItem.Services.Get<IDataService>();
-
-            StatisticsService = RootWorkItem.Services.Get<IStatisticsService>();
-
-            UpdateFooter(new DesktopData() { Status = DesktopStatus.Disconnected });
             base.OnLoad(e);
-        }
-
-        public void UpdateHeader(INetworkData data)
-        {
-            CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
-            if (data.AssociatedAP == null)
-            {
-                if (PreviouslyConnected)
-                {
-                    StatisticsService.LostAccessPoint();
-                    PreviouslyConnected = false;
-                }
-                m_Header.SetCurrentAP("[none]", "-", "-");
-            }
-            else
-            {
-                if (!PreviouslyConnected)
-                {
-                    StatisticsService.FoundAccessPoint();
-                    PreviouslyConnected = true;
-                }
-                m_Header.SetCurrentAP(data.AssociatedAP.Name, data.AssociatedAP.MAC, data.AssociatedAP.SignalStrength.ToString());
-            }
-        }
-
-        public void UpdateFooter(IDesktopData data)
-        {
-            StatusFooterView m_footer = RootWorkItem.Items.Get<StatusFooterView>(ViewNames.Footer);
-            m_footer.UpdateConnection(data);
         }
 
         public void UpdateTools()
         {
-            ToolsView m_Tools = RootWorkItem.Items.Get<ToolsView>(ViewNames.Tools);
+            ConfigurationView m_Tools = RootWorkItem.Items.Get<ConfigurationView>(ViewNames.Tools);
             m_Tools.UpdateTools();
         }
 

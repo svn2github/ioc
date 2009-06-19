@@ -1,6 +1,6 @@
 ﻿namespace WiFiSurvey.Shell.Views
 {
-    partial class ToolsView
+    partial class ConfigurationView
     {
         /// <summary> 
         /// Required designer variable.

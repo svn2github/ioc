@@ -9,10 +9,11 @@ using System.Threading;
 using System.Diagnostics;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.IoC;
+using WiFiSurvey.Infrastructure.Constants;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
-    public class NetworkService : INetworkService
+    public class DesktopService : IDesktopService
     {
         private Stopwatch m_lastReceivedWatch = new Stopwatch();
         private double m_dropOutSeconds = 0;
@@ -29,15 +30,26 @@ namespace WiFiSurvey.Infrastructure.Services
 
         private UdpClient Listener { get; set; }
         private Boolean Done { get; set; }
-        private IDataService DataService { get; set; }
+
+        private string m_lastDesktop = "";
+
+        public APInfo CurrentAP { get; set; }
+
+        private IHistoricEventService DataService { get; set; }
+        private IAPMonitorService APService { get; set; }
         private IStatisticsService StatisticsService { get; set; }
         private IConfigurationService ConfigurationService { get; set; }
 
         public DateTime LastSentTime { get; set; }
 
+        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
+        public void OnNewAP(object sender, GenericEventArgs<INetworkData> args)
+        {
+            CurrentAP = args.Value.AssociatedAP;
+        }
 
         [InjectionConstructor]
-        public NetworkService([ServiceDependency]IConfigurationService configService)
+        public DesktopService([ServiceDependency]IConfigurationService configService)
         {
             ConfigurationService = configService;
             m_lastReceivedWatch.Start();
@@ -48,7 +60,7 @@ namespace WiFiSurvey.Infrastructure.Services
             m_hostName = Dns.GetHostName();
         }
 
-        ~NetworkService()
+        ~DesktopService()
         {
             // TODO: fix this - it is bad, bad form.
             if (m_broadcastThread != null)
@@ -76,6 +88,9 @@ namespace WiFiSurvey.Infrastructure.Services
             m_listenThread.Start();
         }
 
+        [EventPublication(EventNames.DesktopConnectionChange)]
+        public event EventHandler<GenericEventArgs<IDesktopData>> DesktopConnectionChange;
+
         public void ListenerProc()
         {
             try
@@ -90,20 +105,19 @@ namespace WiFiSurvey.Infrastructure.Services
 
                         byte[] data = Listener.Receive(ref m_endPoint);
 
-                        if (data.Length > 0)
+                        m_lastReceivedWatch.Stop();
+                        m_lastRecievedTime = m_lastReceivedWatch.Elapsed;
+
+                        if (!m_connected)
                         {
-                            m_lastReceivedWatch.Stop();
-                            m_lastRecievedTime = m_lastReceivedWatch.Elapsed;
-                            WirelessUtility.DesktopConnected = true;
-                        }
-                        else
-                        {
-                            if (!m_connected)
-                            {
-                                WirelessUtility.DesktopConnected = true;
-                                StatisticsService.FoundNetwork();
-                                m_connected = true;
-                            }
+                            m_connected = true;
+
+                            IDesktopData deskData = new DesktopData();
+                            deskData.Status = DesktopStatus.Connected;
+                            m_lastDesktop = m_endPoint.Address.ToString();
+                            deskData.IPAddress = m_lastDesktop;
+
+                            DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
                         }
                     }
                 }
@@ -119,7 +133,7 @@ namespace WiFiSurvey.Infrastructure.Services
         }
         public void StartListening()
         {
-            DataService = RootWorkItem.Services.Get<IDataService>();
+            DataService = RootWorkItem.Services.Get<IHistoricEventService>();
 
             StartBroadcastProc();
             StartListenerThread();
@@ -127,7 +141,6 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void Broadcast()
         {
-
             string[] args = new string[1];
 
             //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
@@ -143,9 +156,9 @@ namespace WiFiSurvey.Infrastructure.Services
 
             while (!Done)
             {
-                if (WirelessUtility.CurrentAccessPoint != null && !WirelessUtility.DesktopAppDisabled)
+                if (CurrentAP != null && !WirelessUtility.DesktopAppDisabled)
                 {
-                    args[0] = m_hostName + ":" + WirelessUtility.CurrentAccessPoint.Name + ":" + WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString();
+                    args[0] = m_hostName + ":" + CurrentAP.Name + ":" + CurrentAP.SignalStrength.ToString();
                     byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
                     m_BroadcastClient.Send(sendbuf, sendbuf.Length);
@@ -155,11 +168,13 @@ namespace WiFiSurvey.Infrastructure.Services
 
                     if (m_dropOutSeconds > m_dropOutSecondsMax)
                     {
-                        WirelessUtility.DesktopConnected = false;
                         if (m_connected)
                         {
-                            StatisticsService.LostNetwork();
                             m_connected = false;
+                            IDesktopData deskData = new DesktopData();
+                            deskData.Status = DesktopStatus.Disconnected;
+                            deskData.IPAddress = m_lastDesktop;
+                            DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
                         }
                     }
                 }

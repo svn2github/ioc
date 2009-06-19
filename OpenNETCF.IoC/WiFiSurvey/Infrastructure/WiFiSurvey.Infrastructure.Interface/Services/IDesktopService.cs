@@ -6,7 +6,7 @@ using OpenNETCF.Net.NetworkInformation;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
-    public interface INetworkService
+    public interface IDesktopService
     {
         void StartListening();
     }

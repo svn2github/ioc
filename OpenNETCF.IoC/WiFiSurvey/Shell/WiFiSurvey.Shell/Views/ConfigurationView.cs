@@ -10,20 +10,21 @@ using OpenNETCF.IoC.UI;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.IoC;
+using WiFiSurvey.Shell.Presenters;
 
 namespace WiFiSurvey.Shell.Views
 {
-    public partial class ToolsView : SmartPart
+    public partial class ConfigurationView : SmartPart
     {
-        private IDataService DataService {get;set;}
+        AccessPointPresenter APPresenter;
+        DesktopPresenter DesktopPresenter;
+        HistoryPresenter HistoryPresenter;
 
-        public ToolsView()
+        public ConfigurationView()
         {
             InitializeComponent();
 
             this.Name = "Tools";
-
-            DataService = RootWorkItem.Services.Get<IDataService>();
 
             btnDisableDesktop.Enabled = true;
             btnEnableDesktop.Enabled = false;
@@ -66,8 +67,7 @@ namespace WiFiSurvey.Shell.Views
 
         private void btnResetEvents_Click(object sender, EventArgs e)
         {
-//            DataService.EventCount = 0;
-//            DataService.ClearEvents();
+            HistoryPresenter.ClearHistory();
         }
     }
 }

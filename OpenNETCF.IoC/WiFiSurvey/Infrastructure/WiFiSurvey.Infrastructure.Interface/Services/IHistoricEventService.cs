@@ -6,10 +6,10 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
-    public interface IDataService
+    public interface IHistoricEventService
     {
         void ShutDown();
         void InsertNetworkData(INetworkData data);
-        void InsertDesktopData(IDesktopData data);
+        void InsertStatisticsData(IStatisticsData data);
     }
 }

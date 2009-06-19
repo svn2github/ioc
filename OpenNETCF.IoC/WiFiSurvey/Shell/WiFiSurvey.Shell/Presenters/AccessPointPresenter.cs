@@ -12,11 +12,11 @@ using WiFiSurvey.Infrastructure;
 
 namespace WiFiSurvey.Shell.Presenters
 {
-    public class APListPresenter
+    public class AccessPointPresenter
     {
         public AccessPointCollection AccessPoints { get; set; }
 
-        private INetworkService NetworkService { get; set; }
+        private IDesktopService NetworkService { get; set; }
         private Thread AccessPointThread;
         private Boolean Done { get; set; }
 
@@ -34,7 +34,16 @@ namespace WiFiSurvey.Shell.Presenters
             }
         }
 
-        public APListPresenter()
+        public event EventHandler<GenericEventArgs<INetworkData>> OnCurrentAPUpdate;
+
+        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
+        public void NetworkAPUpdate(object sender, GenericEventArgs<INetworkData> args)
+        {
+            if (OnCurrentAPUpdate == null) return;
+            OnCurrentAPUpdate(sender, args);
+        }
+
+        public AccessPointPresenter()
         {
         }
 

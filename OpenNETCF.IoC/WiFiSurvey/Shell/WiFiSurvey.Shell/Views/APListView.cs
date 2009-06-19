@@ -23,8 +23,8 @@ namespace WiFiSurvey.Shell.Views
 {
     public partial class APListView : SmartPart
     {
-        public APListPresenter Presenter { get; set; }
-        public INetworkService NetworkService { get; set; }
+        public AccessPointPresenter Presenter { get; set; }
+        public IDesktopService NetworkService { get; set; }
 
         private Timer m_apRefreshTimer = new Timer();
         private bool m_columnWidthsSet = false;
@@ -35,7 +35,7 @@ namespace WiFiSurvey.Shell.Views
 
         public APListView()
         {
-            Presenter = RootWorkItem.Items.AddNew<APListPresenter>(PresenterNames.APList);
+            Presenter = RootWorkItem.Items.AddNew<AccessPointPresenter>(PresenterNames.APList);
             Presenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_NetworkDataChanged);
 
             InitializeComponent();

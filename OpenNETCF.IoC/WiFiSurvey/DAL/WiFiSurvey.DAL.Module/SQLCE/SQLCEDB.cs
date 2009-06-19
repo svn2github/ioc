@@ -22,6 +22,8 @@ namespace WiFiSurvey.DAL.SQLCE
         private string ConnectionString { get; set; }
         private SqlCeCommand NearbyAPInsertCommand { get; set; }
         private SqlCeCommand AssociatedAPInsertCommand { get; set; }
+        private SqlCeCommand StatisticsInsertCommand { get; set; }
+
         private Dictionary<string, ITable> Tables { get; set; }
 
         public SQLCEDB()
@@ -73,6 +75,31 @@ namespace WiFiSurvey.DAL.SQLCE
             NearbyAPInsertCommand.Parameters["@Signal"].Value = data.SignalStrength;
 
             NearbyAPInsertCommand.ExecuteNonQuery();
+        }
+
+        public void InsertStatisticsRow(IStatisticsData data, IDbConnection connection)
+        {
+            if (data == null) return;
+
+            if (NearbyAPInsertCommand == null)
+            {
+                StatisticsInsertCommand = Tables["NetworkStats"].GetInsertCommand() as SqlCeCommand;
+            }
+
+            object o = ExecuteScalar("SELECT MAX(DataID) FROM NetworkStats", connection as SqlCeConnection);
+            int id = o.Equals(DBNull.Value) ? 0 : (int)o;
+            id++;
+
+            StatisticsInsertCommand.Connection = connection as SqlCeConnection;
+
+            // set all of the parameters
+            StatisticsInsertCommand.Parameters["@DataID"].Value = id;
+            StatisticsInsertCommand.Parameters["@TimeStamp"].Value = DateTime.Now;
+            StatisticsInsertCommand.Parameters["@StatType"].Value = data.Event.ToString();
+            StatisticsInsertCommand.Parameters["@TimeData"].Value = data.EventTime;
+            StatisticsInsertCommand.Parameters["@Note"].Value = data.Description;
+
+            StatisticsInsertCommand.ExecuteNonQuery();
         }
 
         public int InsertAssociatedAPRow(APInfo data, IDbConnection connection)

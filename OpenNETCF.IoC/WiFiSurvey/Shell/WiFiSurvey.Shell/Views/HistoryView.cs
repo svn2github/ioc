@@ -12,6 +12,7 @@ using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Shell.Presenters;
+using WiFiSurvey.Infrastructure;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -30,12 +31,12 @@ namespace WiFiSurvey.Shell.Views
             InitializeComponent();
             this.Name = "History";
 
-            Presenter.OnNewHistoryEvent += new EventHandler<DataServiceArgs<DataEvent>>(Presenter_OnNewHistoryEvent);
+            Presenter.OnNewHistoryEvent += new EventHandler<GenericEventArgs<IStatisticsData>>(Presenter_OnNewHistoryEvent);
         }
 
-        void Presenter_OnNewHistoryEvent(object sender, DataServiceArgs<DataEvent> e)
+        void Presenter_OnNewHistoryEvent(object sender, GenericEventArgs<IStatisticsData> e)
         {
-            NewHistoryEvent(e.Value.Location, e.Value.Description);
+            NewHistoryEvent(DateTime.Now, e.Value.Description);
         }
 
         void DataService_OnClearEvents(object sender, EventArgs e)
@@ -49,19 +50,20 @@ namespace WiFiSurvey.Shell.Views
             historyListView.Columns[1].Width = -2;
             m_ColumnsResized = true;
         }
-        delegate void NewHistoryDelegate(string Name, string Event);
+        delegate void NewHistoryDelegate(DateTime time, string Event);
         delegate void ClearListView();
         delegate ListViewItem AddListItem(ListViewItem item);
 
-        public void NewHistoryEvent(string Name, string Event)
+        public void NewHistoryEvent(DateTime time, string Event)
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new NewHistoryDelegate(NewHistoryEvent), new object[]{Name, Event});
+                this.Invoke(new NewHistoryDelegate(NewHistoryEvent), new object[]{time, Event});
+                return;
             }
-
+            
             item = new ListViewItem();
-            item.Text = Name;
+            item.Text = time.ToShortTimeString();
             item.SubItems.Add(Event);
 
             historyListView.Invoke(new AddListItem(historyListView.Items.Add), new object[] { item });

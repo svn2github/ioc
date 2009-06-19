@@ -1,6 +1,6 @@
 ﻿namespace WiFiSurvey.Shell.Views
 {
-    partial class StatusFooterView
+    partial class DesktopConnectionView
     {
         /// <summary> 
         /// Required designer variable.

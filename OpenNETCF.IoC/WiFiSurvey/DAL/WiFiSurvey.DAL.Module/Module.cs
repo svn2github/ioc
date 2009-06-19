@@ -17,7 +17,7 @@ namespace WiFiSurvey.DAL
 
         public override void AddServices()
         {
-            RootWorkItem.Services.AddNew<DataService, IDataService>();
+            RootWorkItem.Services.AddNew<HistoricEventService, IHistoricEventService>();
         }
     }
 }
