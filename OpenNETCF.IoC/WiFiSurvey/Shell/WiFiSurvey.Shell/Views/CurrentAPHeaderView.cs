@@ -17,8 +17,15 @@ namespace WiFiSurvey.Shell.Views
             InitializeComponent();
         }
 
+        delegate void SetCurrentAPDelegate(string name, string MAC, string strength);
+
         public void SetCurrentAP(string Name, string MAC, string Strength)
         {
+            if(this.InvokeRequired)
+            {
+                this.Invoke(new SetCurrentAPDelegate(SetCurrentAP), new object[]{Name, MAC, Strength});
+            }
+
             lblSSIDName.Text = Name;
             lblSignalStrength.Text = "Signal: "+ Strength;
             lblMacAdress.Text = MAC;

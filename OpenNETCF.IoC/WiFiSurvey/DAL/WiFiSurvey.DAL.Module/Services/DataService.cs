@@ -50,6 +50,11 @@ namespace WiFiSurvey.DAL.Services
             Debug.WriteLine(string.Format("Insert took {0}ms", et));
         }
 
+        public void InsertDesktopData(IDesktopData data)
+        {
+
+        }
+
         [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
         public void OnNetworkDataChange(object sender, GenericEventArgs<INetworkData> args)
         {

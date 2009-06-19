@@ -10,5 +10,6 @@ namespace WiFiSurvey.Infrastructure.Services
     {
         void ShutDown();
         void InsertNetworkData(INetworkData data);
+        void InsertDesktopData(IDesktopData data);
     }
 }

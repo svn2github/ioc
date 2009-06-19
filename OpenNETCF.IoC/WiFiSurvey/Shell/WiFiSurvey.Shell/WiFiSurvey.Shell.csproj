@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1D63ABCC-F4EB-442E-96E0-3164900371B4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Presenters\APListPresenter.cs" />
     <Compile Include="Presenters\ContainerPresenter.cs" />
+    <Compile Include="Presenters\HistoryPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Components\CurrentAP.resx">
@@ -173,6 +174,10 @@
     <ProjectReference Include="..\..\Infrastructure\WiFiSurvey.Infrastructure.Interface\WiFiSurvey.Infrastructure.Interface.csproj">
       <Project>{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}</Project>
       <Name>WiFiSurvey.Infrastructure.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\WiFiSurvey.Infrastructure.Module\WiFiSurvey.Infrastructure.Module.csproj">
+      <Project>{7F319E26-A83B-4388-8D51-0FD713364FB2}</Project>
+      <Name>WiFiSurvey.Infrastructure.Module</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />

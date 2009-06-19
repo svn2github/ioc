@@ -57,6 +57,8 @@ namespace WiFiSurvey.Shell.Views
             // update the UI
             apList.SuspendLayout();
 
+            apList.Items.Clear();
+
             try
             {
                 foreach (var ap in e.Value.NearbyAPs)

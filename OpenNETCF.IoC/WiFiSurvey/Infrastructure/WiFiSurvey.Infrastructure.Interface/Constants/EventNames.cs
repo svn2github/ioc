@@ -9,5 +9,6 @@ namespace WiFiSurvey.Infrastructure.Constants
     {
         public const string NewAPConnection = "event:NewAP";
         public const string NetworkDataChange = "event:NetworkDataChange";
+        public const string DesktopConnectionChange = "event:DesktopConnectionChange";
     }
 }

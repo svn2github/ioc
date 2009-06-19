@@ -10,30 +10,32 @@ using OpenNETCF.IoC.UI;
 using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using WiFiSurvey.Infrastructure.Constants;
+using WiFiSurvey.Shell.Presenters;
 
 namespace WiFiSurvey.Shell.Views
 {
     public partial class HistoryView : SmartPart
     {
         private ListViewItem item;
-
-        public int EventCount;
-
-        private IDataService DataService { get; set; }
+        public HistoryPresenter Presenter { get; set; }
 
         private Dictionary<string, string> Events = new Dictionary<string, string>();
+        private Boolean m_ColumnsResized = false;
 
         public HistoryView()
         {
+            Presenter = RootWorkItem.Items.AddNew<HistoryPresenter>(PresenterNames.History);
+
             InitializeComponent();
             this.Name = "History";
 
-            //ResizeView();
+            Presenter.OnNewHistoryEvent += new EventHandler<DataServiceArgs<DataEvent>>(Presenter_OnNewHistoryEvent);
+        }
 
-            DataService = RootWorkItem.Services.Get<IDataService>();
-
-//            DataService.OnNewDataEvent += new EventHandler<DataServiceArgs<DataEvent>>(DataService_NewDataEvent);
-//            DataService.OnClearEvents += new EventHandler<EventArgs>(DataService_OnClearEvents);
+        void Presenter_OnNewHistoryEvent(object sender, DataServiceArgs<DataEvent> e)
+        {
+            NewHistoryEvent(e.Value.Location, e.Value.Description);
         }
 
         void DataService_OnClearEvents(object sender, EventArgs e)
@@ -41,21 +43,11 @@ namespace WiFiSurvey.Shell.Views
             historyListView.Invoke(new ClearListView(historyListView.Items.Clear));
         }
 
-        void DataService_NewDataEvent(object sender, DataServiceArgs<DataEvent> e)
-        {
-            NewHistoryEvent(e.Value.Location, e.Value.Description);
-        }
-
         public void ResizeView()
         {
-            int m_HistWidth = historyListView.Width;
-            m_HistWidth = (m_HistWidth / historyListView.Columns.Count);
-
-            int i = 1;
-            foreach(ColumnHeader header in historyListView.Columns)
-            {
-                header.Width = m_HistWidth - i++;
-            }
+            historyListView.Columns[0].Width = -1;
+            historyListView.Columns[1].Width = -2;
+            m_ColumnsResized = true;
         }
         delegate void NewHistoryDelegate(string Name, string Event);
         delegate void ClearListView();
@@ -72,8 +64,12 @@ namespace WiFiSurvey.Shell.Views
             item.Text = Name;
             item.SubItems.Add(Event);
 
-            //Events.Add(Name, Event);
             historyListView.Invoke(new AddListItem(historyListView.Items.Add), new object[] { item });
+
+            if (!m_ColumnsResized)
+            {
+                ResizeView();
+            }
         }
     }
 }

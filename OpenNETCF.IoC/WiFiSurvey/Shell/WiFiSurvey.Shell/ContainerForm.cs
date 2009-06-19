@@ -15,17 +15,19 @@ using WiFiSurvey.Shell.Views;
 using OpenNETCF.Net.NetworkInformation;
 using WiFiSurvey.Infrastructure.Services;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using WiFiSurvey.Infrastructure;
 
 namespace WiFiSurvey.Shell
 {
     public partial class ContainerForm : Form
     {
         ContainerPresenter Presenter { get; set; }
-        private IDataService DataService { get; set; }
-        private INetworkService NetworkService { get; set; }
+        IDataService DataService { get; set; }
+        INetworkService NetworkService { get; set; }
+        IStatisticsService StatisticsService { get; set; }
+
         private Stopwatch APDownWatch = new Stopwatch();
         private Boolean PreviouslyConnected { get; set; }
-        private Timer m_containerTimer = new Timer();
 
         public ContainerForm()
         {
@@ -59,16 +61,24 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<StatusFooterView>(ViewNames.Footer) as ISmartPart;
             footerWorkspace.Show(view);
 
-            NetworkService = RootWorkItem.Services.Get<INetworkService>();
-            NetworkService.StartListening();
-
-            DataService = RootWorkItem.Services.Get<IDataService>();
-
             bodyWorkspace.SelectTab(0);
 
-            this.WindowState = FormWindowState.Maximized;
+            Presenter.APConnectionChanged += new EventHandler<WiFiSurvey.Infrastructure.GenericEventArgs<INetworkData>>(Presenter_APConnectionChanged);
+            Presenter.DesktopConnectionChanged += new EventHandler<GenericEventArgs<IDesktopData>>(Presenter_DesktopConnectionChanged);
+
+            this.WindowState = FormWindowState.Normal;
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
+        }
+
+        void Presenter_DesktopConnectionChanged(object sender, GenericEventArgs<IDesktopData> e)
+        {
+            UpdateFooter(e.Value);
+        }
+
+        void Presenter_APConnectionChanged(object sender, GenericEventArgs<INetworkData> e)
+        {
+            UpdateHeader(e.Value);
         }
 
         void ContainerForm_Resize(object sender, EventArgs e)
@@ -78,54 +88,25 @@ namespace WiFiSurvey.Shell
 
         protected override void OnLoad(EventArgs e)
         {
-            //WU.DesktopAppEnabled = true;
+            NetworkService = RootWorkItem.Services.Get<INetworkService>();
+            NetworkService.StartListening();
 
-            if (WirelessUtility.RefreshRate == 0)
-            {
-                WirelessUtility.RefreshRate = 0;
-            }
-            m_containerTimer.Interval = 1000;
-            m_containerTimer.Tick += new EventHandler(m_containerTimer_Tick);
-            m_containerTimer.Enabled = true;
+            DataService = RootWorkItem.Services.Get<IDataService>();
 
-            UpdateHeader();
-            UpdateFooter();
+            StatisticsService = RootWorkItem.Services.Get<IStatisticsService>();
 
+            UpdateFooter(new DesktopData() { Status = DesktopStatus.Disconnected });
             base.OnLoad(e);
         }
 
-        void m_containerTimer_Tick(object sender, EventArgs e)
-        {
-            //if (m_containerTimer.Interval != WirelessUtility.RefreshRate)
-            //{
-            //    m_containerTimer.Interval = WirelessUtility.RefreshRate;
-            //}
-            //UpdateHeader();
-
-            //APDownWatch.Reset();
-            //APDownWatch.Start();
-
-            //UpdateAPList();
-            
-            //APDownWatch.Stop();
-            //Trace.WriteLine("APList Took" + APDownWatch.ElapsedMilliseconds);
-
-            //UpdateFooter();
-            //UpdateTools();
-
-        }
-
-        public void UpdateHeader()
+        public void UpdateHeader(INetworkData data)
         {
             CurrentAPHeaderView m_Header = RootWorkItem.Items.Get<CurrentAPHeaderView>(ViewNames.Header);
-            AccessPoint accessPoint = WirelessUtility.CurrentAccessPoint;
-            if (accessPoint == null)
+            if (data.AssociatedAP == null)
             {
                 if (PreviouslyConnected)
                 {
-//                    DataService.NewEvent("Current AP" , "AP Connection Lost");
-                    //APDownWatch.Reset();
-                    //APDownWatch.Start();
+                    StatisticsService.LostAccessPoint();
                     PreviouslyConnected = false;
                 }
                 m_Header.SetCurrentAP("[none]", "-", "-");
@@ -134,24 +115,17 @@ namespace WiFiSurvey.Shell
             {
                 if (!PreviouslyConnected)
                 {
-//                    DataService.NewEvent("Current AP", "AP Connection Found");
-                    APDownWatch.Stop();
+                    StatisticsService.FoundAccessPoint();
                     PreviouslyConnected = true;
                 }
-                m_Header.SetCurrentAP(WirelessUtility.CurrentAccessPoint.Name, WirelessUtility.CurrentAccessPoint.PhysicalAddress.ToString(), WirelessUtility.CurrentAccessPoint.SignalStrength.Decibels.ToString());
+                m_Header.SetCurrentAP(data.AssociatedAP.Name, data.AssociatedAP.MAC, data.AssociatedAP.SignalStrength.ToString());
             }
         }
 
-        public void UpdateAPList()
-        {
-            APListView m_APList = RootWorkItem.Items.Get<APListView>(ViewNames.APList);
-//            m_APList.RefreshList();
-        }
-
-        public void UpdateFooter()
+        public void UpdateFooter(IDesktopData data)
         {
             StatusFooterView m_footer = RootWorkItem.Items.Get<StatusFooterView>(ViewNames.Footer);
-            m_footer.UpdateConnection(WirelessUtility.DesktopConnected);
+            m_footer.UpdateConnection(data);
         }
 
         public void UpdateTools()

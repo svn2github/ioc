@@ -30,6 +30,7 @@ namespace WiFiSurvey.Infrastructure.Services
         private UdpClient Listener { get; set; }
         private Boolean Done { get; set; }
         private IDataService DataService { get; set; }
+        private IStatisticsService StatisticsService { get; set; }
         private IConfigurationService ConfigurationService { get; set; }
 
         public DateTime LastSentTime { get; set; }
@@ -50,8 +51,14 @@ namespace WiFiSurvey.Infrastructure.Services
         ~NetworkService()
         {
             // TODO: fix this - it is bad, bad form.
-            m_broadcastThread.Abort();
-            m_listenThread.Abort();
+            if (m_broadcastThread != null)
+            {
+                m_broadcastThread.Abort();
+            }
+            if (m_listenThread != null)
+            {
+                m_listenThread.Abort();
+            }
         }
 
         public void StartBroadcastProc()
@@ -88,6 +95,15 @@ namespace WiFiSurvey.Infrastructure.Services
                             m_lastReceivedWatch.Stop();
                             m_lastRecievedTime = m_lastReceivedWatch.Elapsed;
                             WirelessUtility.DesktopConnected = true;
+                        }
+                        else
+                        {
+                            if (!m_connected)
+                            {
+                                WirelessUtility.DesktopConnected = true;
+                                StatisticsService.FoundNetwork();
+                                m_connected = true;
+                            }
                         }
                     }
                 }
@@ -142,17 +158,8 @@ namespace WiFiSurvey.Infrastructure.Services
                         WirelessUtility.DesktopConnected = false;
                         if (m_connected)
                         {
-//                            DataService.NewEvent("Desktop Client", "Lost Desktop Connection");
+                            StatisticsService.LostNetwork();
                             m_connected = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!m_connected)
-                        {
-                            WirelessUtility.DesktopConnected = true;
-//                            DataService.NewEvent("Desktop Client", "Found Desktop Connection");
-                            m_connected = true;
                         }
                     }
                 }

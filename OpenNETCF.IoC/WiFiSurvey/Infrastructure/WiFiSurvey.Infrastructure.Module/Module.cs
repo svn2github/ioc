@@ -17,6 +17,7 @@ namespace WiFiSurvey.Infrastructure
         {
             RootWorkItem.Services.AddNew<APMonitorService, IAPMonitorService>();
             RootWorkItem.Services.AddNew<NetworkService, INetworkService>();
+            RootWorkItem.Services.AddNew<StatisticsService, IStatisticsService>();
         }
     }
 }

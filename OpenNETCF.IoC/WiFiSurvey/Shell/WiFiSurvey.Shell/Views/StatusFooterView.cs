@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenNETCF.IoC.UI;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using WiFiSurvey.Infrastructure.Constants;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -16,26 +17,15 @@ namespace WiFiSurvey.Shell.Views
         public StatusFooterView()
         {
             InitializeComponent();
-
-            // TODO: display current PC connection status, updates with ET for last AP and PC connection
         }
 
-        public void UpdateConnection(Boolean connected)
+        public void UpdateConnection(IDesktopData data)
         {
-            if (WirelessUtility.DesktopAppDisabled)
+            switch (data.Status)
             {
-                label1.Text = "Desktop Connection Disabled";
-            }
-            else
-            {
-                if (connected)
-                {
-                    label1.Text = "Desktop Connected";
-                }
-                else
-                {
-                    label1.Text = "Desktop Not Connected";
-                }
+                case DesktopStatus.Connected:    label1.Text = "Desktop Connected";           break;
+                case DesktopStatus.Disabled:     label1.Text = "Desktop Connection Disabled"; break;
+                case DesktopStatus.Disconnected: label1.Text = "Desktop Not Connected";       break;
             }
         }
     }
