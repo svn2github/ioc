@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.UI", "..\Open
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WiFiSurveyDesktop", "WiFiSurveyDesktop", "{39A19C13-C126-47FA-A64F-5CB30F8C50C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurveryDesktop", "..\..\..\..\..\Projects\WiFi\WiFiSurveryDesktop\WiFiSurveryDesktop\WiFiSurveryDesktop.csproj", "{5C3B42E7-984E-48C2-BF50-A4411C4CDF35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurveyDesktop", "WiFiSurveryDesktop\WiFiSurveyDesktop.csproj", "{5C3B42E7-984E-48C2-BF50-A4411C4CDF35}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -63,10 +63,10 @@ Global
 		SccProjectTopLevelParentUniqueName7 = WiFiSurvey.sln
 		SccProjectName7 = Shell/WiFiSurvey.Shell
 		SccLocalPath7 = Shell\\WiFiSurvey.Shell
-		SccProjectUniqueName8 = ..\\..\\..\\..\\..\\Projects\\WiFi\\WiFiSurveryDesktop\\WiFiSurveryDesktop\\WiFiSurveryDesktop.csproj
+		SccProjectUniqueName8 = WiFiSurveryDesktop\\WiFiSurveyDesktop.csproj
 		SccProjectTopLevelParentUniqueName8 = WiFiSurvey.sln
 		SccProjectName8 = WiFiSurveryDesktop
-		SccLocalPath8 = ..\\..\\..\\..\\..\\Projects\\WiFi\\WiFiSurveryDesktop\\WiFiSurveryDesktop
+		SccLocalPath8 = WiFiSurveryDesktop
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

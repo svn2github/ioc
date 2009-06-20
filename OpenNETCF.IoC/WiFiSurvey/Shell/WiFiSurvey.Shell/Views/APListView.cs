@@ -46,6 +46,10 @@ namespace WiFiSurvey.Shell.Views
 
         void Presenter_NetworkDataChanged(object sender, GenericEventArgs<INetworkData> e)
         {
+            // check this in case we get any events after we've close the Form
+            if (m_invoker.IsDisposed) return;
+
+            // THese events will come in on a non-UI thread
             if (m_invoker.InvokeRequired)
             {
                 m_invoker.Invoke(new EventHandler<GenericEventArgs<INetworkData>>(Presenter_NetworkDataChanged), new object[] { sender, e });

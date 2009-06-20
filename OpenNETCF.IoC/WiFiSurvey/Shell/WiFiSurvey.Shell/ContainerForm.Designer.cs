@@ -50,9 +50,9 @@
             this.bodyWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.bodyWorkspace.Location = new System.Drawing.Point(0, 49);
+            this.bodyWorkspace.Location = new System.Drawing.Point(0, 39);
             this.bodyWorkspace.Name = "bodyWorkspace";
-            this.bodyWorkspace.Size = new System.Drawing.Size(240, 211);
+            this.bodyWorkspace.Size = new System.Drawing.Size(240, 230);
             this.bodyWorkspace.TabIndex = 1;
             this.bodyWorkspace.Text = "tabWorkspace1";
             // 
@@ -61,7 +61,7 @@
             this.headerWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.headerWorkspace.Controls.Add(this.tabWorkspace1);
-            this.headerWorkspace.Location = new System.Drawing.Point(0, 3);
+            this.headerWorkspace.Location = new System.Drawing.Point(0, 0);
             this.headerWorkspace.Name = "headerWorkspace";
             this.headerWorkspace.Size = new System.Drawing.Size(240, 40);
             this.headerWorkspace.TabIndex = 0;
@@ -88,6 +88,7 @@
             this.Controls.Add(this.bodyWorkspace);
             this.Controls.Add(this.headerWorkspace);
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ContainerForm";
             this.Text = "WiFi Survey";
