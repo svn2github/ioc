@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Threading;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.BusinessObjects;
-using OpenNETCF.Net.Sockets;
 using OpenNETCF.Net.NetworkInformation;
 using WiFiSurvey.DAL.SQLCE;
 using WiFiSurvey.DAL.Unit_of_Work;
