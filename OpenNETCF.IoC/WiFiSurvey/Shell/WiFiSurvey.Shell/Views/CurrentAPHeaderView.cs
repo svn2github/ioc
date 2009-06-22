@@ -13,6 +13,7 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
+using System.Diagnostics;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -22,6 +23,12 @@ namespace WiFiSurvey.Shell.Views
         DesktopPresenter DeskPresenter;
         Boolean PreviouslyConnected { get; set; }
 
+        APInfo CurrentAP { get; set; }
+
+        private Stopwatch m_timeConnected = new Stopwatch();
+
+        private Timer m_HeaderTimer = new Timer();
+
         public CurrentAPHeaderView()
         {
             InitializeComponent();
@@ -30,6 +37,15 @@ namespace WiFiSurvey.Shell.Views
 
             DeskPresenter = RootWorkItem.Items.AddNew<DesktopPresenter>(PresenterNames.Desktop);
             DeskPresenter.DesktopConnectionChange += new EventHandler<GenericEventArgs<IDesktopData>>(DeskPresenter_DesktopConnectionChange);
+
+            m_HeaderTimer.Interval = 1000;
+            m_HeaderTimer.Tick += new EventHandler(m_HeaderTimer_Tick);
+            m_HeaderTimer.Enabled = true;
+        }
+
+        void m_HeaderTimer_Tick(object sender, EventArgs e)
+        {
+            SetCurrentAP();
         }
 
         void DeskPresenter_DesktopConnectionChange(object sender, GenericEventArgs<IDesktopData> e)
@@ -39,18 +55,29 @@ namespace WiFiSurvey.Shell.Views
 
         void Presenter_OnCurrentAPUpdate(object sender, GenericEventArgs<INetworkData> e)
         {
-            SetCurrentAP(e.Value.AssociatedAP);
+
+            if (CurrentAP != null)
+            {
+                if (CurrentAP.Name != e.Value.AssociatedAP.Name)
+                {
+                    m_timeConnected.Reset();
+                    m_timeConnected.Start();
+                }
+            }
+
+            CurrentAP = e.Value.AssociatedAP;
+            SetCurrentAP();
         }
 
-        public void SetCurrentAP(APInfo info)
+        public void SetCurrentAP()
         {
-            if (info == null)
+            if (CurrentAP == null)
             {
                 UpdateHeader("[none]", "-", "-");
             }
             else
             {
-                UpdateHeader(info.Name, info.MAC, info.SignalStrength.ToString());
+                UpdateHeader(CurrentAP.Name, CurrentAP.MAC, CurrentAP.SignalStrength.ToString());
             }
         }
 
@@ -64,7 +91,9 @@ namespace WiFiSurvey.Shell.Views
                 return;
             }
 
-            lblSSIDName.Text = Name;
+            m_timeConnected.Stop();
+            lblSSIDName.Text = "[" + Name + "] " + m_timeConnected.Elapsed.Hours.ToString("D2") + ":" + m_timeConnected.Elapsed.Minutes.ToString("D2") + ":" + m_timeConnected.Elapsed.Seconds.ToString("D2");
+            m_timeConnected.Start();
             lblSignalStrength.Text = "Signal: " + Strength;
             lblMacAdress.Text = MAC;
         }
