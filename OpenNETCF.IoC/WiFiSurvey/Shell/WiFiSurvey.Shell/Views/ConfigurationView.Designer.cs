@@ -39,6 +39,7 @@
             this.lblEventCount = new System.Windows.Forms.Label();
             this.lblRefreshTime = new System.Windows.Forms.Label();
             this.lblDataRefresh = new System.Windows.Forms.Label();
+            this.btnBroadcast = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblDesktopConnect
@@ -138,10 +139,21 @@
             this.lblDataRefresh.Size = new System.Drawing.Size(94, 20);
             this.lblDataRefresh.Text = "Data Refresh";
             // 
+            // btnBroadcast
+            // 
+            this.btnBroadcast.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBroadcast.Location = new System.Drawing.Point(160, 100);
+            this.btnBroadcast.Name = "btnBroadcast";
+            this.btnBroadcast.Size = new System.Drawing.Size(72, 20);
+            this.btnBroadcast.TabIndex = 18;
+            this.btnBroadcast.Text = "Broadcast";
+            this.btnBroadcast.Click += new System.EventHandler(this.btnBroadcast_Click);
+            // 
             // ConfigurationView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.btnBroadcast);
             this.Controls.Add(this.lblRefreshTime);
             this.Controls.Add(this.lblDataRefresh);
             this.Controls.Add(this.lblEventCount);
@@ -172,6 +184,7 @@
         private System.Windows.Forms.Label lblEventCount;
         private System.Windows.Forms.Label lblRefreshTime;
         private System.Windows.Forms.Label lblDataRefresh;
+        private System.Windows.Forms.Button btnBroadcast;
 
     }
 }

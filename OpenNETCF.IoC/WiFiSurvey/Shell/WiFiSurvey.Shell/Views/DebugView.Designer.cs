@@ -28,10 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.debugBox = new System.Windows.Forms.ListBox();
+            this.SuspendLayout();
+            // 
+            // debugBox
+            // 
+            this.debugBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.debugBox.Location = new System.Drawing.Point(0, 0);
+            this.debugBox.Name = "debugBox";
+            this.debugBox.Size = new System.Drawing.Size(150, 146);
+            this.debugBox.TabIndex = 0;
+            // 
+            // DebugView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.debugBox);
+            this.Name = "DebugView";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.ListBox debugBox;
     }
 }

@@ -13,5 +13,6 @@ namespace WiFiSurvey.Infrastructure.Constants
         public const string NewStatisticsEvent = "event:NewStatistic";
         public const string ClearHistory = "event:ClearHistory";
         public const string DebugLine = "event:DebugLine";
+        public const string RestartBroadcasting = "event:RestartBroadcast";
     }
 }

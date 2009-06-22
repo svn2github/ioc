@@ -19,5 +19,13 @@ namespace WiFiSurvey.Shell.Presenters
             if (DesktopConnectionChange == null) return;
             DesktopConnectionChange(sender, args);
         }
+
+        [EventPublication(EventNames.RestartBroadcasting)]
+        public event EventHandler<EventArgs> RestartBroadcasting;
+
+        public void RestartBroadcast()
+        {
+            RestartBroadcasting(this, new EventArgs());
+        }
     }
 }

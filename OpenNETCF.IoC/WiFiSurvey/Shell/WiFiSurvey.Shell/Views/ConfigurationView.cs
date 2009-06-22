@@ -126,5 +126,10 @@ namespace WiFiSurvey.Shell.Views
         {
             HistoryPresenter.ClearHistory();
         }
+
+        private void btnBroadcast_Click(object sender, EventArgs e)
+        {
+            DesktopPresenter.RestartBroadcast();
+        }
     }
 }

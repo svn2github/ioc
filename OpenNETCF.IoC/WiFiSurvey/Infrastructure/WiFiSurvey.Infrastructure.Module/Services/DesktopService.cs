@@ -142,6 +142,12 @@ namespace WiFiSurvey.Infrastructure.Services
             StartListenerThread();
         }
 
+        [EventSubscription(EventNames.RestartBroadcasting, ThreadOption.UserInterface)]
+        public void RestartBroad(object sender, EventArgs e)
+        {
+            StartBroadcastProc();
+        }
+
         public void Broadcast()
         {
             try
