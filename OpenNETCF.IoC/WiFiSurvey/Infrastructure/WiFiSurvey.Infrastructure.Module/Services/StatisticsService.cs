@@ -11,7 +11,6 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public class StatisticsService : IStatisticsService
     {
-        [InjectionConstructor]
         public StatisticsService()
         {
         }
@@ -114,6 +113,15 @@ namespace WiFiSurvey.Infrastructure.Services
         {
             m_AccessPointWatch.Reset();
             m_AccessPointWatch.Start();
+        }
+
+        public void Shutdown()
+        {
+            m_AccessPointWatch.Stop();
+            m_AccessPointWatch = null;
+
+            m_NetworkWatch.Stop();
+            m_NetworkWatch = null;
         }
     }
 }

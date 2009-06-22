@@ -28,6 +28,8 @@ namespace WiFiSurveryDesktop
         private int m_listenPort = 11000;
         private int m_broadcastPort = 11001;
 
+        private int pingCount = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -61,6 +63,7 @@ namespace WiFiSurveryDesktop
                     IPEndPoint m_endPoint = new IPEndPoint(IPAddress.Any, m_listenPort);
                     byte[] bytes = m_listener.Receive(ref m_endPoint);
                     PingDevice(m_endPoint, bytes);
+                    Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
@@ -120,6 +123,8 @@ namespace WiFiSurveryDesktop
 
             IPEndPoint m_EndPoint = new IPEndPoint(broadcast.Address, 11001);
 
+            Trace.WriteLine("Ping to " + broadcast.Address.ToString() +" "+ pingCount++);
+
             byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
             s.EnableBroadcast = true;
@@ -129,7 +134,7 @@ namespace WiFiSurveryDesktop
 
             foreach (var item in ConnectedDevices)
             {
-                if (item.IPAdress.Address == broadcast.Address.Address)
+                if (item.IPAdress.ToString() == broadcast.Address.ToString())
                 {
                     foundDevice = true;
                     item.Data = dataString;

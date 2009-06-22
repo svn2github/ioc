@@ -1,6 +1,6 @@
-﻿namespace WiFiSurvey.Shell.Views
+﻿namespace WiFiSurvey.Shell
 {
-    partial class DesktopConnectionView
+    partial class DebugView
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,31 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 40);
-            this.label1.Text = "Status : Desktop Connected";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // StatusFooterView
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.label1);
-            this.Name = "StatusFooterView";
-            this.Size = new System.Drawing.Size(256, 40);
-            this.ResumeLayout(false);
-
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
     }
 }

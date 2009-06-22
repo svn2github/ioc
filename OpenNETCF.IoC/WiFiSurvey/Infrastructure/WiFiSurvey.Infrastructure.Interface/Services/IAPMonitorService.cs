@@ -8,6 +8,6 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public interface IAPMonitorService
     {
-        WirelessZeroConfigNetworkInterface Adapter { get; }
+        void Shutdown();
     }
 }

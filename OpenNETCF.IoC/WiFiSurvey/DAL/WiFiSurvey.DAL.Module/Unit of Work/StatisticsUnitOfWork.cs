@@ -73,8 +73,17 @@ namespace WiFiSurvey.DAL.Unit_of_Work
                     }
                 }
 
+                ClearLists();
+
                 // TODO: updates and deletes
             }
+        }
+
+        private void ClearLists()
+        {
+            m_inserts.Clear();
+            m_deletes.Clear();
+            m_updates.Clear();
         }
 
 

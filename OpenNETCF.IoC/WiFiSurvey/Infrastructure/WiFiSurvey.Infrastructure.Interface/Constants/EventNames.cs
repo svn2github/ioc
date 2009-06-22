@@ -12,5 +12,6 @@ namespace WiFiSurvey.Infrastructure.Constants
         public const string DesktopConnectionChange = "event:DesktopConnectionChange";
         public const string NewStatisticsEvent = "event:NewStatistic";
         public const string ClearHistory = "event:ClearHistory";
+        public const string DebugLine = "event:DebugLine";
     }
 }

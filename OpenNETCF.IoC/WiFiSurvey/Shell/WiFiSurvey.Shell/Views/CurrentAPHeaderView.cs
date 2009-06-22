@@ -12,19 +12,29 @@ using WiFiSurvey.Infrastructure;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.IoC;
+using WiFiSurvey.Infrastructure.Constants;
 
 namespace WiFiSurvey.Shell.Views
 {
     public partial class CurrentAPHeaderView : SmartPart
     {
-        AccessPointPresenter Presenter;
+        AccessPointPresenter APPresenter;
+        DesktopPresenter DeskPresenter;
         Boolean PreviouslyConnected { get; set; }
 
         public CurrentAPHeaderView()
         {
             InitializeComponent();
-            Presenter = RootWorkItem.Items.AddNew<AccessPointPresenter>();
-            Presenter.OnCurrentAPUpdate += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_OnCurrentAPUpdate);
+            APPresenter = RootWorkItem.Items.AddNew<AccessPointPresenter>();
+            APPresenter.OnCurrentAPUpdate += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_OnCurrentAPUpdate);
+
+            DeskPresenter = RootWorkItem.Items.AddNew<DesktopPresenter>(PresenterNames.Desktop);
+            DeskPresenter.DesktopConnectionChange += new EventHandler<GenericEventArgs<IDesktopData>>(DeskPresenter_DesktopConnectionChange);
+        }
+
+        void DeskPresenter_DesktopConnectionChange(object sender, GenericEventArgs<IDesktopData> e)
+        {
+            UpdateConnection(e.Value);
         }
 
         void Presenter_OnCurrentAPUpdate(object sender, GenericEventArgs<INetworkData> e)
@@ -57,6 +67,25 @@ namespace WiFiSurvey.Shell.Views
             lblSSIDName.Text = Name;
             lblSignalStrength.Text = "Signal: " + Strength;
             lblMacAdress.Text = MAC;
+        }
+
+        delegate void UC(IDesktopData data);
+
+        public void UpdateConnection(IDesktopData data)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new UC(UpdateConnection), new object[] { data });
+                return;
+            }
+
+            switch (data.Status)
+            {
+                case DesktopStatus.Connected: desktopStatusPictureBox.Image = ildesktopStatus.Images[1]; break;
+                case DesktopStatus.Disabled: desktopStatusPictureBox.Image = ildesktopStatus.Images[0]; break;
+                case DesktopStatus.Disconnected: desktopStatusPictureBox.Image = ildesktopStatus.Images[0]; break;
+                case DesktopStatus.Enabled: desktopStatusPictureBox.Image = ildesktopStatus.Images[0]; break;
+            }
         }
     }
 }

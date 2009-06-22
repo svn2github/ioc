@@ -9,5 +9,6 @@ namespace WiFiSurvey.Infrastructure.Services
     public interface IDesktopService
     {
         void StartListening();
+        void Shutdown();
     }
 }

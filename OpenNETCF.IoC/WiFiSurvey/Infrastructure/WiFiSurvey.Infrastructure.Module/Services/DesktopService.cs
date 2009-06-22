@@ -17,7 +17,7 @@ namespace WiFiSurvey.Infrastructure.Services
     {
         private Stopwatch m_lastReceivedWatch = new Stopwatch();
         private double m_dropOutSeconds = 0;
-        private double m_dropOutSecondsMax = 5;
+        private double m_dropOutSecondsMax = 8;
         private int m_listenReciever = 11001;
         private int m_broadcastPort = 11000;
         private TimeSpan m_lastRecievedTime;
@@ -60,9 +60,9 @@ namespace WiFiSurvey.Infrastructure.Services
             m_hostName = Dns.GetHostName();
         }
 
-        ~DesktopService()
+        public void Shutdown()
         {
-            // TODO: fix this - it is bad, bad form.
+            Done = true;
             if (m_broadcastThread != null)
             {
                 m_broadcastThread.Abort();
@@ -82,7 +82,6 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void StartListenerThread()
         {
-            Listener = new UdpClient(m_listenReciever);
             m_listenThread = new Thread(ListenerProc);
             m_listenThread.IsBackground = true;
             m_listenThread.Start();
@@ -95,6 +94,8 @@ namespace WiFiSurvey.Infrastructure.Services
         {
             try
             {
+                Listener = new UdpClient(m_listenReciever);
+
                 while (!Done)
                 {
                     if (!WirelessUtility.DesktopAppDisabled)
@@ -116,15 +117,17 @@ namespace WiFiSurvey.Infrastructure.Services
                             deskData.Status = DesktopStatus.Connected;
                             m_lastDesktop = m_endPoint.Address.ToString();
                             deskData.IPAddress = m_lastDesktop;
+                            m_dropOutSeconds = 0;
 
                             DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
                         }
                     }
+                    Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(ex.InnerException);
+                DebugService.WriteLine(ex.InnerException.ToString());
             }
             finally
             {
@@ -141,48 +144,58 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void Broadcast()
         {
-            string[] args = new string[1];
-
-            //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
-            IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
-
-            //Bind the UdpClient to the Local IP for Desktop DebugZ
-            IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
-
-            UdpClient m_BroadcastClient = new UdpClient(m_localEP);
-
-            m_BroadcastClient.Connect(m_RemoteEP);
-            //s.Connect(ep);
-
-            while (!Done)
+            try
             {
-                if (CurrentAP != null && !WirelessUtility.DesktopAppDisabled)
+                string[] args = new string[1];
+
+                //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
+                IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast , m_broadcastPort);
+
+                //Bind the UdpClient to the Local IP for Desktop DebugZ
+                IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
+
+                UdpClient m_BroadcastClient = new UdpClient(m_localEP);
+
+                m_BroadcastClient.Connect(m_RemoteEP);
+                //s.Connect(ep);
+
+                while (!Done)
                 {
-                    args[0] = m_hostName + ":" + CurrentAP.Name + ":" + CurrentAP.SignalStrength.ToString();
-                    byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
-
-                    m_BroadcastClient.Send(sendbuf, sendbuf.Length);
-
-                    //Check Connectivity to Desktop
-                    m_dropOutSeconds = m_lastReceivedWatch.Elapsed.TotalSeconds;
-
-                    if (m_dropOutSeconds > m_dropOutSecondsMax)
+                    if (CurrentAP != null && !WirelessUtility.DesktopAppDisabled)
                     {
-                        if (m_connected)
+                        args[0] = m_hostName + ":" + CurrentAP.Name + ":" + CurrentAP.SignalStrength.ToString();
+                        byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
+
+                        m_BroadcastClient.Send(sendbuf, sendbuf.Length);
+
+                        //Check Connectivity to Desktop
+                        m_lastReceivedWatch.Stop();
+                        m_dropOutSeconds = m_lastReceivedWatch.Elapsed.TotalSeconds;
+                        m_lastReceivedWatch.Start();
+
+
+                        if (m_dropOutSeconds > m_dropOutSecondsMax)
                         {
-                            m_connected = false;
-                            IDesktopData deskData = new DesktopData();
-                            deskData.Status = DesktopStatus.Disconnected;
-                            deskData.IPAddress = m_lastDesktop;
-                            DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
+                            if (m_connected)
+                            {
+                                m_connected = false;
+                                IDesktopData deskData = new DesktopData();
+                                deskData.Status = DesktopStatus.Disconnected;
+                                deskData.IPAddress = m_lastDesktop;
+                                DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
+                            }
                         }
                     }
+                    else
+                    {
+                        m_connected = false;
+                    }
+                    Thread.Sleep(1000);
                 }
-                else
-                {
-                    m_connected = false;
-                }
-                Thread.Sleep(1000);
+            }
+            catch(Exception ex)
+            {
+                DebugService.WriteLine(ex.InnerException.ToString());
             }
         }
     }

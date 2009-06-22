@@ -23,8 +23,9 @@ namespace WiFiSurvey.Shell
     {
         ContainerPresenter Presenter { get; set; }
         IHistoricEventService DataService { get; set; }
-        IDesktopService NetworkService { get; set; }
+        IDesktopService DesktopService { get; set; }
         IStatisticsService StatisticsService { get; set; }
+        IAPMonitorService APMonitorService { get; set; }
 
         private Stopwatch APDownWatch = new Stopwatch();
         private Boolean PreviouslyConnected { get; set; }
@@ -39,7 +40,6 @@ namespace WiFiSurvey.Shell
             // store the main workspace in the IoC framework
             RootWorkItem.Items.Add(headerWorkspace, WorkspaceNames.HeaderWorkspace);
             RootWorkItem.Items.Add(bodyWorkspace, WorkspaceNames.BodyWorkspace);
-            RootWorkItem.Items.Add(footerWorkspace, WorkspaceNames.FooterWorkspace);
 
             // create the presenter for the container
             Presenter = RootWorkItem.Items.AddNew<ContainerPresenter>(PresenterNames.Container);
@@ -58,9 +58,6 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<CurrentAPHeaderView>(ViewNames.Header) as ISmartPart;
             headerWorkspace.Show(view);
 
-            view = RootWorkItem.Items.AddNew<DesktopConnectionView>(ViewNames.Footer) as ISmartPart;
-            footerWorkspace.Show(view);
-
             bodyWorkspace.SelectTab(0);
 
             this.WindowState = FormWindowState.Normal;
@@ -73,10 +70,21 @@ namespace WiFiSurvey.Shell
             throw new NotImplementedException();
         }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            DesktopService.Shutdown();
+            StatisticsService.Shutdown();
+            APMonitorService.Shutdown();
+        }
+
         protected override void OnLoad(EventArgs e)
         {
-            NetworkService = RootWorkItem.Services.Get<IDesktopService>();
-            NetworkService.StartListening();
+            DesktopService = RootWorkItem.Services.Get<IDesktopService>();
+            DesktopService.StartListening();
+
+            StatisticsService = RootWorkItem.Services.Get<IStatisticsService>();
+
+            APMonitorService = RootWorkItem.Services.Get<IAPMonitorService>();
 
             base.OnLoad(e);
         }

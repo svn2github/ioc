@@ -26,7 +26,6 @@ namespace WiFiSurvey.Shell.Views
         public AccessPointPresenter Presenter { get; set; }
         public IDesktopService NetworkService { get; set; }
 
-        private Timer m_apRefreshTimer = new Timer();
         private bool m_columnWidthsSet = false;
         private bool m_alreadyQuerying = false;
         private EventWaitHandle m_activityEvent;
@@ -82,7 +81,6 @@ namespace WiFiSurvey.Shell.Views
             {
                 apList.ResumeLayout(true);
             }
-
         }
 
         private void UpdateColumnsWidth()

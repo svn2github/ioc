@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CurrentAPHeaderView));
             this.lblSSIDName = new System.Windows.Forms.Label();
             this.lblSignalStrength = new System.Windows.Forms.Label();
             this.lblMacAdress = new System.Windows.Forms.Label();
+            this.desktopStatusPictureBox = new System.Windows.Forms.PictureBox();
+            this.ildesktopStatus = new System.Windows.Forms.ImageList();
             this.SuspendLayout();
             // 
             // lblSSIDName
@@ -55,10 +58,28 @@
             this.lblMacAdress.Size = new System.Drawing.Size(100, 20);
             this.lblMacAdress.Text = "-";
             // 
+            // desktopStatusPictureBox
+            // 
+            this.desktopStatusPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.desktopStatusPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.desktopStatusPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("desktopStatusPictureBox.Image")));
+            this.desktopStatusPictureBox.Location = new System.Drawing.Point(197, 3);
+            this.desktopStatusPictureBox.Name = "desktopStatusPictureBox";
+            this.desktopStatusPictureBox.Size = new System.Drawing.Size(34, 34);
+            this.desktopStatusPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            // 
+            // ildesktopStatus
+            // 
+            this.ildesktopStatus.ImageSize = new System.Drawing.Size(32, 32);
+            this.ildesktopStatus.Images.Clear();
+            this.ildesktopStatus.Images.Add(((System.Drawing.Image)(resources.GetObject("resource"))));
+            this.ildesktopStatus.Images.Add(((System.Drawing.Image)(resources.GetObject("resource1"))));
+            // 
             // CurrentAPHeaderView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.desktopStatusPictureBox);
             this.Controls.Add(this.lblMacAdress);
             this.Controls.Add(this.lblSignalStrength);
             this.Controls.Add(this.lblSSIDName);
@@ -73,6 +94,8 @@
         private System.Windows.Forms.Label lblSSIDName;
         private System.Windows.Forms.Label lblSignalStrength;
         private System.Windows.Forms.Label lblMacAdress;
+        private System.Windows.Forms.PictureBox desktopStatusPictureBox;
+        private System.Windows.Forms.ImageList ildesktopStatus;
 
     }
 }

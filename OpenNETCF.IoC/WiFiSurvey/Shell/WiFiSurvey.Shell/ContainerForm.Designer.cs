@@ -28,22 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.footerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.bodyWorkspace = new OpenNETCF.IoC.UI.TabWorkspace();
             this.headerWorkspace = new OpenNETCF.IoC.UI.DeckWorkspace();
             this.tabWorkspace1 = new OpenNETCF.IoC.UI.TabWorkspace();
             this.headerWorkspace.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // footerWorkspace
-            // 
-            this.footerWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.footerWorkspace.Location = new System.Drawing.Point(0, 266);
-            this.footerWorkspace.Name = "footerWorkspace";
-            this.footerWorkspace.Size = new System.Drawing.Size(240, 28);
-            this.footerWorkspace.TabIndex = 2;
-            this.footerWorkspace.Text = "deckWorkspace1";
             // 
             // bodyWorkspace
             // 
@@ -52,7 +41,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.bodyWorkspace.Location = new System.Drawing.Point(0, 39);
             this.bodyWorkspace.Name = "bodyWorkspace";
-            this.bodyWorkspace.Size = new System.Drawing.Size(240, 230);
+            this.bodyWorkspace.Size = new System.Drawing.Size(240, 252);
             this.bodyWorkspace.TabIndex = 1;
             this.bodyWorkspace.Text = "tabWorkspace1";
             // 
@@ -84,7 +73,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(240, 294);
-            this.Controls.Add(this.footerWorkspace);
             this.Controls.Add(this.bodyWorkspace);
             this.Controls.Add(this.headerWorkspace);
             this.KeyPreview = true;
@@ -101,7 +89,6 @@
 
         private OpenNETCF.IoC.UI.DeckWorkspace headerWorkspace;
         private OpenNETCF.IoC.UI.TabWorkspace bodyWorkspace;
-        private OpenNETCF.IoC.UI.DeckWorkspace footerWorkspace;
         private OpenNETCF.IoC.UI.TabWorkspace tabWorkspace1;
     }
 }

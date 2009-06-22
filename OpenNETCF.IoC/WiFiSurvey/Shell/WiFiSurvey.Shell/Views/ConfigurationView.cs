@@ -13,6 +13,7 @@ using OpenNETCF.IoC;
 using WiFiSurvey.Shell.Presenters;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure;
+using System.Diagnostics;
 
 namespace WiFiSurvey.Shell.Views
 {
@@ -22,6 +23,8 @@ namespace WiFiSurvey.Shell.Views
         DesktopPresenter DesktopPresenter;
         HistoryPresenter HistoryPresenter;
 
+        private Stopwatch m_refreshWatch = new Stopwatch();
+
         IConfigurationService Configuration { get; set; }
 
         Timer ConfigTimer = new Timer();
@@ -30,7 +33,7 @@ namespace WiFiSurvey.Shell.Views
         {
             InitializeComponent();
 
-            this.Name = "Tools";
+            this.Name = "Config";
 
             btnDisableDesktop.Enabled = true;
             btnEnableDesktop.Enabled = false;
@@ -44,10 +47,20 @@ namespace WiFiSurvey.Shell.Views
             // TODO: collection interval, etc.
 
             APPresenter = RootWorkItem.Items.Get<AccessPointPresenter>(PresenterNames.APList);
+
+            APPresenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(APPresenter_NetworkDataChanged);
+
             DesktopPresenter = RootWorkItem.Items.Get<DesktopPresenter>(PresenterNames.Desktop);
             HistoryPresenter = RootWorkItem.Items.Get<HistoryPresenter>(PresenterNames.History);
 
             Configuration = RootWorkItem.Services.Get<IConfigurationService>();
+
+            m_refreshWatch.Start();
+        }
+
+        void APPresenter_NetworkDataChanged(object sender, GenericEventArgs<INetworkData> e)
+        {
+            m_refreshWatch.Reset();
         }
 
         void ConfigTimer_Tick(object sender, EventArgs e)
@@ -65,6 +78,12 @@ namespace WiFiSurvey.Shell.Views
             {
                 lblEventCount.Text = HistoryPresenter.EventCount.ToString();
             }
+
+
+            m_refreshWatch.Stop();
+            lblRefreshTime.Text = m_refreshWatch.Elapsed.TotalSeconds.ToString("N1");
+            m_refreshWatch.Start();
+
         }
 
         void cmbRefreshRate_SelectedIndexChanged(object sender, EventArgs e)

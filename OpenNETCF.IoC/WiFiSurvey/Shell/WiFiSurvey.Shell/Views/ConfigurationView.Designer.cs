@@ -37,6 +37,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnResetEvents = new System.Windows.Forms.Button();
             this.lblEventCount = new System.Windows.Forms.Label();
+            this.lblRefreshTime = new System.Windows.Forms.Label();
+            this.lblDataRefresh = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblDesktopConnect
@@ -121,10 +123,27 @@
             this.lblEventCount.Size = new System.Drawing.Size(48, 20);
             this.lblEventCount.Text = "label2";
             // 
-            // ToolsView
+            // lblRefreshTime
+            // 
+            this.lblRefreshTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblRefreshTime.Location = new System.Drawing.Point(88, 99);
+            this.lblRefreshTime.Name = "lblRefreshTime";
+            this.lblRefreshTime.Size = new System.Drawing.Size(48, 20);
+            this.lblRefreshTime.Text = "label2";
+            // 
+            // lblDataRefresh
+            // 
+            this.lblDataRefresh.Location = new System.Drawing.Point(2, 99);
+            this.lblDataRefresh.Name = "lblDataRefresh";
+            this.lblDataRefresh.Size = new System.Drawing.Size(94, 20);
+            this.lblDataRefresh.Text = "Data Refresh";
+            // 
+            // ConfigurationView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.lblRefreshTime);
+            this.Controls.Add(this.lblDataRefresh);
             this.Controls.Add(this.lblEventCount);
             this.Controls.Add(this.btnResetEvents);
             this.Controls.Add(this.label1);
@@ -134,7 +153,7 @@
             this.Controls.Add(this.btnDisableDesktop);
             this.Controls.Add(this.btnEnableDesktop);
             this.Controls.Add(this.lblDesktopConnect);
-            this.Name = "ToolsView";
+            this.Name = "ConfigurationView";
             this.Size = new System.Drawing.Size(234, 155);
             this.ResumeLayout(false);
 
@@ -151,6 +170,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnResetEvents;
         private System.Windows.Forms.Label lblEventCount;
+        private System.Windows.Forms.Label lblRefreshTime;
+        private System.Windows.Forms.Label lblDataRefresh;
 
     }
 }

@@ -8,6 +8,7 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.Net.NetworkInformation;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
+using System.Diagnostics;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
@@ -16,11 +17,15 @@ namespace WiFiSurvey.Infrastructure.Services
         private Timer m_adapterPollTimer;
         private bool m_pollingAPs = false;
 
+        private Thread m_APthread;
+
         [EventPublication(EventNames.NetworkDataChange)]
         public event EventHandler<GenericEventArgs<INetworkData>> NetworkDataChange;
 
         public WirelessZeroConfigNetworkInterface Adapter { get; set; }
         private IConfigurationService ConfigurationService { get; set; }
+
+        private Stopwatch watch = new Stopwatch();
 
         [InjectionConstructor]
         public APMonitorService([ServiceDependency]IConfigurationService configService)
@@ -38,52 +43,83 @@ namespace WiFiSurvey.Infrastructure.Services
 
             Adapter = intf as WirelessZeroConfigNetworkInterface;
 
-            m_adapterPollTimer = new Timer(AdapterPollProc, null, ConfigurationService.ApplicationConfig.AdapterPollInterval, ConfigurationService.ApplicationConfig.AdapterPollInterval);
+            CreateAPThread();
         }
 
-        ~APMonitorService()
+        public void Shutdown()
         {
-            m_adapterPollTimer.Dispose();
-        }
-
-        void AdapterPollProc(object o)
-        {
-            if (m_pollingAPs) return;
-
-            try
+            if (m_APthread != null)
             {
-                m_pollingAPs = true;
+                m_APthread.Abort();
+            }
+        }
 
-                // refresh the nearby list
-                Adapter.NearbyAccessPoints.Refresh();
+        private void CreateAPThread()
+        {
+            m_APthread = new Thread(AdapterPollProc);
+            m_APthread.IsBackground = true;
+            m_APthread.Start();
+        }
+        void AdapterPollProc()
+        {
 
-                NetworkData data = new NetworkData();
-                data.AssociatedAP = new APInfo
+            while (true)
+            {
+                watch.Reset();
+                watch.Start();
+                try
                 {
-                    Name = Adapter.AssociatedAccessPoint,
-                    MAC = Adapter.AssociatedAccessPointMAC.ToString(),
-                    SignalStrength = Adapter.SignalStrength.Decibels
-                };
+                    m_pollingAPs = true;
 
-                List<APInfo> nearbyList = new List<APInfo>();
-                foreach (var ap in Adapter.NearbyAccessPoints)
-                {
-                    nearbyList.Add(new APInfo
+                    // refresh the nearby list
+                    Adapter.NearbyAccessPoints.Refresh();
+
+                    NetworkData data = new NetworkData();
+                    data.AssociatedAP = new APInfo();
+                    if (Adapter != null)
                     {
-                        Name = ap.Name,
-                        MAC = ap.PhysicalAddress.ToString(),
-                        SignalStrength = ap.SignalStrength.Decibels
-                    });
+                        data.AssociatedAP.Name = Adapter.AssociatedAccessPoint;
+                        if (Adapter.AssociatedAccessPointMAC != null)
+                        {
+                            data.AssociatedAP.MAC = Adapter.AssociatedAccessPointMAC.ToString();
+                        }
+                        else
+                        {
+                            data.AssociatedAP.MAC = "";
+                        }
+                        data.AssociatedAP.SignalStrength = Adapter.SignalStrength.Decibels;
+                    }
+
+                    List<APInfo> nearbyList = new List<APInfo>();
+                    foreach (var ap in Adapter.NearbyAccessPoints)
+                    {
+                        nearbyList.Add(new APInfo
+                        {
+                            Name = ap.Name,
+                            MAC = ap.PhysicalAddress.ToString(),
+                            SignalStrength = ap.SignalStrength.Decibels
+                        });
+                    }
+
+                    data.NearbyAPs = nearbyList.ToArray();
+
+                    RaiseNetworkDataChange(data);
+                }
+                catch (Exception ex)
+                {
+                    DebugService.WriteLine(ex.InnerException.ToString());
+                }
+                finally
+                {
+                    m_pollingAPs = false;
                 }
 
-                data.NearbyAPs = nearbyList.ToArray();
+                watch.Stop();
+                Trace.WriteLine("AP Refresh " + watch.Elapsed.TotalSeconds.ToString());
 
-                RaiseNetworkDataChange(data);
+                Thread.Sleep(1000);
             }
-            finally
-            {
-                m_pollingAPs = false;
-            }
+
         }
 
         void RaiseNetworkDataChange(INetworkData data)

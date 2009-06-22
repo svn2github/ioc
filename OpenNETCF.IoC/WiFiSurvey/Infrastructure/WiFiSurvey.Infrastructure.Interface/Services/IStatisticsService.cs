@@ -15,5 +15,7 @@ namespace WiFiSurvey.Infrastructure.Services
         TimeSpan AcessPointDownTime { get; set; }
         void FoundAccessPoint(APInfo info);
         void LostAccessPoint();
+
+        void Shutdown();
     }
 }
