@@ -64,6 +64,11 @@ namespace WiFiSurvey.Shell.Views
                     m_timeConnected.Start();
                 }
             }
+            else
+            {
+                m_timeConnected.Reset();
+                m_timeConnected.Start();
+            }
 
             CurrentAP = e.Value.AssociatedAP;
             SetCurrentAP();
@@ -73,7 +78,7 @@ namespace WiFiSurvey.Shell.Views
         {
             if (CurrentAP == null)
             {
-                UpdateHeader("[none]", "-", "-");
+                UpdateHeader("none", "-", "-");
             }
             else
             {
