@@ -195,7 +195,7 @@ namespace WiFiSurvey.Infrastructure.Services
             }
             catch(Exception ex)
             {
-                DebugService.WriteLine(ex.InnerException.ToString());
+                DebugService.WriteLine(ex.ToString());
             }
         }
     }

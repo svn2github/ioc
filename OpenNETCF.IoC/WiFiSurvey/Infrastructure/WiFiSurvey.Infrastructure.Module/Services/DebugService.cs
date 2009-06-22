@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WiFiSurvey.Infrastructure.Constants;
 using OpenNETCF.IoC;
+using System.Diagnostics;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
@@ -11,7 +12,11 @@ namespace WiFiSurvey.Infrastructure.Services
     {
         public static void WriteLine(string message)
         {
-            DebugLine("DebugService", new GenericEventArgs<string>(message));
+            if(DebugLine != null)
+            {
+                DebugLine("DebugService", new GenericEventArgs<string>(message));
+            }
+            Trace.WriteLine(message);
         }
 
         [EventPublication(EventNames.DebugLine)]
