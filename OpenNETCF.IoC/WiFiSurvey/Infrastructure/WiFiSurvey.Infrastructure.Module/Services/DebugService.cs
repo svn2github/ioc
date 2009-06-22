@@ -16,10 +16,8 @@ namespace WiFiSurvey.Infrastructure.Services
             {
                 DebugLine("DebugService", new GenericEventArgs<string>(message));
             }
-            Trace.WriteLine(message);
         }
 
-        [EventPublication(EventNames.DebugLine)]
         public static event EventHandler<GenericEventArgs<string>> DebugLine;
     }
 }
