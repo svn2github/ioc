@@ -160,8 +160,16 @@ namespace WiFiSurvey.Infrastructure.Services
             //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
             IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
 
-            //Bind the UdpClient to the Local IP for Desktop DebugZ
-            IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
+            m_ipAddress = null;
+
+            //find a non LocalIP
+
+            while (m_ipAddress == null)
+            {
+                m_ipAddress = FindIP();
+            }
+
+            IPEndPoint m_localEP = new IPEndPoint(m_ipAddress, 11000);
 
             Trace.WriteLine("Local Bind");
 
@@ -172,6 +180,24 @@ namespace WiFiSurvey.Infrastructure.Services
             Broadcaster.Connect(m_RemoteEP);
         }
 
+        private IPAddress FindIP()
+        {
+            IPAddress localaddy = null;
+
+            IPAddress[] addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+
+            //Bind the UdpClient to the Local IP for Desktop DebugZ
+            foreach (IPAddress address in addresses)
+            {
+                if (!IPAddress.IsLoopback(address))
+                {
+                    localaddy = address;
+                }
+            }
+
+            return localaddy;
+
+        }
         public void Broadcast()
         {
             try
