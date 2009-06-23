@@ -21,7 +21,6 @@ namespace WiFiSurvey.Shell.Presenters
         private Boolean Done { get; set; }
 
         public event EventHandler<GenericEventArgs<INetworkData>> NetworkDataChanged;
-        public event EventHandler<GenericEventArgs<INetworkData>> OnCurrentAPUpdate;
 
         [ServiceDependency]
         IAPMonitorService APMonitorService { get; set; }
@@ -33,11 +32,8 @@ namespace WiFiSurvey.Shell.Presenters
             {
                 NetworkDataChanged(this, args);
             }
-            if (OnCurrentAPUpdate != null)
-            {
-                OnCurrentAPUpdate(sender, args);
-            }
         }
+
         public AccessPointPresenter()
         {
         }

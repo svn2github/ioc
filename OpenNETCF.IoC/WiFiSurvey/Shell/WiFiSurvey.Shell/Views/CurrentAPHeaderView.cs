@@ -33,7 +33,7 @@ namespace WiFiSurvey.Shell.Views
         {
             InitializeComponent();
             APPresenter = RootWorkItem.Items.AddNew<AccessPointPresenter>();
-            APPresenter.OnCurrentAPUpdate += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_OnCurrentAPUpdate);
+            APPresenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_OnCurrentAPUpdate);
 
             DeskPresenter = RootWorkItem.Items.AddNew<DesktopPresenter>(PresenterNames.Desktop);
             DeskPresenter.DesktopConnectionChange += new EventHandler<GenericEventArgs<IDesktopData>>(DeskPresenter_DesktopConnectionChange);
@@ -55,13 +55,19 @@ namespace WiFiSurvey.Shell.Views
 
         void Presenter_OnCurrentAPUpdate(object sender, GenericEventArgs<INetworkData> e)
         {
-
             if (CurrentAP != null)
             {
                 if (CurrentAP.Name != e.Value.AssociatedAP.Name)
                 {
-                    m_timeConnected.Reset();
-                    m_timeConnected.Start();
+                    if (e.Value.AssociatedAP.Name != String.Empty)
+                    {
+                        m_timeConnected.Reset();
+                        m_timeConnected.Start();
+                    }
+                    else
+                    {
+                        m_timeConnected.Reset();
+                    }
                 }
             }
             else
@@ -76,13 +82,15 @@ namespace WiFiSurvey.Shell.Views
 
         public void SetCurrentAP()
         {
-            if (CurrentAP == null)
+            if (CurrentAP == null || CurrentAP.Name == String.Empty)
             {
                 UpdateHeader("none", "-", "-");
             }
             else
             {
+                m_timeConnected.Stop();
                 UpdateHeader(CurrentAP.Name, CurrentAP.MAC, CurrentAP.SignalStrength.ToString());
+                m_timeConnected.Start();
             }
         }
 
@@ -96,9 +104,7 @@ namespace WiFiSurvey.Shell.Views
                 return;
             }
 
-            m_timeConnected.Stop();
             lblSSIDName.Text = "[" + Name + "] " + m_timeConnected.Elapsed.Hours.ToString("D2") + ":" + m_timeConnected.Elapsed.Minutes.ToString("D2") + ":" + m_timeConnected.Elapsed.Seconds.ToString("D2");
-            m_timeConnected.Start();
             lblSignalStrength.Text = "Signal: " + Strength;
             lblMacAdress.Text = MAC;
         }

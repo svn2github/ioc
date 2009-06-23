@@ -36,11 +36,12 @@ namespace WiFiSurvey.Infrastructure.Services
         [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
         public void AccessPointUpdate(object sender, GenericEventArgs<INetworkData> args)
         {
-            if (args.Value.AssociatedAP == null)
+            if ((args.Value.AssociatedAP == null) || (args.Value.AssociatedAP.Name.ToString() == String.Empty))
             {
                 if (m_previousAP != null)
                 {
                     LostAccessPoint();
+                    m_previousAP = null;
                 }
             }
             else
@@ -97,10 +98,10 @@ namespace WiFiSurvey.Infrastructure.Services
 
             IStatisticsData stats = new StatisticsData();
             stats.Event = StatsEvent.APConnectionChange;
-            stats.EventTime = (int)AcessPointDownTime.TotalSeconds;
+            stats.EventTime = (int)AcessPointDownTime.TotalMilliseconds;
             if (m_previousAP == null)
             {
-                stats.Description = "Initial AP Connection to " + info.Name;
+                stats.Description = "Connected to AP " + info.Name;
             }
             else
             {
