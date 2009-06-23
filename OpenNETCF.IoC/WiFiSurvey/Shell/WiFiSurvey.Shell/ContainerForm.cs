@@ -54,6 +54,9 @@ namespace WiFiSurvey.Shell
             view = RootWorkItem.Items.AddNew<HistoryView>(ViewNames.History) as ISmartPart;
             bodyWorkspace.Show(view);
 
+            view = RootWorkItem.Items.AddNew<DebugView>("debug") as ISmartPart;
+            bodyWorkspace.Show(view);
+
             //Header and Footer
             view = RootWorkItem.Items.AddNew<CurrentAPHeaderView>(ViewNames.Header) as ISmartPart;
             headerWorkspace.Show(view);

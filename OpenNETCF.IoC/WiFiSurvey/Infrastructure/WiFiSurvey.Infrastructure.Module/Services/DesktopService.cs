@@ -29,7 +29,10 @@ namespace WiFiSurvey.Infrastructure.Services
         private IPAddress m_ipAddress;
 
         private UdpClient Listener { get; set; }
+        private UdpClient Broadcaster { get; set; }
         private Boolean Done { get; set; }
+
+        private Boolean m_broadcasting = false;
 
         private string m_lastDesktop = "";
 
@@ -77,6 +80,7 @@ namespace WiFiSurvey.Infrastructure.Services
         {
             m_broadcastThread = new Thread(Broadcast);
             m_broadcastThread.IsBackground = true;
+
             m_broadcastThread.Start();
         }
 
@@ -98,7 +102,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
                 while (!Done)
                 {
-                    if (!WirelessUtility.DesktopAppDisabled)
+                    if (!WirelessUtility.DesktopAppDisabled && CurrentAP.Name != string.Empty)
                     {
                         m_lastReceivedWatch.Reset();
                         m_lastReceivedWatch.Start();
@@ -145,34 +149,54 @@ namespace WiFiSurvey.Infrastructure.Services
         [EventSubscription(EventNames.RestartBroadcasting, ThreadOption.UserInterface)]
         public void RestartBroad(object sender, EventArgs e)
         {
+            m_broadcasting = false;
             StartBroadcastProc();
+        }
+
+        private void ConnectBroadcaster()
+        {
+            //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
+            IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
+
+            //Bind the UdpClient to the Local IP for Desktop DebugZ
+            IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
+
+            Trace.WriteLine("Local Bind");
+
+            Broadcaster = new UdpClient(m_localEP);
+
+            Trace.WriteLine("Remote Connect");
+
+            Broadcaster.Connect(m_RemoteEP);
         }
 
         public void Broadcast()
         {
             try
             {
+                if (m_broadcasting) return;
+
                 string[] args = new string[1];
 
-                //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
-                IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast , m_broadcastPort);
 
-                //Bind the UdpClient to the Local IP for Desktop DebugZ
-                IPEndPoint m_localEP = new IPEndPoint(Dns.GetHostEntry(Dns.GetHostName()).AddressList[0], 11000);
-
-                UdpClient m_BroadcastClient = new UdpClient(m_localEP);
-
-                m_BroadcastClient.Connect(m_RemoteEP);
                 //s.Connect(ep);
 
                 while (!Done)
                 {
-                    if (CurrentAP != null && !WirelessUtility.DesktopAppDisabled)
+                    m_broadcasting = true;
+
+                    if (CurrentAP.Name != string.Empty && !WirelessUtility.DesktopAppDisabled)
                     {
+                        if (!m_connected)
+                        {
+                            ConnectBroadcaster();
+                        }
+
                         args[0] = m_hostName + ":" + CurrentAP.Name + ":" + CurrentAP.SignalStrength.ToString();
                         byte[] sendbuf = Encoding.ASCII.GetBytes(args[0]);
 
-                        m_BroadcastClient.Send(sendbuf, sendbuf.Length);
+                        Trace.WriteLine("Sending");
+                        Broadcaster.Send(sendbuf, sendbuf.Length);
 
                         //Check Connectivity to Desktop
                         m_lastReceivedWatch.Stop();
@@ -191,6 +215,7 @@ namespace WiFiSurvey.Infrastructure.Services
                                 DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
                             }
                         }
+                        DebugService.WriteLine("Broadcasting on" + Broadcaster.Client.LocalEndPoint.ToString());
                     }
                     else
                     {
@@ -198,10 +223,14 @@ namespace WiFiSurvey.Infrastructure.Services
                     }
                     Thread.Sleep(1000);
                 }
+
+                m_broadcasting = false;
             }
             catch(Exception ex)
             {
                 DebugService.WriteLine(ex.ToString());
+                m_broadcasting = false;
+                Broadcast();
             }
         }
     }

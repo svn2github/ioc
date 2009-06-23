@@ -73,7 +73,6 @@ namespace WiFiSurvey.Shell.Views
             else
             {
                 m_timeConnected.Reset();
-                m_timeConnected.Start();
             }
 
             CurrentAP = e.Value.AssociatedAP;

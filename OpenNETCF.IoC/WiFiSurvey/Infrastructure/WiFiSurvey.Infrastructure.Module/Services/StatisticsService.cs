@@ -51,7 +51,7 @@ namespace WiFiSurvey.Infrastructure.Services
                     FoundAccessPoint(args.Value.AssociatedAP);
                     m_previousAP = args.Value.AssociatedAP;
                 }
-                else if(m_previousAP.Name != args.Value.AssociatedAP.Name)
+                else if(m_previousAP.MAC != args.Value.AssociatedAP.MAC)
                 {
                     FoundAccessPoint(args.Value.AssociatedAP);
                     m_previousAP = args.Value.AssociatedAP;

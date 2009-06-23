@@ -83,7 +83,6 @@ namespace WiFiSurvey.Shell.Views
             m_refreshWatch.Stop();
             lblRefreshTime.Text = m_refreshWatch.Elapsed.TotalSeconds.ToString("N1");
             m_refreshWatch.Start();
-
         }
 
         void cmbRefreshRate_SelectedIndexChanged(object sender, EventArgs e)

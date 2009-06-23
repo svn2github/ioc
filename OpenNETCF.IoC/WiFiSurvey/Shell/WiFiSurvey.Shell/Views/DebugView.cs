@@ -20,14 +20,22 @@ namespace WiFiSurvey.Shell
         public DebugView()
         {
             InitializeComponent();
+            this.Name = "Debug";
 
             DebugService.DebugLine += new EventHandler<GenericEventArgs<string>>(DebugService_DebugLine);
         }
 
+        public delegate void DebugLine(object sender, GenericEventArgs<string> e);
+
         void DebugService_DebugLine(object sender, GenericEventArgs<string> e)
         {
-            debugBox.Items.Insert(0, e.Value);
-            Trace.WriteLine(e.Value);
+            if (this.InvokeRequired)
+            {
+                Invoke(new DebugLine(DebugService_DebugLine), new object[] { sender, e });
+                return;
+            }
+
+            listView1.Items.Insert(0, (new ListViewItem(e.Value)));
         }
     }
 }

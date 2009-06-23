@@ -28,22 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.debugBox = new System.Windows.Forms.ListBox();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
-            // debugBox
+            // listView1
             // 
-            this.debugBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.debugBox.Location = new System.Drawing.Point(0, 0);
-            this.debugBox.Name = "debugBox";
-            this.debugBox.Size = new System.Drawing.Size(150, 146);
-            this.debugBox.TabIndex = 0;
+            this.listView1.Columns.Add(this.columnHeader1);
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Location = new System.Drawing.Point(0, 0);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(150, 150);
+            this.listView1.TabIndex = 0;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Debug";
+            this.columnHeader1.Width = 60;
             // 
             // DebugView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.debugBox);
+            this.Controls.Add(this.listView1);
             this.Name = "DebugView";
             this.ResumeLayout(false);
 
@@ -51,6 +59,8 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox debugBox;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+
     }
 }
