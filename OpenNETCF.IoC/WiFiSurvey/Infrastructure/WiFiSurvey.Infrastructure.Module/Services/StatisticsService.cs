@@ -72,7 +72,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
             IStatisticsData stats = new StatisticsData();
             stats.Event = StatsEvent.GainDesktop;
-            stats.EventTime =  (int)NetworkDownTime.TotalSeconds;
+            stats.EventTime =  (int)NetworkDownTime.TotalMilliseconds;
             stats.Description = "Desktop Connection to " + IPAddress + " Found";
 
             StatisticEvent(this, new GenericEventArgs<IStatisticsData>(stats));
