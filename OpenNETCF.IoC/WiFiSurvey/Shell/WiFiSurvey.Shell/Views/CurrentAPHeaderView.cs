@@ -57,7 +57,7 @@ namespace WiFiSurvey.Shell.Views
         {
             if (CurrentAP != null)
             {
-                if (CurrentAP.Name != e.Value.AssociatedAP.Name)
+                if (CurrentAP.MAC != e.Value.AssociatedAP.MAC)
                 {
                     if (e.Value.AssociatedAP.Name != String.Empty)
                     {
