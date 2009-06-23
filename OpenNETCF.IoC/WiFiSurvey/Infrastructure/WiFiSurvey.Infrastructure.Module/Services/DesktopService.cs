@@ -27,6 +27,7 @@ namespace WiFiSurvey.Infrastructure.Services
         private bool m_connected;
         private string m_hostName;
         private IPAddress m_ipAddress;
+        private Boolean m_Reconnecting = true;
 
         private UdpClient Listener { get; set; }
         private UdpClient Broadcaster { get; set; }
@@ -150,6 +151,7 @@ namespace WiFiSurvey.Infrastructure.Services
         public void RestartBroad(object sender, EventArgs e)
         {
             m_broadcasting = false;
+            m_Reconnecting = true;
             StartBroadcastProc();
         }
 
@@ -187,7 +189,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
                     if (CurrentAP.Name != string.Empty && !WirelessUtility.DesktopAppDisabled)
                     {
-                        if (!m_connected)
+                        if (m_Reconnecting)
                         {
                             ConnectBroadcaster();
                         }
@@ -216,9 +218,12 @@ namespace WiFiSurvey.Infrastructure.Services
                             }
                         }
                         DebugService.WriteLine("Broadcasting on" + Broadcaster.Client.LocalEndPoint.ToString());
+
+                        m_Reconnecting = false;
                     }
                     else
                     {
+                        m_Reconnecting = true;
                         m_connected = false;
                     }
                     Thread.Sleep(1000);
