@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<SolutionProfile>
-  <Modules>
-    <ModuleInfo AssemblyFile="Infrastructure.Module.dll" />
-    <ModuleInfo AssemblyFile="DAL.Module.dll" />
-  </Modules>
-</SolutionProfile>
