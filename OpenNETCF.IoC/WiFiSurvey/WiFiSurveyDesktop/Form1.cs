@@ -18,17 +18,14 @@ namespace WiFiSurveryDesktop
     {
         private System.Windows.Forms.Timer m_DisplayRefreshTimer = new System.Windows.Forms.Timer();
 
-        private Boolean done = false;
+        private Boolean m_done = false;
         private Thread m_listenThread;
         private UdpClient m_listener;
-
-        private List<ConnectedDevice> ConnectedDevices = new List<ConnectedDevice>();
-        private Dictionary<IPAddress, UIAction> DeviceControls = new Dictionary<IPAddress, UIAction>();
-
         private int m_listenPort = 11000;
         private int m_broadcastPort = 11001;
-
         private int pingCount = 0;
+        private List<ConnectedDevice> m_connectedDevices = new List<ConnectedDevice>();
+        private Dictionary<IPAddress, UIAction> m_deviceControls = new Dictionary<IPAddress, UIAction>();
 
         public Form1()
         {
@@ -58,7 +55,7 @@ namespace WiFiSurveryDesktop
         {
             try
             {
-                while (!done)
+                while (!m_done)
                 {
                     IPEndPoint m_endPoint = new IPEndPoint(IPAddress.Any, m_listenPort);
                     byte[] bytes = m_listener.Receive(ref m_endPoint);
@@ -80,26 +77,26 @@ namespace WiFiSurveryDesktop
         {
             SuspendLayout();
             UIAction actionItem;
-            foreach(var item in ConnectedDevices)
+            foreach(var item in m_connectedDevices)
             {
-                if (DeviceControls.ContainsKey(item.IPAdress))
+                if (m_deviceControls.ContainsKey(item.IPAdress))
                 {
                     DateTime lastPing = item.LastPing;
                     DateTime compareTime = DateTime.Now.AddSeconds(-5);
 
                     if (lastPing.CompareTo(compareTime) == 1)
                     {
-                        DeviceControls[item.IPAdress].UpdateData(item.Data);
-                        DeviceControls[item.IPAdress].Connected = true;
+                        m_deviceControls[item.IPAdress].UpdateData(item.Data);
+                        m_deviceControls[item.IPAdress].Connected = true;
                     }
                     else
                     {
-                        if (DeviceControls[item.IPAdress].Connected == true)
+                        if (m_deviceControls[item.IPAdress].Connected == true)
                         {
-                            DeviceControls[item.IPAdress].Connected = false;
+                            m_deviceControls[item.IPAdress].Connected = false;
                         }
                     }
-                    DeviceControls[item.IPAdress].Refresh();
+                    m_deviceControls[item.IPAdress].Refresh();
                 }
                 else
                 {
@@ -107,7 +104,7 @@ namespace WiFiSurveryDesktop
                     actionItem.Width = flowLayoutPanel1.Width - 10;
                     actionItem.Connected = true;
                     flowLayoutPanel1.Controls.Add(actionItem);
-                    DeviceControls.Add(item.IPAdress, actionItem);
+                    m_deviceControls.Add(item.IPAdress, actionItem);
                 }
             }
             ResumeLayout(true);
@@ -132,7 +129,7 @@ namespace WiFiSurveryDesktop
 
             string dataString = Encoding.ASCII.GetString(data);
 
-            foreach (var item in ConnectedDevices)
+            foreach (var item in m_connectedDevices)
             {
                 if (item.IPAdress.ToString() == broadcast.Address.ToString())
                 {
@@ -147,15 +144,15 @@ namespace WiFiSurveryDesktop
                 ConnectedDevice device = new ConnectedDevice();
                 device.IPAdress = broadcast.Address;
                 device.Data = dataString;
-                ConnectedDevices.Add(device);
+                m_connectedDevices.Add(device);
             }
 
         }
 
         protected override void Dispose(bool disposing)
         {
-            done = true;
-            m_listenThread.Abort();
+            m_done = true;
+            m_listener.Close();
 
             if (disposing && (components != null))
             {

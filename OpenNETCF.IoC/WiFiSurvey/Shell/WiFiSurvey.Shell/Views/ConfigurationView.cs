@@ -46,7 +46,7 @@ namespace WiFiSurvey.Shell.Views
             cmbRefreshRate.SelectedIndexChanged += new EventHandler(cmbRefreshRate_SelectedIndexChanged);
             // TODO: collection interval, etc.
 
-            APPresenter = RootWorkItem.Items.Get<AccessPointPresenter>(PresenterNames.APList);
+            APPresenter = RootWorkItem.Items.Get<AccessPointPresenter>(PresenterNames.AccessPoint);
 
             APPresenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(APPresenter_NetworkDataChanged);
 

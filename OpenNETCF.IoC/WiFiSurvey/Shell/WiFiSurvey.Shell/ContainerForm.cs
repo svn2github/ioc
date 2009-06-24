@@ -21,13 +21,11 @@ namespace WiFiSurvey.Shell
 {
     public partial class ContainerForm : Form
     {
-        ContainerPresenter Presenter { get; set; }
-        IHistoricEventService DataService { get; set; }
-        IDesktopService DesktopService { get; set; }
-        IStatisticsService StatisticsService { get; set; }
-        IAPMonitorService APMonitorService { get; set; }
-
-        private Stopwatch APDownWatch = new Stopwatch();
+        private ContainerPresenter Presenter { get; set; }
+        private IHistoricEventService DataService { get; set; }
+        private IDesktopService DesktopService { get; set; }
+        private IStatisticsService StatisticsService { get; set; }
+        private IAPMonitorService APMonitorService { get; set; }
         private Boolean PreviouslyConnected { get; set; }
 
         public ContainerForm()
@@ -66,11 +64,6 @@ namespace WiFiSurvey.Shell
             this.WindowState = FormWindowState.Normal;
             this.Width = Screen.PrimaryScreen.WorkingArea.Width;
             this.Height = Screen.PrimaryScreen.WorkingArea.Height;
-        }
-
-        void ContainerForm_Resize(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         protected override void OnClosing(CancelEventArgs e)

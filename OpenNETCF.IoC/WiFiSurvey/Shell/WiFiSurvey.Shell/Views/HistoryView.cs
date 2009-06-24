@@ -18,11 +18,13 @@ namespace WiFiSurvey.Shell.Views
 {
     public partial class HistoryView : SmartPart
     {
-        private ListViewItem item;
-        public HistoryPresenter Presenter { get; set; }
+        private delegate void NewHistoryDelegate(DateTime time, string Event);
+        private delegate void ClearListView();
+        private delegate ListViewItem AddListItem(ListViewItem item);
 
-        private Dictionary<string, string> Events = new Dictionary<string, string>();
         private Boolean m_ColumnsResized = false;
+
+        public HistoryPresenter Presenter { get; set; }
 
         public HistoryView()
         {
@@ -31,8 +33,8 @@ namespace WiFiSurvey.Shell.Views
             InitializeComponent();
             this.Name = "History";
 
-            Presenter.OnNewHistoryEvent += new EventHandler<GenericEventArgs<IStatisticsData>>(Presenter_OnNewHistoryEvent);
-            Presenter.ClearEvents += new EventHandler<EventArgs>(Presenter_ClearEvents);
+            Presenter.OnNewHistoryEvent += Presenter_OnNewHistoryEvent;
+            Presenter.ClearEvents += Presenter_ClearEvents;
         }
 
         void Presenter_ClearEvents(object sender, EventArgs e)
@@ -58,9 +60,6 @@ namespace WiFiSurvey.Shell.Views
             historyListView.Columns[1].Width = -2;
             m_ColumnsResized = true;
         }
-        delegate void NewHistoryDelegate(DateTime time, string Event);
-        delegate void ClearListView();
-        delegate ListViewItem AddListItem(ListViewItem item);
 
         public void NewHistoryEvent(DateTime time, string Event)
         {
@@ -70,7 +69,7 @@ namespace WiFiSurvey.Shell.Views
                 return;
             }
             
-            item = new ListViewItem();
+            ListViewItem item = new ListViewItem();
             item.Text = time.ToShortTimeString();
             item.SubItems.Add(Event);
 

@@ -32,20 +32,15 @@ namespace WiFiSurvey.Shell.Views
         public CurrentAPHeaderView()
         {
             InitializeComponent();
-            APPresenter = RootWorkItem.Items.AddNew<AccessPointPresenter>();
-            APPresenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_OnCurrentAPUpdate);
+            APPresenter = RootWorkItem.Items.Get<AccessPointPresenter>(PresenterNames.AccessPoint);
+            APPresenter.NetworkDataChanged += Presenter_OnCurrentAPUpdate;
 
             DeskPresenter = RootWorkItem.Items.AddNew<DesktopPresenter>(PresenterNames.Desktop);
-            DeskPresenter.DesktopConnectionChange += new EventHandler<GenericEventArgs<IDesktopData>>(DeskPresenter_DesktopConnectionChange);
+            DeskPresenter.DesktopConnectionChange += DeskPresenter_DesktopConnectionChange;
 
             m_HeaderTimer.Interval = 1000;
-            m_HeaderTimer.Tick += new EventHandler(m_HeaderTimer_Tick);
+            m_HeaderTimer.Tick += delegate { SetCurrentAP(); };
             m_HeaderTimer.Enabled = true;
-        }
-
-        void m_HeaderTimer_Tick(object sender, EventArgs e)
-        {
-            SetCurrentAP();
         }
 
         void DeskPresenter_DesktopConnectionChange(object sender, GenericEventArgs<IDesktopData> e)
@@ -97,15 +92,22 @@ namespace WiFiSurvey.Shell.Views
 
         public void UpdateHeader(string Name, string MAC, string Strength)
         {
-            if(this.InvokeRequired)
+            try
             {
-                this.Invoke(new UpdateHeaderDelegate(UpdateHeader),new object[]{Name, MAC, Strength});
-                return;
-            }
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new UpdateHeaderDelegate(UpdateHeader), new object[] { Name, MAC, Strength });
+                    return;
+                }
 
-            lblSSIDName.Text = "[" + Name + "] " + m_timeConnected.Elapsed.Hours.ToString("D2") + ":" + m_timeConnected.Elapsed.Minutes.ToString("D2") + ":" + m_timeConnected.Elapsed.Seconds.ToString("D2");
-            lblSignalStrength.Text = "Signal: " + Strength;
-            lblMacAdress.Text = MAC;
+                lblSSIDName.Text = "[" + Name + "] " + m_timeConnected.Elapsed.Hours.ToString("D2") + ":" + m_timeConnected.Elapsed.Minutes.ToString("D2") + ":" + m_timeConnected.Elapsed.Seconds.ToString("D2");
+                lblSignalStrength.Text = "Signal: " + Strength;
+                lblMacAdress.Text = MAC;
+            }
+            catch (ObjectDisposedException)
+            {
+                // this can happen when shutting down the app (getting an event after the Form has been disposed)
+            }
         }
 
         delegate void UC(IDesktopData data);

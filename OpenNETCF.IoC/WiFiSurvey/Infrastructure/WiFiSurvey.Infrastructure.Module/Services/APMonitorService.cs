@@ -16,22 +16,22 @@ namespace WiFiSurvey.Infrastructure.Services
     {
         private Timer m_adapterPollTimer;
         private bool m_pollingAPs = false;
-
-        private Thread m_APthread;
+        private Stopwatch m_stopwatch = new Stopwatch();
+        private Thread m_apThread;
+        private bool m_stopThreads = false;
 
         [EventPublication(EventNames.NetworkDataChange)]
         public event EventHandler<GenericEventArgs<INetworkData>> NetworkDataChange;
 
-        public WirelessZeroConfigNetworkInterface Adapter { get; set; }
         private IConfigurationService ConfigurationService { get; set; }
-
-        private Stopwatch watch = new Stopwatch();
+        private IDebugService DebugService { get; set; }
+        private WirelessZeroConfigNetworkInterface Adapter { get; set; }
 
         [InjectionConstructor]
-        public APMonitorService([ServiceDependency]IConfigurationService configService)
+        public APMonitorService(
+            [ServiceDependency]IConfigurationService configService,
+            [ServiceDependency]IDebugService debugService)
         {
-            ConfigurationService = configService;
-
             // we'll assume that you *must* have an adapter, and we'll use the first
             var intf = NetworkInterface.GetAllNetworkInterfaces().FirstOrDefault(
                 i => i is WirelessZeroConfigNetworkInterface);
@@ -41,6 +41,9 @@ namespace WiFiSurvey.Infrastructure.Services
                 throw new Exception("No WZC adapter found!");
             }
 
+            ConfigurationService = configService;
+            DebugService = debugService;
+
             Adapter = intf as WirelessZeroConfigNetworkInterface;
 
             CreateAPThread();
@@ -48,25 +51,22 @@ namespace WiFiSurvey.Infrastructure.Services
 
         public void Shutdown()
         {
-            if (m_APthread != null)
-            {
-                m_APthread.Abort();
-            }
+            m_stopThreads = true;
         }
 
         private void CreateAPThread()
         {
-            m_APthread = new Thread(AdapterPollProc);
-            m_APthread.IsBackground = true;
-            m_APthread.Start();
+            m_apThread = new Thread(AdapterPollProc);
+            m_apThread.IsBackground = true;
+            m_apThread.Start();
         }
+
         void AdapterPollProc()
         {
-
-            while (true)
+            while (!m_stopThreads)
             {
-                watch.Reset();
-                watch.Start();
+                m_stopwatch.Reset();
+                m_stopwatch.Start();
                 try
                 {
                     m_pollingAPs = true;
@@ -107,15 +107,15 @@ namespace WiFiSurvey.Infrastructure.Services
                 }
                 catch (Exception ex)
                 {
-                    //DebugService.WriteLine(ex.InnerException.ToString());
+                    DebugService.WriteLine(ex.InnerException.ToString());
                 }
                 finally
                 {
                     m_pollingAPs = false;
                 }
 
-                watch.Stop();
-                Trace.WriteLine("AP Refresh " + watch.Elapsed.TotalSeconds.ToString());
+                m_stopwatch.Stop();
+                DebugService.WriteLine("AP Refresh took " + m_stopwatch.Elapsed.TotalSeconds.ToString());
 
                 Thread.Sleep(1000);
             }

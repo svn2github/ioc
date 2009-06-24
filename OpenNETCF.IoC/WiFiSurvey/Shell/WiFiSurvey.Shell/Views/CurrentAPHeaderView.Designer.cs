@@ -38,13 +38,17 @@
             // 
             // lblSSIDName
             // 
+            this.lblSSIDName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSSIDName.Location = new System.Drawing.Point(4, 4);
             this.lblSSIDName.Name = "lblSSIDName";
-            this.lblSSIDName.Size = new System.Drawing.Size(118, 20);
+            this.lblSSIDName.Size = new System.Drawing.Size(187, 20);
             this.lblSSIDName.Text = "Locating AP";
             // 
             // lblSignalStrength
             // 
+            this.lblSignalStrength.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSignalStrength.Location = new System.Drawing.Point(110, 20);
             this.lblSignalStrength.Name = "lblSignalStrength";
             this.lblSignalStrength.Size = new System.Drawing.Size(81, 20);

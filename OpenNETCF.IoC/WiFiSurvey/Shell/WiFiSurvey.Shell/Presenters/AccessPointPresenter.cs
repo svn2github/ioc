@@ -33,11 +33,5 @@ namespace WiFiSurvey.Shell.Presenters
                 NetworkDataChanged(this, args);
             }
         }
-
-        public AccessPointPresenter()
-        {
-        }
-
-
     }
 }

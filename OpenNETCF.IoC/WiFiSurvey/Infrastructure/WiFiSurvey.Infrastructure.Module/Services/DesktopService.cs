@@ -27,30 +27,26 @@ namespace WiFiSurvey.Infrastructure.Services
         private bool m_connected;
         private string m_hostName;
         private IPAddress m_ipAddress;
-        private Boolean m_Reconnecting = true;
+        private Boolean m_reconnecting = true;
+        private Boolean m_broadcasting = false;
+        private string m_lastDesktop = "";
 
         private UdpClient Listener { get; set; }
         private UdpClient Broadcaster { get; set; }
         private Boolean Done { get; set; }
-
-        private Boolean m_broadcasting = false;
-
-        private string m_lastDesktop = "";
-
-        public APInfo CurrentAP { get; set; }
-
         private IHistoricEventService DataService { get; set; }
         private IAPMonitorService APService { get; set; }
         private IStatisticsService StatisticsService { get; set; }
         private IConfigurationService ConfigurationService { get; set; }
 
+        public APInfo CurrentAP { get; set; }
         public DateTime LastSentTime { get; set; }
 
-        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
-        public void OnNewAP(object sender, GenericEventArgs<INetworkData> args)
-        {
-            CurrentAP = args.Value.AssociatedAP;
-        }
+        [ServiceDependency]
+        IDebugService DebugService { get; set; }
+
+        [EventPublication(EventNames.DesktopConnectionChange)]
+        public event EventHandler<GenericEventArgs<IDesktopData>> DesktopConnectionChange;
 
         [InjectionConstructor]
         public DesktopService([ServiceDependency]IConfigurationService configService)
@@ -64,24 +60,23 @@ namespace WiFiSurvey.Infrastructure.Services
             m_hostName = Dns.GetHostName();
         }
 
+        [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]
+        public void OnNewAP(object sender, GenericEventArgs<INetworkData> args)
+        {
+            CurrentAP = args.Value.AssociatedAP;
+        }
+
         public void Shutdown()
         {
             Done = true;
-            if (m_broadcastThread != null)
-            {
-                m_broadcastThread.Abort();
-            }
-            if (m_listenThread != null)
-            {
-                m_listenThread.Abort();
-            }
+            Broadcaster.Close();
+            Listener.Close();
         }
 
         public void StartBroadcastProc()
         {
-            m_broadcastThread = new Thread(Broadcast);
+            m_broadcastThread = new Thread(BroadcastProc);
             m_broadcastThread.IsBackground = true;
-
             m_broadcastThread.Start();
         }
 
@@ -91,9 +86,6 @@ namespace WiFiSurvey.Infrastructure.Services
             m_listenThread.IsBackground = true;
             m_listenThread.Start();
         }
-
-        [EventPublication(EventNames.DesktopConnectionChange)]
-        public event EventHandler<GenericEventArgs<IDesktopData>> DesktopConnectionChange;
 
         public void ListenerProc()
         {
@@ -132,13 +124,14 @@ namespace WiFiSurvey.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                //DebugService.WriteLine(ex.InnerException.ToString());
+                DebugService.WriteLine(ex.Message);
             }
             finally
             {
                 Listener.Close();
             }
         }
+        
         public void StartListening()
         {
             DataService = RootWorkItem.Services.Get<IHistoricEventService>();
@@ -151,14 +144,14 @@ namespace WiFiSurvey.Infrastructure.Services
         public void RestartBroad(object sender, EventArgs e)
         {
             m_broadcasting = false;
-            m_Reconnecting = true;
+            m_reconnecting = true;
             StartBroadcastProc();
         }
 
         private void ConnectBroadcaster()
         {
             //the only way the desktop client recieves a packet is using the remote ep of IPAddress.Broadcast
-            IPEndPoint m_RemoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
+            IPEndPoint remoteEP = new IPEndPoint(IPAddress.Broadcast, m_broadcastPort);
 
             m_ipAddress = null;
 
@@ -171,13 +164,16 @@ namespace WiFiSurvey.Infrastructure.Services
 
             IPEndPoint m_localEP = new IPEndPoint(m_ipAddress, 11000);
 
+            DebugService.WriteLine("Desktop connection local endpoint: " + m_localEP.Address.ToString());
+            DebugService.WriteLine("Desktop connection remote endpoint: " + remoteEP.Address.ToString());
+
             Trace.WriteLine("Local Bind");
 
             Broadcaster = new UdpClient(m_localEP);
 
             Trace.WriteLine("Remote Connect");
 
-            Broadcaster.Connect(m_RemoteEP);
+            Broadcaster.Connect(remoteEP);
         }
 
         private IPAddress FindIP()
@@ -198,7 +194,8 @@ namespace WiFiSurvey.Infrastructure.Services
             return localaddy;
 
         }
-        public void Broadcast()
+
+        public void BroadcastProc()
         {
             try
             {
@@ -206,16 +203,13 @@ namespace WiFiSurvey.Infrastructure.Services
 
                 string[] args = new string[1];
 
-
-                //s.Connect(ep);
-
                 while (!Done)
                 {
                     m_broadcasting = true;
 
                     if (CurrentAP.Name != string.Empty && !WirelessUtility.DesktopAppDisabled)
                     {
-                        if (m_Reconnecting)
+                        if (m_reconnecting)
                         {
                             ConnectBroadcaster();
                         }
@@ -243,13 +237,12 @@ namespace WiFiSurvey.Infrastructure.Services
                                 DesktopConnectionChange(this, new GenericEventArgs<IDesktopData>(deskData));
                             }
                         }
-                        DebugService.WriteLine("Broadcasting on" + Broadcaster.Client.LocalEndPoint.ToString());
 
-                        m_Reconnecting = false;
+                        m_reconnecting = false;
                     }
                     else
                     {
-                        m_Reconnecting = true;
+                        m_reconnecting = true;
                         m_connected = false;
                     }
                     Thread.Sleep(1000);
@@ -261,7 +254,7 @@ namespace WiFiSurvey.Infrastructure.Services
             {
                 DebugService.WriteLine(ex.ToString());
                 m_broadcasting = false;
-                Broadcast();
+                BroadcastProc();
             }
         }
     }

@@ -14,16 +14,14 @@ namespace WiFiSurvey.DAL.SQLCE
 {
     internal class SQLCEDB
     {
-        private SqlCeConnection m_connection;
-
         // /TODO: pull this from the configuration service
         private const string DB_PATH = "\\WiFiSurvey.sdf";
+        private SqlCeConnection m_connection;
 
         private string ConnectionString { get; set; }
         private SqlCeCommand NearbyAPInsertCommand { get; set; }
         private SqlCeCommand AssociatedAPInsertCommand { get; set; }
         private SqlCeCommand StatisticsInsertCommand { get; set; }
-
         private Dictionary<string, ITable> Tables { get; set; }
 
         public SQLCEDB()
@@ -74,6 +72,8 @@ namespace WiFiSurvey.DAL.SQLCE
             NearbyAPInsertCommand.Parameters["@MAC"].Value = data.MAC;
             NearbyAPInsertCommand.Parameters["@Signal"].Value = data.SignalStrength;
 
+            if (connection.State != ConnectionState.Open) return;
+
             NearbyAPInsertCommand.ExecuteNonQuery();
         }
 
@@ -85,6 +85,8 @@ namespace WiFiSurvey.DAL.SQLCE
             {
                 StatisticsInsertCommand = Tables["NetworkStats"].GetInsertCommand() as SqlCeCommand;
             }
+
+            if (connection.State != ConnectionState.Open) return;
 
             object o = ExecuteScalar("SELECT MAX(DataID) FROM NetworkStats", connection as SqlCeConnection);
             int id = o.Equals(DBNull.Value) ? 0 : (int)o;
@@ -99,6 +101,8 @@ namespace WiFiSurvey.DAL.SQLCE
             StatisticsInsertCommand.Parameters["@TimeData"].Value = data.EventTime;
             StatisticsInsertCommand.Parameters["@Note"].Value = data.Description;
 
+            if (connection.State != ConnectionState.Open) return;
+
             StatisticsInsertCommand.ExecuteNonQuery();
         }
 
@@ -110,7 +114,9 @@ namespace WiFiSurvey.DAL.SQLCE
             {
                 AssociatedAPInsertCommand = Tables["AssociatedAP"].GetInsertCommand() as SqlCeCommand;
             }
-            
+
+            if (connection.State != ConnectionState.Open) return 0;
+
             object o = ExecuteScalar("SELECT MAX(DataID) FROM AssociatedAP", connection as SqlCeConnection);
             int id = o.Equals(DBNull.Value) ? 0 : (int)o;
             id++;
@@ -123,6 +129,8 @@ namespace WiFiSurvey.DAL.SQLCE
             AssociatedAPInsertCommand.Parameters["@Name"].Value = data.Name;
             AssociatedAPInsertCommand.Parameters["@MAC"].Value = data.MAC;
             AssociatedAPInsertCommand.Parameters["@Signal"].Value = data.SignalStrength;
+
+            if (connection.State != ConnectionState.Open) return 0;
 
             AssociatedAPInsertCommand.ExecuteNonQuery();
 
@@ -185,6 +193,8 @@ namespace WiFiSurvey.DAL.SQLCE
                 throw new ArgumentException("invalid tablename");
             }
 
+            if (connection.State != ConnectionState.Open) return null;
+
             using (SqlCeCommand cmd = new SqlCeCommand(sql, connection))
             {
                 return cmd.ExecuteScalar();
@@ -206,6 +216,8 @@ namespace WiFiSurvey.DAL.SQLCE
 
         private int ExecuteNonQuery(string sql, SqlCeConnection connection)
         {
+            if (connection.State != ConnectionState.Open) return 0;
+
             using (SqlCeCommand command = new SqlCeCommand(sql, connection))
             {
                 return command.ExecuteNonQuery();

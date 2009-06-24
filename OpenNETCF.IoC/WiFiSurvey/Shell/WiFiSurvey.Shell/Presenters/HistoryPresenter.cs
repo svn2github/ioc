@@ -19,11 +19,6 @@ namespace WiFiSurvey.Shell.Presenters
         [EventPublication(EventNames.ClearHistory)]
         public event EventHandler<EventArgs> ClearEvents;
 
-        public HistoryPresenter()
-        {
-
-        }
-
         [EventSubscription(EventNames.NewStatisticsEvent, ThreadOption.UserInterface)]
         public void DataService_NewDataEvent(object sender, GenericEventArgs<IStatisticsData> e)
         {

@@ -11,14 +11,15 @@ namespace WiFiSurvey.Infrastructure.Services
 {
     public class StatisticsService : IStatisticsService
     {
-        public StatisticsService()
-        {
-        }
-
         private Stopwatch m_NetworkWatch = new Stopwatch();
         private Stopwatch m_AccessPointWatch = new Stopwatch();
-
         private APInfo m_previousAP = null;
+
+        public TimeSpan AcessPointDownTime { get; set; }
+        public TimeSpan NetworkDownTime { get; set; }
+
+        [EventPublication(EventNames.NewStatisticsEvent)]
+        public event EventHandler<GenericEventArgs<IStatisticsData>> StatisticEvent;
 
         [EventSubscription(EventNames.DesktopConnectionChange, ThreadOption.UserInterface)]
         public void DesktopChanged(object sender, GenericEventArgs<IDesktopData> args)
@@ -60,11 +61,6 @@ namespace WiFiSurvey.Infrastructure.Services
             }
         }
 
-        [EventPublication(EventNames.NewStatisticsEvent)]
-        public event EventHandler<GenericEventArgs<IStatisticsData>> StatisticEvent;
-
-        //Network Stats
-        public TimeSpan NetworkDownTime { get; set; }
         public void FoundNetwork(string IPAddress)
         {
             m_NetworkWatch.Stop();
@@ -77,6 +73,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
             StatisticEvent(this, new GenericEventArgs<IStatisticsData>(stats));
         }
+
         public void LostNetwork(string IPAddress)
         {
             IStatisticsData stats = new StatisticsData();
@@ -89,8 +86,6 @@ namespace WiFiSurvey.Infrastructure.Services
             m_NetworkWatch.Start();
         }
 
-        //Access Point Stats
-        public TimeSpan AcessPointDownTime { get; set; }
         public void FoundAccessPoint(APInfo info)
         {
             m_AccessPointWatch.Stop();
@@ -110,6 +105,7 @@ namespace WiFiSurvey.Infrastructure.Services
 
             StatisticEvent(this, new GenericEventArgs<IStatisticsData>(stats));
         }
+
         public void LostAccessPoint()
         {
             m_AccessPointWatch.Reset();

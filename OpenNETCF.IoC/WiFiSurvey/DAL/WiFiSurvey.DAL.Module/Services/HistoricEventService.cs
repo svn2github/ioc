@@ -19,7 +19,14 @@ namespace WiFiSurvey.DAL.Services
 {
     public class HistoricEventService : IHistoricEventService
     {
-        SQLCEDB Database;
+        private SQLCEDB Database { get; set; }
+        private NetworkInfoUnitOfWork NetworkInfoUnitOfWork { get; set; }
+        private StatisticsUnitOfWork StatisticsUnitOfWork { get; set; }
+
+        public List<IStatisticsData> HistoryEvents = new List<IStatisticsData>();
+
+        [ServiceDependency]
+        IDebugService DebugService { get; set; }
 
         public HistoricEventService()
         {
@@ -34,11 +41,6 @@ namespace WiFiSurvey.DAL.Services
             Database.ShutDown();
         }
 
-        public List<IStatisticsData> HistoryEvents = new List<IStatisticsData>();
-
-        private NetworkInfoUnitOfWork NetworkInfoUnitOfWork { get; set; }
-        private StatisticsUnitOfWork StatisticsUnitOfWork { get; set; }
-
         public void InsertNetworkData(INetworkData data)
         {
             // lazy load
@@ -49,7 +51,7 @@ namespace WiFiSurvey.DAL.Services
             NetworkInfoUnitOfWork.Insert(data);
             NetworkInfoUnitOfWork.Commit();
             et = Environment.TickCount - et;
-            Debug.WriteLine(string.Format("Insert took {0}ms", et));
+            DebugService.WriteLine(string.Format("Network data insert took {0}ms", et));
         }
 
         public void InsertStatisticsData(IStatisticsData data)
@@ -63,7 +65,7 @@ namespace WiFiSurvey.DAL.Services
             StatisticsUnitOfWork.Insert(data);
             StatisticsUnitOfWork.Commit();
             et = Environment.TickCount - et;
-            Debug.WriteLine(string.Format("Insert took {0}ms", et));
+            DebugService.WriteLine(string.Format("Stats data insert took {0}ms", et));
         }
 
         [EventSubscription(EventNames.NetworkDataChange, ThreadOption.UserInterface)]

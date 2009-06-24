@@ -34,7 +34,7 @@ namespace WiFiSurvey.Shell.Views
 
         public APListView()
         {
-            Presenter = RootWorkItem.Items.AddNew<AccessPointPresenter>(PresenterNames.APList);
+            Presenter = RootWorkItem.Items.AddNew<AccessPointPresenter>(PresenterNames.AccessPoint);
             Presenter.NetworkDataChanged += new EventHandler<GenericEventArgs<INetworkData>>(Presenter_NetworkDataChanged);
 
             InitializeComponent();

@@ -8,16 +8,25 @@ using System.Diagnostics;
 
 namespace WiFiSurvey.Infrastructure.Services
 {
-    public static class DebugService
+    public class DebugService : IDebugService
     {
-        public static void WriteLine(string message)
+        public event EventHandler<GenericEventArgs<string>> DebugLine;
+
+        public void WriteLine(string message)
         {
-            if(DebugLine != null)
+            Debug.WriteLine(message);
+
+            if (DebugLine != null)
             {
-                DebugLine("DebugService", new GenericEventArgs<string>(message));
+                try
+                {
+                    DebugLine("DebugService", new GenericEventArgs<string>(message));
+                }
+                catch
+                {
+                    // if we get an exception in a handler, there's little we can do about it.
+                }
             }
         }
-
-        public static event EventHandler<GenericEventArgs<string>> DebugLine;
     }
 }

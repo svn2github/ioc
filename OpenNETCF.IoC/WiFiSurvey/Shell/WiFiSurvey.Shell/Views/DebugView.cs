@@ -17,25 +17,41 @@ namespace WiFiSurvey.Shell
 {
     public partial class DebugView : SmartPart
     {
-        public DebugView()
+        IDebugService DebugService { get; set; }
+
+        [InjectionConstructor]
+        public DebugView([ServiceDependency]IDebugService debugService)
         {
             InitializeComponent();
             this.Name = "Debug";
 
-            DebugService.DebugLine += new EventHandler<GenericEventArgs<string>>(DebugService_DebugLine);
+            debugList.Columns[0].Width = -2;
+            clear.Click += delegate { debugList.Items.Clear(); };
+
+            DebugService = debugService;
+            DebugService.DebugLine += DebugService_DebugLine;
         }
 
         public delegate void DebugLine(object sender, GenericEventArgs<string> e);
 
         void DebugService_DebugLine(object sender, GenericEventArgs<string> e)
         {
-            if (this.InvokeRequired)
+            try
             {
-                Invoke(new DebugLine(DebugService_DebugLine), new object[] { sender, e });
-                return;
-            }
+                if (this.InvokeRequired)
+                {
+                    Invoke(new DebugLine(DebugService_DebugLine), new object[] { sender, e });
+                    return;
+                }
 
-            listView1.Items.Insert(0, (new ListViewItem(e.Value)));
+                if (!enable.Checked) return;
+
+                debugList.Items.Insert(0, (new ListViewItem(e.Value)));
+            }
+            catch (ObjectDisposedException)
+            {
+                // this can happen when shutting down the app (getting an event after the Form has been disposed)
+            }
         }
     }
 }
