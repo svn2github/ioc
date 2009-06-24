@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 
-namespace WiFiSurveryDesktop.Components
+namespace WiFiSurveyDesktop.Components
 {
     public class ConnectedDevice
     {

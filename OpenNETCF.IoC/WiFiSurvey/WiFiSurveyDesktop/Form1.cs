@@ -10,9 +10,9 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.Diagnostics;
-using WiFiSurveryDesktop.Components;
+using WiFiSurveyDesktop.Components;
 
-namespace WiFiSurveryDesktop
+namespace WiFiSurveyDesktop
 {
     public partial class Form1 : Form
     {

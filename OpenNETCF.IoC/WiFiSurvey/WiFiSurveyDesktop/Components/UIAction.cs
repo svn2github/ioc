@@ -10,7 +10,7 @@ using System.Net;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
 
-namespace WiFiSurveryDesktop.Components
+namespace WiFiSurveyDesktop.Components
 {
     public partial class UIAction : UserControl
     {

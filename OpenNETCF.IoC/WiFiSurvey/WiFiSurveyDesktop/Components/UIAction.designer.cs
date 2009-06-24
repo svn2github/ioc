@@ -1,4 +1,4 @@
-﻿namespace WiFiSurveryDesktop.Components
+﻿namespace WiFiSurveyDesktop.Components
 {
     partial class UIAction
     {

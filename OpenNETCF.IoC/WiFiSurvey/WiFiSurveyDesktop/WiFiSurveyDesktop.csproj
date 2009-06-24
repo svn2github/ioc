@@ -8,8 +8,8 @@
     <ProjectGuid>{5C3B42E7-984E-48C2-BF50-A4411C4CDF35}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WiFiSurveryDesktop</RootNamespace>
-    <AssemblyName>WiFiSurveryDesktop</AssemblyName>
+    <RootNamespace>WiFiSurveyDesktop</RootNamespace>
+    <AssemblyName>WiFiSurveyDesktop</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -84,6 +84,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

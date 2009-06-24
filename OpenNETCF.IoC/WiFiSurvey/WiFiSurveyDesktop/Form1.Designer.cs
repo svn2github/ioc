@@ -1,4 +1,4 @@
-﻿namespace WiFiSurveryDesktop
+﻿namespace WiFiSurveyDesktop
 {
     partial class Form1
     {
