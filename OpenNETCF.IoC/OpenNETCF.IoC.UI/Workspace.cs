@@ -22,6 +22,7 @@ namespace OpenNETCF.IoC.UI
     public abstract class Workspace : ContainerControl, IWorkspace
     {
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartActivated;
+        public event EventHandler<DataEventArgs<ISmartPart>> SmartPartDeactivated;
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartClosing;
 
         public Workspace()
@@ -58,7 +59,10 @@ namespace OpenNETCF.IoC.UI
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
             CheckSmartPartExists(smartPart);
+            
             OnHide(smartPart);
+
+            RaiseSmartPartDeactivated(smartPart);
         }
 
         protected virtual void OnHide(ISmartPart smartPart)
@@ -126,6 +130,13 @@ namespace OpenNETCF.IoC.UI
             if (SmartPartActivated == null) return;
 
             SmartPartActivated(this, new DataEventArgs<ISmartPart>(smartPart));
+        }
+
+        protected void RaiseSmartPartDeactivated(ISmartPart smartPart)
+        {
+            if (SmartPartDeactivated == null) return;
+
+            SmartPartDeactivated(this, new DataEventArgs<ISmartPart>(smartPart));
         }
 
         public virtual ISmartPart ActiveSmartPart

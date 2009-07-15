@@ -21,6 +21,7 @@ namespace OpenNETCF.IoC.UI
     public interface IWorkspace
     {
         event EventHandler<DataEventArgs<ISmartPart>> SmartPartActivated;
+        event EventHandler<DataEventArgs<ISmartPart>> SmartPartDeactivated;
         event EventHandler<DataEventArgs<ISmartPart>> SmartPartClosing;
 
         void Show(ISmartPart smartPart);
