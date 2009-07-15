@@ -83,6 +83,7 @@ namespace OpenNETCF.IoC
             lock (m_syncRoot)
             {
                 m_items.Add(id, item);
+                ObjectFactory.DoInjections(item, m_root);
 
                 if (Added == null) return;
 

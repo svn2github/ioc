@@ -21,6 +21,16 @@ namespace OpenNETCF.IoC
 {
     internal class ObjectFactory
     {
+        private static Dictionary<Type, SubscriptionDescriptor[]> m_subscriptionDescriptorCache =
+            new Dictionary<Type, SubscriptionDescriptor[]>();
+
+        private static Dictionary<Type, PublicationDescriptor[]> m_publicationDescriptorCache =
+            new Dictionary<Type, PublicationDescriptor[]>();
+
+        private static Dictionary<Type, InjectionConstructor> m_constructorCache = new Dictionary<Type, InjectionConstructor>();
+
+        private static Dictionary<Type, string[]> m_eventSourceNameCache = new Dictionary<Type, string[]>();
+
         internal static string GenerateServiceName(Type t)
         {
             return t.Name + "Service";
@@ -48,12 +58,6 @@ namespace OpenNETCF.IoC
             public EventSubscription Subscription { get; set; }
             public MethodInfo MethodInfo { get; set; }
         }
-
-        private static Dictionary<Type, SubscriptionDescriptor[]> m_subscriptionDescriptorCache = 
-            new Dictionary<Type, SubscriptionDescriptor[]>();
-
-        private static Dictionary<Type, PublicationDescriptor[]> m_publicationDescriptorCache =
-            new Dictionary<Type, PublicationDescriptor[]>();
 
         internal static SubscriptionDescriptor[] GetEventSinks(Type type)
         {
@@ -112,9 +116,19 @@ namespace OpenNETCF.IoC
 
         internal static string[] GetEventSourceNames(Type type)
         {
-            return (from n in (type.GetEvents(BindingFlags.Public | BindingFlags.Instance).Select(
+            if(m_eventSourceNameCache.ContainsKey(type))
+            {
+                return m_eventSourceNameCache[type];
+            }
+            else
+            {
+                string[] names = (from n in (type.GetEvents(BindingFlags.Public | BindingFlags.Instance).Select(
                 e => e.GetCustomAttributes(typeof(EventPublication), true).First() as EventPublication))
                     select n.EventName).Distinct().ToArray();
+
+                m_eventSourceNameCache.Add(type, names);
+                return names;
+            }
         }
 
         internal static EventSubscription[] GetEventSinkSubscriptions(Type type)
@@ -126,32 +140,51 @@ namespace OpenNETCF.IoC
 
         internal static EventInfo[] GetEventSourcesFromTypeByName(Type type, string eventName)
         {
-            return (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
-                    where
-            (from a in e.GetCustomAttributes(typeof(EventPublication), true) as EventPublication[]
-             where a.EventName == eventName
-             select a).Count() > 0
-                    select e).ToArray();
+            if (m_publicationDescriptorCache.ContainsKey(type))
+            {
+                return (from e in m_publicationDescriptorCache[type]
+                        where e.Publication.EventName == eventName
+                        select e.EventInfo).ToArray();
+            }
+            else
+            {
+                return (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
+                        where
+                    (from a in e.GetCustomAttributes(typeof(EventPublication), true) as EventPublication[]
+                     where a.EventName == eventName
+                     select a).Count() > 0
+                            select e).ToArray();
+            }
+
         }
 
         internal static MethodInfo[] GetEventSinksFromTypeByName(Type type, string eventName)
         {
-            return (from e in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                    where
-            (from a in e.GetCustomAttributes(typeof(EventSubscription), true) as EventSubscription[]
-             where a.EventName == eventName
-             select a).Count() > 0
-                    select e).ToArray();
+            if (m_subscriptionDescriptorCache.ContainsKey(type))
+            {
+                return (from e in m_subscriptionDescriptorCache[type]
+                        where e.Subscription.EventName == eventName
+                        select e.MethodInfo).ToArray();
+            }
+            else
+            {
+                return (from e in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                        where
+                    (from a in e.GetCustomAttributes(typeof(EventSubscription), true) as EventSubscription[]
+                     where a.EventName == eventName
+                     select a).Count() > 0
+                            select e).ToArray();
+            }
         }
 
         internal static void AddEventHandlers(object instance)
         {
-            // TODO: check cache
+            Type instanceType = instance.GetType();
+
             // get all of the sources from the object
             var sourceEvents = GetEventSources(instance.GetType());
 
             // get all of the sinks in the object
-            // TODO: check cache
             var eventSinks = GetEventSinks(instance.GetType());
 
             // find any items that subscribe to the source events
@@ -159,7 +192,6 @@ namespace OpenNETCF.IoC
             {
                 foreach(var source in sourceEvents)
                 {
-                    // TODO: check cache
                     // wire up events
                     foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
                     {
@@ -199,7 +231,6 @@ namespace OpenNETCF.IoC
 
                 foreach (var source in sourceEvents)
                 {
-                    // TODO: check cache
                     // wire up events
                     foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
                     {
@@ -229,16 +260,51 @@ namespace OpenNETCF.IoC
             }
         }
 
+        private struct InjectionConstructor
+        {
+            public ConstructorInfo CI { get; set; }
+            public ParameterInfo[] ParameterList { get; set; }
+        }
+
+        private static object CreateObjectFromCache(Type t, WorkItem root)
+        {
+            InjectionConstructor ic = m_constructorCache[t];
+
+            try
+            {
+                if ((ic.ParameterList == null) || (ic.ParameterList.Length == 0))
+                {
+                    return ic.CI.Invoke(null);
+                }
+                else
+                {
+                    object[] inputs = GetParameterObjectsForParameterList(ic.ParameterList, root, t.Name);
+                    return ic.CI.Invoke(inputs);
+                }
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
+
         internal static object CreateObject(Type t, WorkItem root)
         {
             object instance = null;
 
-            // TODO: build cache for ctor info by type
+            // first check the cache
+            if(m_constructorCache.ContainsKey(t))
+            {
+                return CreateObjectFromCache(t, root);
+            }
+
+            ConstructorInfo ci;
 
             if (t.IsInterface)
             {
                 throw new IOCException(string.Format("Cannot create an instance of an interface class ({0}). Check your registration code.", t.Name));
             }
+
 
             // see if there is an injection ctor
             var ctors = (from c in t.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
@@ -250,18 +316,19 @@ namespace OpenNETCF.IoC
             {
                 // no injection ctor, get the default, parameterless ctor
                 var parameterlessCtors = (from c in t.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                            where c.GetParameters().Length == 0
-                            select c);
+                                          where c.GetParameters().Length == 0
+                                          select c);
                 if (parameterlessCtors.Count() == 0)
                 {
                     throw new ArgumentException(string.Format("Type '{0}' has no public parameterless constructor or injection constructor.\r\nAre you missing the InjectionConstructor attribute?", t));
                 }
 
                 // create the object
-                ConstructorInfo ci = parameterlessCtors.First();
+                ci = parameterlessCtors.First();
                 try
                 {
                     instance = ci.Invoke(null);
+                    m_constructorCache.Add(t, new InjectionConstructor { CI = ci });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -271,12 +338,13 @@ namespace OpenNETCF.IoC
             else if (ctors.Count() == 1)
             {
                 // call the injection ctor
-                ConstructorInfo ci = ctors.First();
+                ci = ctors.First();
                 ParameterInfo[] paramList = ci.GetParameters();
                 object[] inputs = GetParameterObjectsForParameterList(paramList, root, t.Name);
                 try
                 {
                     instance = ci.Invoke(inputs);
+                    m_constructorCache.Add(t, new InjectionConstructor { CI = ci, ParameterList = paramList });
                 }
                 catch (TargetInvocationException ex)
                 {
@@ -287,7 +355,6 @@ namespace OpenNETCF.IoC
             {
                 throw new ArgumentException(string.Format("Type '{0}' has {1} defined injection constructors.  Only one is allowed", t.Name, ctors.Count()));
             }
-
             // NOTE: we don't do injections here, as if the created object has a dependency that requires this instance it would fail becasue this instance is not yet in the item list.
 
             return instance;

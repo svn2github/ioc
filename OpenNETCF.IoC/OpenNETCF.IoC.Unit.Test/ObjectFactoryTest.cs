@@ -14,6 +14,8 @@ using OpenNETCF.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Reflection;
+using System.Linq;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC.Unit.Test
 {
@@ -108,6 +110,108 @@ namespace OpenNETCF.IoC.Unit.Test
             RootWorkItem.Items.Remove(src);
             RootWorkItem.Items.Remove(sink);
             RootWorkItem.Items.Remove(composite1);
+        }
+
+        [TestMethod()]
+        [Description("Checks to ensure events happen for items pre-created and added versus created with AddNew")]
+        public void InterClassEventTest3()
+        {
+            MockEventSource src = new MockEventSource();
+            RootWorkItem.Items.Add(src);
+            MockEventSink sinkA = new MockEventSink(); 
+            RootWorkItem.Items.Add(sinkA);
+            MockEventComposite1 composite1 = new MockEventComposite1();
+            RootWorkItem.Items.Add(composite1);
+
+            src.RaiseEventA();
+            Assert.IsTrue(sinkA.AEventReceived, "Event A not received by sinkA");
+            Assert.IsTrue(composite1.AEventReceived, "Event A not received by composite1");
+
+            composite1.RaiseEventB();
+            Assert.IsTrue(sinkA.BEventReceived);
+
+            RootWorkItem.Items.Remove(src);
+            RootWorkItem.Items.Remove(sinkA);
+            RootWorkItem.Items.Remove(composite1);
+        }
+
+        [TestMethod()]
+        public void EventSourceNameCacheTest()
+        {
+            int start = Environment.TickCount;
+            string[] preCache = ObjectFactory.GetEventSourceNames(typeof(MockEventSource));
+            int et1 = Environment.TickCount - start;
+
+            start = Environment.TickCount;
+            string[] postCache = ObjectFactory.GetEventSourceNames(typeof(MockEventSource));
+            int et2 = Environment.TickCount - start;
+
+            Assert.AreEqual<int>(preCache.Length, postCache.Length, "Lengths not equal");
+            Assert.AreEqual<int>(0, preCache.Except(postCache).Count(), "preCache contains values not in postCache");
+            Assert.AreEqual<int>(0, postCache.Except(preCache).Count(), "postCache contains values not in preCache");
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+
+            // uncomment to see actual times
+            // Assert.Fail(string.Format("{0} {1}", et1, et2));
+        }
+
+        [TestMethod()]
+        public void EventSourceTypeCacheTest()
+        {
+            int start = Environment.TickCount;
+            ObjectFactory.PublicationDescriptor[] preCache = ObjectFactory.GetEventSources(typeof(MockEventSource));
+            int et1 = Environment.TickCount - start;
+
+            start = Environment.TickCount;
+            ObjectFactory.PublicationDescriptor[] postCache = ObjectFactory.GetEventSources(typeof(MockEventSource));
+            int et2 = Environment.TickCount - start;
+
+            Assert.AreEqual<int>(preCache.Length, postCache.Length, "Lengths not equal");
+            Assert.AreEqual<int>(0, preCache.Except(postCache).Count(), "preCache contains values not in postCache");
+            Assert.AreEqual<int>(0, postCache.Except(preCache).Count(), "postCache contains values not in preCache");
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+
+            // uncomment to see actual times
+            // Assert.Fail(string.Format("{0} {1}", et1, et2));
+        }
+
+        [TestMethod()]
+        public void EventSinkTypeCacheTest()
+        {
+            int start = Environment.TickCount;
+            ObjectFactory.SubscriptionDescriptor[] preCache = ObjectFactory.GetEventSinks(typeof(MockEventSink));
+            int et1 = Environment.TickCount - start;
+
+            start = Environment.TickCount;
+            ObjectFactory.SubscriptionDescriptor[] postCache = ObjectFactory.GetEventSinks(typeof(MockEventSink));
+            int et2 = Environment.TickCount - start;
+
+            Assert.AreEqual<int>(preCache.Length, postCache.Length, "Lengths not equal");
+            Assert.AreEqual<int>(0, preCache.Except(postCache).Count(), "preCache contains values not in postCache");
+            Assert.AreEqual<int>(0, postCache.Except(preCache).Count(), "postCache contains values not in preCache");
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+
+            // uncomment to see actual times
+            // Assert.Fail(string.Format("{0} {1}", et1, et2));
+        }
+
+        [TestMethod()]
+        public void ObjectCreationUsingCacheTestA()
+        {
+            int start = Environment.TickCount;
+            MockEventComposite1 preCache = RootWorkItem.Items.AddNew<MockEventComposite1>();
+            int et1 = Environment.TickCount - start;
+            Assert.IsNotNull(preCache, "preCache is null");
+
+            start = Environment.TickCount;
+            MockEventComposite1 postCache = RootWorkItem.Items.AddNew<MockEventComposite1>();
+            int et2 = Environment.TickCount - start;
+            Assert.IsNotNull(postCache, "postCache is null");
+
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+
+            // uncomment to see actual times
+            // Assert.Fail(string.Format("{0} {1}", et1, et2));
         }
     }
 }
