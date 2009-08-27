@@ -17,12 +17,12 @@ using System.Text;
 
 namespace OpenNETCF.IoC.Unit.Test
 {
-    internal interface IMockType
+    public interface IMockType
     {
         string Name { get; set; }
     }
 
-    internal class MockTypeA : IMockType
+    public class MockTypeA : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -36,7 +36,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class MockTypeB : IMockType, IDisposable
+    public class MockTypeB : IMockType, IDisposable
     {
         private static int m_instanceCount = 0;
 
@@ -60,7 +60,7 @@ namespace OpenNETCF.IoC.Unit.Test
         }
     }
 
-    internal class MockTypeC : IMockType
+    public class MockTypeC : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -76,7 +76,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class MockTypeD : IMockType
+    public class MockTypeD : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -97,7 +97,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class TypeWithCreateNewAttribCtor : IMockType
+    public class TypeWithCreateNewAttribCtor : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -114,7 +114,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerA : IMockType
+    public class ServiceConsumerA : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -129,7 +129,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerB : IMockType
+    public class ServiceConsumerB : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -144,7 +144,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerAI : IMockType
+    public class ServiceConsumerAI : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -159,7 +159,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerC : IMockType
+    public class ServiceConsumerC : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -175,7 +175,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerCI : IMockType
+    public class ServiceConsumerCI : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -191,7 +191,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class ServiceConsumerD : IMockType
+    public class ServiceConsumerD : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -207,7 +207,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class TypeWithCreateNewAttribMethod : IMockType
+    public class TypeWithCreateNewAttribMethod : IMockType
     {
         private static int m_instanceCount = 0;
 
@@ -228,7 +228,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
-    internal class InvalidInjectionMethodObject
+    public class InvalidInjectionMethodObject
     {
         public InvalidInjectionMethodObject()
         {
@@ -240,7 +240,7 @@ namespace OpenNETCF.IoC.Unit.Test
         }
     }
 
-    internal class TypeNoDefaultCtor
+    public class TypeNoDefaultCtor
     {
         public TypeNoDefaultCtor(string name)
         {
@@ -271,7 +271,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public bool AEventReceived { get; set; }
     }
 
-    public class MockEventSource
+    public class MockEventSource : WorkItem
     {
         [EventPublication("IoC Event A")]
         public event EventHandler OnEventA;
@@ -311,10 +311,15 @@ namespace OpenNETCF.IoC.Unit.Test
         }
     }
 
-    internal class MockEventSink
+    public class MockEventSink : WorkItem
     {
+        public int ACount { get; set; }
+        public int BCount { get; set; }
+
         public MockEventSink()
         {
+            ACount = 0;
+            BCount = 0;
             AEventReceived = false;
             BEventReceived = false;
         }
@@ -322,12 +327,14 @@ namespace OpenNETCF.IoC.Unit.Test
         [EventSubscription("IoC Event A", ThreadOption.Caller)]
         public void MyAHandler(object senter, EventArgs a)
         {
+            ACount++;
             AEventReceived = true;
         }
 
         [EventSubscription("IoC Event B", ThreadOption.Caller)]
         public void MyBHandler(object senter, EventArgs a)
         {
+            BCount++;
             BEventReceived = true;
         }
 

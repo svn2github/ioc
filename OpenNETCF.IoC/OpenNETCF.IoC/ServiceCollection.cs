@@ -132,7 +132,11 @@ namespace OpenNETCF.IoC
                 };
 
                 m_services.Add(descriptor);
-                ObjectFactory.DoInjections(instance, m_root);
+                
+                if (instance != null)
+                {
+                    ObjectFactory.DoInjections(instance, m_root);
+                }
 
                 if (Added == null) return;
 

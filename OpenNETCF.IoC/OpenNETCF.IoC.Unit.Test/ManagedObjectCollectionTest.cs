@@ -27,7 +27,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void AddNewNoIDTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             items.AddNew<MockTypeA>();
 
@@ -38,7 +38,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void AddNewWithIDTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             string id = "test ID 1";
             
@@ -57,7 +57,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void AddNoIDTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             MockTypeA a = new MockTypeA();
 
@@ -70,7 +70,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void AddWithIDTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             items.AddNew<MockTypeA>("test ID 1");
 
@@ -81,7 +81,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void GenericFindByTypeTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             items.AddNew<MockTypeA>("test ID 1");
             items.AddNew<MockTypeB>("test ID 2");
@@ -136,7 +136,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void AddedEventTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             AutoResetEvent are = new AutoResetEvent(false);
             items.Added += new EventHandler<DataEventArgs<KeyValuePair<string,object>>>(
@@ -153,7 +153,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void RemovedEventTestPositive()
         {
             WorkItem root = new WorkItem();
-            ManagedObjectCollection items = new ManagedObjectCollection(root);
+            ManagedObjectCollection<object> items = new ManagedObjectCollection<object>(root);
 
             string id = "test";
             items.AddNew<MockTypeA>(id);

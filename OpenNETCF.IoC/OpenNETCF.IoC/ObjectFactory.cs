@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace OpenNETCF.IoC
 {
@@ -36,14 +37,14 @@ namespace OpenNETCF.IoC
             return t.Name + "Service";
         }
 
-        internal static string GenerateItemName(Type t)
+        internal static string GenerateItemName(Type t, WorkItem root)
         {
             string name = string.Empty;
             int i = 0;
             do
             {
                 name = t.Name + (++i).ToString();
-            } while (RootWorkItem.Items[name] != null);
+            } while (root.Items[name] != null);
             return name;
         }
 
@@ -177,27 +178,17 @@ namespace OpenNETCF.IoC
             }
         }
 
-        internal static void AddEventHandlers(object instance)
+        private static void AddItemEventHandlers(object instance, WorkItem root, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
         {
-            Type instanceType = instance.GetType();
-
-            // get all of the sources from the object
-            var sourceEvents = GetEventSources(instance.GetType());
-
-            // get all of the sinks in the object
-            var eventSinks = GetEventSinks(instance.GetType());
-
-            // find any items that subscribe to the source events
-            foreach (var item in RootWorkItem.Items)
+            foreach (var item in root.Items)
             {
-                foreach(var source in sourceEvents)
+                foreach (var source in sourceEvents)
                 {
                     // wire up events
                     foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
                     {
                         Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
                         source.EventInfo.AddEventHandler(instance, d);
-
                     }
                 }
 
@@ -219,8 +210,11 @@ namespace OpenNETCF.IoC
                     }
                 }
             }
+        }
 
-            foreach (var item in RootWorkItem.Services)
+        private static void AddServiceEventHandlers(object instance, WorkItem root, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
+        {
+            foreach (var item in root.Services)
             {
                 if (item.Value == null)
                 {
@@ -257,6 +251,97 @@ namespace OpenNETCF.IoC
                         }
                     }
                 }
+            }
+        }
+
+        private static void AddCollectionEventHandlers<TKey, TItem>(object instance, IEnumerable<KeyValuePair<TKey, TItem>> collection, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
+        {
+            if (collection == null) return;
+
+            foreach (var item in collection)
+            {
+                if (item.Value.Equals(instance)) continue;
+
+                foreach (var source in sourceEvents)
+                {
+                    // wire up events
+                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
+                    {
+                        Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
+                        source.EventInfo.AddEventHandler(instance, d);
+                    }
+                }
+
+                // back-wire any sinks
+                foreach (var sink in eventSinks)
+                {
+                    foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
+                    {
+                        try
+                        {
+                            // (type, consumer instance, consumer method)
+                            Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
+                            ei.AddEventHandler(item.Value, d);
+                        }
+                        catch (ArgumentException)
+                        {
+                            throw new ArgumentException(string.Format("Unable to attach EventHandler '{0}' to '{1}'.\r\nDo the publisher and subscriber signatures match?", ei.Name, instance.GetType().Name));
+                        }
+                    }
+                }
+
+                WorkItem wi = item.Value as WorkItem;
+                if (wi != null)
+                {
+                    AddEventHandlers(instance, wi, false);
+                }
+            }
+        }
+
+        internal static void AddEventHandlers(object instance, WorkItem root)
+        {
+            AddEventHandlers(instance, root, true);
+        }
+
+        internal static void AddEventHandlers(object instance, WorkItem root, bool walkUpToRoot)
+        {
+            Type instanceType = instance.GetType();
+
+            // get all of the sources from the object
+            var sourceEvents = GetEventSources(instance.GetType());
+
+            // get all of the sinks in the object
+            var eventSinks = GetEventSinks(instance.GetType());
+
+            // find any items that subscribe to the source events
+            WorkItem wi = instance as WorkItem;
+            if (wi != null)
+            {
+                WorkItem localRoot = root;
+                if (walkUpToRoot)
+                {
+                    while (localRoot.Parent != null)
+                    {
+                        localRoot = root.Parent;
+                    }
+                }
+
+                // recurse for WorkItems
+                AddCollectionEventHandlers(instance, localRoot.Items, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, localRoot.Services, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, localRoot.WorkItems, sourceEvents, eventSinks);
+
+                //foreach (var childItem in localRoot.WorkItems)
+                //{
+                //    if (childItem.Value == instance) continue;
+                //    AddEventHandlers(instance, childItem.Value);
+                //}
+            }
+            else
+            {
+                AddCollectionEventHandlers(instance, root.Items, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, root.Services, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, root.WorkItems, sourceEvents, eventSinks);
             }
         }
 
@@ -403,7 +488,7 @@ namespace OpenNETCF.IoC
                 pi.SetValue(instance, root.Services.Get(attrib.RegistrationType), null);
             }
 
-            AddEventHandlers(instance);
+            AddEventHandlers(instance, root);
         }
 
         private static object[] GetParameterObjectsForParameterList(ParameterInfo[] paramList, WorkItem root, string typeName)

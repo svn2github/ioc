@@ -26,7 +26,12 @@ namespace OpenNETCF.IoC
             m_workItem = new WorkItem();
         }
 
-        public static ManagedObjectCollection Items 
+        public static ManagedObjectCollection<WorkItem> WorkItems
+        {
+            get { return m_workItem.WorkItems; }
+        }
+
+        public static ManagedObjectCollection<object> Items 
         {
             get { return m_workItem.Items; }
         }

@@ -55,11 +55,12 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\OpenNETCF.IoC.Version.cs">
+    <Compile Include="..\OpenNETCF.IoC.Shared\OpenNETCF.IoC.Version.cs">
       <Link>Properties\OpenNETCF.IoC.Version.cs</Link>
     </Compile>
     <Compile Include="Attributes.cs" />
@@ -69,6 +70,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions.cs" />
+    <Compile Include="ExtensionMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenericEventArgs.cs" />
     <Compile Include="Guard.cs">
       <SubType>Code</SubType>
     </Compile>

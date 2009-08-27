@@ -14,20 +14,30 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace OpenNETCF.IoC
 {
     public class WorkItem : IDisposable
     {
-        internal WorkItem()
+        public WorkItem()
         {
-            Items = new ManagedObjectCollection(this);
+            WorkItems = new ManagedObjectCollection<WorkItem>(this);
+            Items = new ManagedObjectCollection<object>(this);
             Services = new ServiceCollection(this);
         }
+
+        public WorkItem Parent { get; internal set; }
+
         /// <summary>
         /// The Items collection contains Components unique by string ID.  Multiple Components of the same type can be added
         /// </summary>
-        public ManagedObjectCollection Items { get; private set; }
+        public ManagedObjectCollection<object> Items { get; private set; }
+
+        /// <summary>
+        /// The Items collection contains Components unique by string ID.  Multiple Components of the same type can be added
+        /// </summary>
+        public ManagedObjectCollection<WorkItem> WorkItems { get; private set; }
 
         /// <summary>
         /// The Services collection contains Components unique by registered type.  Only one Service of a given registering type can exist in the collection.

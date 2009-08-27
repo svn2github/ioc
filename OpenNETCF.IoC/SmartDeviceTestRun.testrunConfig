@@ -2,7 +2,7 @@
 <TestRunConfiguration name="Local SmartDevices Test Run" id="c23d2e2c-6217-4e8a-82ed-eb83d9818e77" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
   <Description>This is a default test run configuration for a local SmartDevice test run.</Description>
   <Hosts type="Smart Device">
-    <DeviceHostRunConfigData name="Smart Device" deviceId="C2B0BA8B-9547-4740-9B68-C371C71045F9" deviceName="Windows Mobile 5.0 Pocket PC Emulator" platformId="4118C335-430C-497f-BE48-11C3316B135E" platformName="Windows Mobile 5.0 Pocket PC SDK" uiPlatformId="4118C335-430C-497f-BE48-11C3316B135E" />
+    <DeviceHostRunConfigData name="Smart Device" deviceId="E282E6BE-C7C3-4ece-916A-88FB1CF8AF3C" deviceName="Pocket PC 2003 SE Emulator" platformId="3C41C503-53EF-4c2a-8DD4-A8217CAD115E" platformName="Pocket PC 2003" uiPlatformId="3C41C503-53EF-4c2a-8DD4-A8217CAD115E" />
   </Hosts>
   <TestTypeSpecific>
     <WebTestRunConfiguration testTypeId="4e7599fa-5ecb-43e9-a887-cd63cf72d207">

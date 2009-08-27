@@ -18,14 +18,15 @@ using System.Collections;
 
 namespace OpenNETCF.IoC
 {
-    public class ManagedObjectCollection : ICollection, IEnumerable, IEnumerable<KeyValuePair<string, object>>
+    public class ManagedObjectCollection<TItem> : ICollection, IEnumerable, IEnumerable<KeyValuePair<string, TItem>>
+        where TItem : class
     {
-        private Dictionary<string, object> m_items = new Dictionary<string, object>();
+        private Dictionary<string, TItem> m_items = new Dictionary<string, TItem>();
         private object m_syncRoot = new object();
         private WorkItem m_root;
 
-        public event EventHandler<DataEventArgs<KeyValuePair<string, object>>> Added;
-        public event EventHandler<DataEventArgs<KeyValuePair<string, object>>> Removed;
+        public event EventHandler<DataEventArgs<KeyValuePair<string, TItem>>> Added;
+        public event EventHandler<DataEventArgs<KeyValuePair<string, TItem>>> Removed;
 
         internal ManagedObjectCollection(WorkItem root)
         {
@@ -36,8 +37,16 @@ namespace OpenNETCF.IoC
         {
             if (typeToBuild == null) throw new ArgumentNullException();
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
-            Add(instance);
+            Add(instance as TItem);
             ObjectFactory.DoInjections(instance, m_root);
+
+            WorkItem wi = instance as WorkItem;
+
+            if (wi != null)
+            {
+                wi.Parent = m_root;
+            }
+
             return instance;
         }
 
@@ -52,8 +61,15 @@ namespace OpenNETCF.IoC
             if (id == null) throw new ArgumentNullException("id");
 
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
-            Add(instance, id);
+            Add(instance as TItem, id);
             ObjectFactory.DoInjections(instance, m_root);
+
+            WorkItem wi = instance as WorkItem;
+
+            if (wi != null)
+            {
+                wi.Parent = m_root;
+            }
 
             return instance;
         }
@@ -70,35 +86,59 @@ namespace OpenNETCF.IoC
             return (TTypeToBuild)AddNew(typeof(TTypeToBuild), id);
         }
 
-        public void Add(object item)
+        public void Add(TItem item)
         {
-            Add(item, ObjectFactory.GenerateItemName(item.GetType()));
+            Add(item, ObjectFactory.GenerateItemName(item.GetType(), m_root));
         }
 
-        public void Add(object item, string id)
+        public void Add(TItem item, string id)
         {
             if (id == null) throw new ArgumentNullException("id");
             if (item == null) throw new ArgumentNullException("item");
 
             lock (m_syncRoot)
             {
-                m_items.Add(id, item);
+                m_items.Add(id, item as TItem);
                 ObjectFactory.DoInjections(item, m_root);
+
+                WorkItem wi = item as WorkItem;
+
+                if (wi != null)
+                {
+                    wi.Parent = m_root;
+                }
 
                 if (Added == null) return;
 
-                Added(this, new DataEventArgs<KeyValuePair<string, object>>(
-                    new KeyValuePair<string, object>(id, item)));
+                Added(this, new DataEventArgs<KeyValuePair<string, TItem>>(
+                    new KeyValuePair<string, TItem>(id, item)));
             }
         }
 
-        public object Get(string id)
+        public TItem Get(string id)
         {
             if (id == null) throw new ArgumentNullException("id");
 
-            if (!m_items.ContainsKey(id)) return null;
+            if (m_items.ContainsKey(id)) return m_items[id];
 
-            return m_items[id];
+            //object foundItem = null;
+
+            //// walk up any WorkItems
+            //if (m_root.Parent != null)
+            //{
+            //    var workItems = from i in m_root.Parent.Items
+            //                    where i.Value as WorkItem != null
+            //                    select i.Value as WorkItem;
+
+            //    foreach (var item in workItems)
+            //    {
+            //        foundItem = item.Parent.Items.Get(id);
+
+            //        if (foundItem != null) return foundItem;
+            //    }
+            //}
+
+            return default(TItem);
         }
 
         public TTypeToGet Get<TTypeToGet>(string id) 
@@ -125,7 +165,7 @@ namespace OpenNETCF.IoC
         {
             return (from i in m_items
                     where i.Value is TSearchType
-                    select (TSearchType)i.Value)
+                    select i.Value as TSearchType)
                     .ToList();
         }
 
@@ -149,11 +189,11 @@ namespace OpenNETCF.IoC
 
                 if (Removed == null) return;
 
-                Removed(this, new DataEventArgs<KeyValuePair<string, object>>(obj));
+                Removed(this, new DataEventArgs<KeyValuePair<string, TItem>>(obj));
             }
         }
 
-        public ICollection<object> FindByType(Type searchType)
+        public ICollection<TItem> FindByType(Type searchType)
         {
             if (searchType.IsValueType) throw new ArgumentException("searchType must be a reference type");
 
@@ -191,7 +231,7 @@ namespace OpenNETCF.IoC
             return false;
         }
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, TItem>> GetEnumerator()
         {
             return m_items.GetEnumerator();
         }

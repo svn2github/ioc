@@ -74,65 +74,25 @@ namespace OpenNETCF.IoC.Unit.Test
         }
 
         [TestMethod()]
-        public void InterClassEventTest1()
-        {
-            MockEventSource src = RootWorkItem.Items.AddNew<MockEventSource>();
-            MockEventSink sinkA = RootWorkItem.Items.AddNew<MockEventSink>();
-            MockEventComposite1 composite1 = RootWorkItem.Items.AddNew<MockEventComposite1>();
-
-            src.RaiseEventA();
-            Assert.IsTrue(sinkA.AEventReceived, "Event A not received by sinkA");
-            Assert.IsTrue(composite1.AEventReceived, "Event A not received by composite1");
-
-            composite1.RaiseEventB();
-            Assert.IsTrue(sinkA.BEventReceived);
-
-            RootWorkItem.Items.Remove(src);
-            RootWorkItem.Items.Remove(sinkA);
-            RootWorkItem.Items.Remove(composite1);
-        }
-
-        [TestMethod()]
-        public void InterClassEventTest2()
-        {
-            // test same stuff, but different creation order
-            MockEventSink sink = RootWorkItem.Items.AddNew<MockEventSink>();
-            MockEventComposite1 composite1 = RootWorkItem.Items.AddNew<MockEventComposite1>();
-            MockEventSource src = RootWorkItem.Items.AddNew<MockEventSource>();
-
-            src.RaiseEventA();
-            Assert.IsTrue(sink.AEventReceived);
-            Assert.IsTrue(composite1.AEventReceived);
-
-            composite1.RaiseEventB();
-            Assert.IsTrue(sink.BEventReceived);
-
-            RootWorkItem.Items.Remove(src);
-            RootWorkItem.Items.Remove(sink);
-            RootWorkItem.Items.Remove(composite1);
-        }
-
-        [TestMethod()]
         [Description("Checks to ensure events happen for items pre-created and added versus created with AddNew")]
         public void InterClassEventTest3()
         {
-            MockEventSource src = new MockEventSource();
-            RootWorkItem.Items.Add(src);
-            MockEventSink sinkA = new MockEventSink(); 
-            RootWorkItem.Items.Add(sinkA);
-            MockEventComposite1 composite1 = new MockEventComposite1();
-            RootWorkItem.Items.Add(composite1);
+            using (WorkItem wi = new WorkItem())
+            {
+                MockEventSource src = new MockEventSource();
+                wi.Items.Add(src);
+                MockEventSink sinkA = new MockEventSink();
+                wi.Items.Add(sinkA);
+                MockEventComposite1 composite1 = new MockEventComposite1();
+                wi.Items.Add(composite1);
 
-            src.RaiseEventA();
-            Assert.IsTrue(sinkA.AEventReceived, "Event A not received by sinkA");
-            Assert.IsTrue(composite1.AEventReceived, "Event A not received by composite1");
+                src.RaiseEventA();
+                Assert.IsTrue(sinkA.AEventReceived, "Event A not received by sinkA");
+                Assert.IsTrue(composite1.AEventReceived, "Event A not received by composite1");
 
-            composite1.RaiseEventB();
-            Assert.IsTrue(sinkA.BEventReceived);
-
-            RootWorkItem.Items.Remove(src);
-            RootWorkItem.Items.Remove(sinkA);
-            RootWorkItem.Items.Remove(composite1);
+                composite1.RaiseEventB();
+                Assert.IsTrue(sinkA.BEventReceived);
+            }
         }
 
         [TestMethod()]
@@ -198,20 +158,23 @@ namespace OpenNETCF.IoC.Unit.Test
         [TestMethod()]
         public void ObjectCreationUsingCacheTestA()
         {
-            int start = Environment.TickCount;
-            MockEventComposite1 preCache = RootWorkItem.Items.AddNew<MockEventComposite1>();
-            int et1 = Environment.TickCount - start;
-            Assert.IsNotNull(preCache, "preCache is null");
+            using(WorkItem wi = new WorkItem())
+            {
+                int start = Environment.TickCount;
+                MockEventComposite1 preCache = wi.Items.AddNew<MockEventComposite1>();
+                int et1 = Environment.TickCount - start;
+                Assert.IsNotNull(preCache, "preCache is null");
 
-            start = Environment.TickCount;
-            MockEventComposite1 postCache = RootWorkItem.Items.AddNew<MockEventComposite1>();
-            int et2 = Environment.TickCount - start;
-            Assert.IsNotNull(postCache, "postCache is null");
+                start = Environment.TickCount;
+                MockEventComposite1 postCache = wi.Items.AddNew<MockEventComposite1>();
+                int et2 = Environment.TickCount - start;
+                Assert.IsNotNull(postCache, "postCache is null");
 
-            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+                Assert.IsTrue(et2 < et1, string.Format("Cached retrieval was not faster - uncached: {0}, cached: {1}", et1, et2));
 
-            // uncomment to see actual times
-            // Assert.Fail(string.Format("{0} {1}", et1, et2));
+                // uncomment to see actual times
+                // Assert.Fail(string.Format("{0} {1}", et1, et2));
+            }
         }
     }
 }

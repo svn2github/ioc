@@ -127,6 +127,8 @@ namespace OpenNETCF.IoC.Unit.Test
 
             ServiceCollection services = new ServiceCollection(root);
 
+            Assert.IsNotNull(services, "ServiceCollection not created");
+
             services.AddOnDemand<MockTypeA>();
             Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "First type add failed");
 
@@ -134,10 +136,12 @@ namespace OpenNETCF.IoC.Unit.Test
             Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "Second type add failed");
 
             MockTypeA a = services.Get<MockTypeA>();
+            Assert.IsNotNull(a, "did not retrieve MockTypeA");
             Assert.AreEqual(1, services.GetInstanciatedServiceCount());
             Assert.IsNotNull(a, "First type created failed");
 
             MockTypeB b = services.Get<MockTypeB>();
+            Assert.IsNotNull(b, "did not retrieve MockTypeA");
             Assert.AreEqual(2, services.GetInstanciatedServiceCount());
             Assert.IsNotNull(b, "Second type created failed");
         }
