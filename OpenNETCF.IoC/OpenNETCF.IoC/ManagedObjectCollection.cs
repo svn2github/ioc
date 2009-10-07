@@ -121,23 +121,6 @@ namespace OpenNETCF.IoC
 
             if (m_items.ContainsKey(id)) return m_items[id];
 
-            //object foundItem = null;
-
-            //// walk up any WorkItems
-            //if (m_root.Parent != null)
-            //{
-            //    var workItems = from i in m_root.Parent.Items
-            //                    where i.Value as WorkItem != null
-            //                    select i.Value as WorkItem;
-
-            //    foreach (var item in workItems)
-            //    {
-            //        foundItem = item.Parent.Items.Get(id);
-
-            //        if (foundItem != null) return foundItem;
-            //    }
-            //}
-
             return default(TItem);
         }
 

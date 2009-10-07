@@ -40,5 +40,10 @@ namespace OpenNETCF.IoC
         {
             get { return m_workItem.Services; }
         }
+
+        public static WorkItem Instance
+        {
+            get { return m_workItem; }
+        }
     }
 }
