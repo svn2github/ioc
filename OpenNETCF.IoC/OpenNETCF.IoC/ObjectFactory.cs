@@ -331,11 +331,11 @@ namespace OpenNETCF.IoC
                 AddCollectionEventHandlers(instance, localRoot.Services, sourceEvents, eventSinks);
                 AddCollectionEventHandlers(instance, localRoot.WorkItems, sourceEvents, eventSinks);
 
-                //foreach (var childItem in localRoot.WorkItems)
-                //{
-                //    if (childItem.Value == instance) continue;
-                //    AddEventHandlers(instance, childItem.Value);
-                //}
+                foreach (var childItem in localRoot.WorkItems)
+                {
+                    if (childItem.Value == instance) continue;
+                    AddEventHandlers(instance, childItem.Value);
+                }
             }
             else
             {

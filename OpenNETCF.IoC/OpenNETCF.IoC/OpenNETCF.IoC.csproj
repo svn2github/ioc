@@ -69,6 +69,7 @@
     <Compile Include="DefaultModuleInfoStore.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DisposableWrappedObject.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ExtensionMethods.cs">
       <SubType>Code</SubType>

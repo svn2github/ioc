@@ -77,204 +77,226 @@ namespace OpenNETCF.IoC.Unit.Test
         [ExpectedException(typeof(ServiceMissingException))]
         public void GetUnregisteredServiceWithExceptionTestPositive()
         {
-            WorkItem root = new WorkItem();
-            ServiceCollection services = new ServiceCollection(root);
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            MockTypeA o = services.Get<MockTypeA>(true);
+                MockTypeA o = services.Get<MockTypeA>(true);
+            }
         }
 
         [TestMethod()]
         [ExpectedException(typeof(RegistrationTypeInUseException))]
         public void AddOnDemandDuplicateRegistrationTypeTest1()
         {
-            WorkItem root = new WorkItem();
-            root.Services.AddOnDemand<MockTypeA, IMockType>();
-            root.Services.AddOnDemand<MockTypeB, IMockType>();
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddOnDemand<MockTypeA, IMockType>();
+                root.Services.AddOnDemand<MockTypeB, IMockType>();
+            }
         }
 
         [TestMethod()]
         [ExpectedException(typeof(RegistrationTypeInUseException))]
         public void AddOnDemandDuplicateRegistrationTypeTest2()
         {
-            WorkItem root = new WorkItem();
-            root.Services.AddOnDemand<MockTypeA>();
-            root.Services.AddOnDemand<MockTypeA>();
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddOnDemand<MockTypeA>();
+                root.Services.AddOnDemand<MockTypeA>();
+            }
         }
 
         [TestMethod()]
         [ExpectedException(typeof(RegistrationTypeInUseException))]
         public void AddNewDuplicateRegistrationTypeTest1()
         {
-            WorkItem root = new WorkItem();
-            root.Services.AddNew<MockTypeA, IMockType>();
-            root.Services.AddNew<MockTypeB, IMockType>();
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew<MockTypeA, IMockType>();
+                root.Services.AddNew<MockTypeB, IMockType>();
+            }
         }
 
         [TestMethod()]
         [ExpectedException(typeof(RegistrationTypeInUseException))]
         public void AddNewDuplicateRegistrationTypeTest2()
         {
-            WorkItem root = new WorkItem();
-
-            root.Services.AddNew<MockTypeA>();
-            root.Services.AddNew<MockTypeA>();
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew<MockTypeA>();
+                root.Services.AddNew<MockTypeA>();
+            }
         }
 
         [TestMethod()]
         public void AddOnDemand2TypesPositive()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
 
-            ServiceCollection services = new ServiceCollection(root);
+                ServiceCollection services = new ServiceCollection(root);
 
-            Assert.IsNotNull(services, "ServiceCollection not created");
+                Assert.IsNotNull(services, "ServiceCollection not created");
 
-            services.AddOnDemand<MockTypeA>();
-            Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "First type add failed");
+                services.AddOnDemand<MockTypeA>();
+                Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "First type add failed");
 
-            services.AddOnDemand<MockTypeB>();
-            Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "Second type add failed");
+                services.AddOnDemand<MockTypeB>();
+                Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "Second type add failed");
 
-            MockTypeA a = services.Get<MockTypeA>();
-            Assert.IsNotNull(a, "did not retrieve MockTypeA");
-            Assert.AreEqual(1, services.GetInstanciatedServiceCount());
-            Assert.IsNotNull(a, "First type created failed");
+                MockTypeA a = services.Get<MockTypeA>();
+                Assert.IsNotNull(a, "did not retrieve MockTypeA");
+                Assert.AreEqual(1, services.GetInstanciatedServiceCount());
+                Assert.IsNotNull(a, "First type created failed");
 
-            MockTypeB b = services.Get<MockTypeB>();
-            Assert.IsNotNull(b, "did not retrieve MockTypeA");
-            Assert.AreEqual(2, services.GetInstanciatedServiceCount());
-            Assert.IsNotNull(b, "Second type created failed");
+                MockTypeB b = services.Get<MockTypeB>();
+                Assert.IsNotNull(b, "did not retrieve MockTypeA");
+                Assert.AreEqual(2, services.GetInstanciatedServiceCount());
+                Assert.IsNotNull(b, "Second type created failed");
+            }
         }
 
         [TestMethod()]
         public void AddNew2TypesPositive()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            ServiceCollection services = new ServiceCollection(root);
+                services.AddNew<MockTypeA>();
+                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "First type add failed");
 
-            services.AddNew<MockTypeA>();
-            Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "First type add failed");
-
-            services.AddNew<MockTypeB>();
-            Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "Second type add failed");
+                services.AddNew<MockTypeB>();
+                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "Second type add failed");
+            }
         }
 
         [TestMethod()]
         public void GetClassTwiceReturnsSameObjectTestPositive1()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            ServiceCollection services = new ServiceCollection(root);
+                services.AddNew<MockTypeA>();
+                services.AddNew<MockTypeB>();
 
-            services.AddNew<MockTypeA>();
-            services.AddNew<MockTypeB>();
+                MockTypeA a1 = services.Get<MockTypeA>();
+                MockTypeA a2 = services.Get<MockTypeA>();
 
-            MockTypeA a1 = services.Get<MockTypeA>();
-            MockTypeA a2 = services.Get<MockTypeA>();
-
-            Assert.AreEqual(a1, a2, "instances not equal");
+                Assert.AreEqual(a1, a2, "instances not equal");
+            }
         }
 
         [TestMethod()]
         public void GetClassTwiceReturnsSameObjectTestPositive2()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            ServiceCollection services = new ServiceCollection(root);
+                services.AddOnDemand<MockTypeA>();
+                services.AddOnDemand<MockTypeB>();
 
-            services.AddOnDemand<MockTypeA>();
-            services.AddOnDemand<MockTypeB>();
+                MockTypeA a1 = services.Get<MockTypeA>();
+                MockTypeA a2 = services.Get<MockTypeA>();
 
-            MockTypeA a1 = services.Get<MockTypeA>();
-            MockTypeA a2 = services.Get<MockTypeA>();
-
-            Assert.AreEqual(a1, a2, "instances not equal");
+                Assert.AreEqual(a1, a2, "instances not equal");
+            }
         }
 
         [TestMethod()]
         public void AddNewContainsTestPositive()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            ServiceCollection services = new ServiceCollection(root);
+                services.AddNew<MockTypeA>();
+                services.AddNew<MockTypeB>();
 
-            services.AddNew<MockTypeA>();
-            services.AddNew<MockTypeB>();
+                MockTypeA a1 = services.Get<MockTypeA>();
+                MockTypeA a2 = services.Get<MockTypeA>();
 
-            MockTypeA a1 = services.Get<MockTypeA>();
-            MockTypeA a2 = services.Get<MockTypeA>();
-
-            Assert.AreEqual(a1, a2, "instances not equal");
+                Assert.AreEqual(a1, a2, "instances not equal");
+            }
         }
 
         [TestMethod()]
         public void GenericRemoveTestPositive()
         {
-            WorkItem root = new WorkItem();
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            ServiceCollection services = new ServiceCollection(root);
+                services.AddNew<MockTypeA>();
+                services.AddNew<MockTypeB>();
+                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
-            services.AddNew<MockTypeA>();
-            services.AddNew<MockTypeB>();
-            Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
-
-            services.Remove<MockTypeA>();
-            Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+                services.Remove<MockTypeA>();
+                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+            }
         }
 
         [TestMethod()]
         public void InstanceRemoveTestPositive()
         {
-            WorkItem root = new WorkItem();
-            ServiceCollection services = new ServiceCollection(root);
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            services.AddNew<MockTypeA>();
-            services.AddNew<MockTypeB>();
-            Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
+                services.AddNew<MockTypeA>();
+                services.AddNew<MockTypeB>();
+                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
-            MockTypeB b = services.Get<MockTypeB>();
+                MockTypeB b = services.Get<MockTypeB>();
 
-            services.Remove(b);
-            Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+                services.Remove(b);
+                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+            }
         }
 
         [TestMethod()]
         public void RemoveIDisposableTestPositive()
         {
-            WorkItem root = new WorkItem();
-            ServiceCollection services = new ServiceCollection(root);
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            services.AddNew<MockTypeA>();
-            services.AddNew<MockTypeB>();
-            Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
+                services.AddNew<MockTypeA>();
+                services.AddNew<MockTypeB>();
+                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
-            MockTypeB b = services.Get<MockTypeB>();
-            AutoResetEvent are = new AutoResetEvent(false);
-            b.Disposed += new System.EventHandler(
-                delegate
-                {
-                    are.Set();
-                });
-            services.Remove(b);
-            Assert.IsTrue(are.WaitOne(100, false));
+                MockTypeB b = services.Get<MockTypeB>();
+                AutoResetEvent are = new AutoResetEvent(false);
+                b.Disposed += new System.EventHandler(
+                    delegate
+                    {
+                        are.Set();
+                    });
+                services.Remove(b);
+                Assert.IsTrue(are.WaitOne(100, false));
+            }
         }
 
         [TestMethod()]
         public void AddedEventTestPositive()
         {
-            WorkItem root = new WorkItem();
-            ServiceCollection services = new ServiceCollection(root);
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            AutoResetEvent are = new AutoResetEvent(false);
-            services.Added += new System.EventHandler<DataEventArgs<object>>(
-                delegate
-                {
-                    are.Set();
-                });
+                AutoResetEvent are = new AutoResetEvent(false);
+                services.Added += new System.EventHandler<DataEventArgs<object>>(
+                    delegate
+                    {
+                        are.Set();
+                    });
 
-            services.AddNew<MockTypeA>();
-            Assert.IsTrue(are.WaitOne(100, false));
+                services.AddNew<MockTypeA>();
+                Assert.IsTrue(are.WaitOne(100, false));
+            }
         }
 
         [TestMethod()]

@@ -65,6 +65,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisposableWrapperTests.cs" />
     <Compile Include="CSLTest.cs" />
     <Compile Include="WorkItemTests.cs" />
     <Compile Include="EventTests.cs" />

@@ -35,10 +35,62 @@ namespace OpenNETCF.IoC
 
         public object AddNew(Type typeToBuild)
         {
-            if (typeToBuild == null) throw new ArgumentNullException();
+            return AddNew(typeToBuild, null, true, false);
+        }
+
+        public object AddNew(Type typeToBuild, string id)
+        {
+            return AddNew(typeToBuild, id, false, false);
+        }
+
+        public object AddNewDisposable(Type typeToBuild)
+        {
+            if (!typeToBuild.Implements<IDisposable>()) throw new ArgumentException("typeToBuild is not IDisposable");
+
+            return AddNew(typeToBuild, null, true, true);
+        }
+
+        public object AddNewDisposable(Type typeToBuild, string id)
+        {
+            if (!typeToBuild.Implements<IDisposable>()) throw new ArgumentException("typeToBuild is not IDisposable");
+
+            return AddNew(typeToBuild, id, false, true);
+        }
+
+        private object AddNew(Type typeToBuild, string id, bool expectNullId, bool wrapDisposables)
+        {
+            if (id == null)
+            {
+                if (expectNullId)
+                {
+                    id = ObjectFactory.GenerateItemName(typeToBuild, m_root);
+                }
+                else
+                {
+                    throw new ArgumentNullException("id");
+                }
+            }
+
+            if (this.Contains(id))
+            {
+                throw new ArgumentException("Duplicate ID");
+            }
+
+            if (typeToBuild == null) throw new ArgumentNullException("typeToBuild");
+
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
-            Add(instance as TItem);
-            ObjectFactory.DoInjections(instance, m_root);
+
+            if ((wrapDisposables) && (instance is IDisposable))
+            {
+                DisposableWrappedObject<IDisposable> dispInstance = new DisposableWrappedObject<IDisposable>(instance as IDisposable);
+                dispInstance.Disposing += new EventHandler<GenericEventArgs<IDisposable>>(DisposableItemHandler);
+                Add(dispInstance as TItem, id, expectNullId);
+                instance = dispInstance;
+            }
+            else
+            {
+                Add(instance as TItem, id, expectNullId);
+            }
 
             WorkItem wi = instance as WorkItem;
 
@@ -50,28 +102,11 @@ namespace OpenNETCF.IoC
             return instance;
         }
 
-        public object AddNew(Type typeToBuild, string id)
+        private void DisposableItemHandler(object sender, GenericEventArgs<IDisposable> e)
         {
-            if (this.Contains(id))
-            {
-                throw new ArgumentException("Duplicate ID");
-            }
-
-            if (typeToBuild == null) throw new ArgumentNullException("typeToBuild");
-            if (id == null) throw new ArgumentNullException("id");
-
-            object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
-            Add(instance as TItem, id);
-            ObjectFactory.DoInjections(instance, m_root);
-
-            WorkItem wi = instance as WorkItem;
-
-            if (wi != null)
-            {
-                wi.Parent = m_root;
-            }
-
-            return instance;
+            var key = m_items.FirstOrDefault(i => i.Value == sender).Key;
+            if (key == null) return;
+            m_items.Remove(key);
         }
 
         public TTypeToBuild AddNew<TTypeToBuild>()
@@ -86,6 +121,18 @@ namespace OpenNETCF.IoC
             return (TTypeToBuild)AddNew(typeof(TTypeToBuild), id);
         }
 
+        public DisposableWrappedObject<IDisposable> AddNewDisposable<TTypeToBuild>()
+            where TTypeToBuild : class, IDisposable
+        {
+            return (DisposableWrappedObject<IDisposable>)AddNew(typeof(TTypeToBuild), null, true, true);
+        }
+
+        public DisposableWrappedObject<IDisposable> AddNewDisposable<TTypeToBuild>(string id)
+            where TTypeToBuild : class, IDisposable
+        {
+            return (DisposableWrappedObject<IDisposable>)AddNew(typeof(TTypeToBuild), id, false, true);
+        }
+
         public void Add(TItem item)
         {
             Add(item, ObjectFactory.GenerateItemName(item.GetType(), m_root));
@@ -93,8 +140,13 @@ namespace OpenNETCF.IoC
 
         public void Add(TItem item, string id)
         {
+            Add(item, id, false);
+        }
+
+        private void Add(TItem item, string id, bool expectNullId)
+        {
             if (id == null) throw new ArgumentNullException("id");
-            if (item == null) throw new ArgumentNullException("item");
+            if ((item == null) && (!expectNullId)) throw new ArgumentNullException("item");
 
             lock (m_syncRoot)
             {
@@ -124,7 +176,7 @@ namespace OpenNETCF.IoC
             return default(TItem);
         }
 
-        public TTypeToGet Get<TTypeToGet>(string id) 
+        public TTypeToGet Get<TTypeToGet>(string id)
             where TTypeToGet : class
         {
             if (id == null) throw new ArgumentNullException("id");
@@ -135,7 +187,7 @@ namespace OpenNETCF.IoC
 
                 return t;
             }
-            
+
             return default(TTypeToGet);
         }
 
@@ -158,12 +210,12 @@ namespace OpenNETCF.IoC
             lock (m_syncRoot)
             {
                 var objList = (from i in m_items
-                            where i.Value.Equals(item)
-                            select i);
+                               where i.Value.Equals(item)
+                               select i);
 
-                if(objList.Count() == 0) return;
+                if (objList.Count() == 0) return;
                 var obj = objList.First();
-                
+
                 m_items.Remove(obj.Key);
 
                 // dispose of IDisposable objects
@@ -247,7 +299,7 @@ namespace OpenNETCF.IoC
         public void Clear()
         {
             var vals = (from i in this
-                         select i.Value).ToArray();
+                        select i.Value).ToArray();
 
             for (int i = 0; i < vals.Length; i++)
             {

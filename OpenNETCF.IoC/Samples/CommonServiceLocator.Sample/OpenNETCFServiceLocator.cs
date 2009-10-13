@@ -29,7 +29,7 @@ namespace OpenNETCF.IoC
             if (key == null)
             {
                 // no key provided, just get the first (default) of the requested type
-                var instance =  (from i in RootWorkItem.Items
+                var instance =  (from i in m_container.Items
                                 where i.Value.IsConvertableTo(serviceType)
                                 select i.Value).FirstOrDefault();
 
@@ -39,7 +39,7 @@ namespace OpenNETCF.IoC
             }
             else
             {
-                var instance =  (from i in RootWorkItem.Items
+                var instance = (from i in m_container.Items
                                 where i.Key == key && i.Value.IsConvertableTo(serviceType)
                                 select i.Value).FirstOrDefault();
 
@@ -59,7 +59,7 @@ namespace OpenNETCF.IoC
         /// </returns>
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
-            var instanceList = (from i in RootWorkItem.Items
+            var instanceList = (from i in m_container.Items
                             where i.Value.IsConvertableTo(serviceType)
                             select i.Value);
 
