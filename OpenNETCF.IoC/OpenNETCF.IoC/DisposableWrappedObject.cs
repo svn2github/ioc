@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenNETCF.IoC
 {
-    public class DisposableWrappedObject<T>
+    public class DisposableWrappedObject<T> : IDisposable
         where T : class, IDisposable
     {
         public bool Disposed { get; private set; }

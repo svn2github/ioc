@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.IO;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {
@@ -33,6 +34,12 @@ namespace OpenNETCF.IoC
         {
             try
             {
+                if (!File.Exists(m_catalogFilePath))
+                {
+                    Debug.WriteLine(string.Format("Catalog file '{0}' not found", m_catalogFilePath));
+                    return null;
+
+                }
                 using (TextReader reader = File.OpenText(m_catalogFilePath))
                 {
                     return reader.ReadToEnd();
