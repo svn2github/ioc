@@ -97,7 +97,7 @@ namespace OpenNETCF.IoC
             // there has to be a less convoluted LINQ query to pull this off, I just can't work it out yet
 
             var events =
-            from n in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
+            from n in type.GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
             where n.GetCustomAttributes(typeof(EventPublication), true).Length > 0
             select n;
 
@@ -123,7 +123,7 @@ namespace OpenNETCF.IoC
             }
             else
             {
-                string[] names = (from n in (type.GetEvents(BindingFlags.Public | BindingFlags.Instance).Select(
+                string[] names = (from n in (type.GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Select(
                 e => e.GetCustomAttributes(typeof(EventPublication), true).First() as EventPublication))
                     select n.EventName).Distinct().ToArray();
 
@@ -134,7 +134,7 @@ namespace OpenNETCF.IoC
 
         internal static EventSubscription[] GetEventSinkSubscriptions(Type type)
         {
-            return (from n in (type.GetMethods(BindingFlags.Public | BindingFlags.Instance).Select(
+            return (from n in (type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Select(
                 m => m.GetCustomAttributes(typeof(EventSubscription), true).FirstOrDefault() as EventSubscription))
                     select n).Distinct().Where(e => e != null).ToArray();
         }
@@ -149,7 +149,7 @@ namespace OpenNETCF.IoC
             }
             else
             {
-                return (from e in type.GetEvents(BindingFlags.Public | BindingFlags.Instance)
+                return (from e in type.GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                         where
                     (from a in e.GetCustomAttributes(typeof(EventPublication), true) as EventPublication[]
                      where a.EventName == eventName
@@ -169,7 +169,7 @@ namespace OpenNETCF.IoC
             }
             else
             {
-                return (from e in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                return (from e in type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                         where
                     (from a in e.GetCustomAttributes(typeof(EventSubscription), true) as EventSubscription[]
                      where a.EventName == eventName

@@ -65,6 +65,45 @@ namespace OpenNETCF.IoC
             LoadAssemblies(assemblies);
         }
 
+        internal void LoadAssembly(Assembly assembly)
+        {
+            var imodule = (from t in assembly.GetTypes()
+                           where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
+                           select t).FirstOrDefault();
+
+            if (imodule == null) return;
+
+            object instance = Activator.CreateInstance(imodule);
+
+            m_loadedModules.Add(new ModuleInfo { AssemblyFile = assembly.GetName().CodeBase });
+
+            var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
+            if (loadMethod != null)
+            {
+                try
+                {
+                    loadMethod.Invoke(instance, null);
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+            }
+
+            var addServices = imodule.GetMethod("AddServices", BindingFlags.Public | BindingFlags.Instance);
+            if (addServices != null)
+            {
+                try
+                {
+                    addServices.Invoke(instance, null);
+                }
+                catch (Exception ex)
+                {
+                    throw ex.InnerException;
+                }
+            }
+        }
+
         private void LoadAssemblies(IEnumerable<string> assemblyNames)
         {
             Guard.ArgumentNotNull(assemblyNames, "assemblyNames");
@@ -99,41 +138,7 @@ namespace OpenNETCF.IoC
 
                 if (asm == null) continue;
 
-                var imodule = (from t in asm.GetTypes()
-                               where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
-                               select t).FirstOrDefault();
-
-                if (imodule == null) continue;
-
-                object instance = Activator.CreateInstance(imodule);
-
-                m_loadedModules.Add(new ModuleInfo { AssemblyFile = asm.GetName().CodeBase });
-
-                var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
-                if (loadMethod != null)
-                {
-                    try
-                    {
-                        loadMethod.Invoke(instance, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex.InnerException;
-                    }
-                }
-
-                var addServices = imodule.GetMethod("AddServices", BindingFlags.Public | BindingFlags.Instance);
-                if (addServices != null)
-                {
-                    try
-                    {
-                        addServices.Invoke(instance, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex.InnerException;
-                    }
-                }
+                LoadAssembly(asm);
             }
         }
 

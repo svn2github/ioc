@@ -159,6 +159,19 @@ namespace OpenNETCF.IoC
             }
         }
 
+        /// <summary>
+        /// Gets an existing service of a given type if it already exists in the collection.  If it does not exist, it creates and adds a new instance.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <returns></returns>
+        public TService GetOrCreate<TService>()
+            where TService : class
+        {
+            TService service = Get<TService>();
+            if (service != null) return service;
+            return AddNew<TService>();
+        }
+
         public TService Get<TService>() where TService : class
         {
             return Get<TService>(false);
@@ -168,6 +181,14 @@ namespace OpenNETCF.IoC
         {
             Type t = typeof(TService);
             return Get(t, ensureExists) as TService;
+        }
+
+        public object GetOrCreate(Type serviceType)
+        {
+            object instance = Get(serviceType, false);
+            if (instance != null) return instance;
+
+            return AddNew(serviceType);
         }
 
         public object Get(Type serviceType)

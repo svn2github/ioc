@@ -26,8 +26,11 @@ namespace OpenNETCF.IoC
 
         public DefaultModuleInfoStore()
         {
-            CatalogFilePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            CatalogFilePath = Path.Combine(m_catalogFilePath, "ProfileCatalog.xml");
+            // use a Uri because the desktop will add in the "file//:" prefix
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            path = Path.Combine(path, "ProfileCatalog.xml");
+            Uri uri = new Uri(path);
+            CatalogFilePath = uri.AbsolutePath;
         }
 
         public string GetModuleListXml()
