@@ -334,7 +334,7 @@ namespace OpenNETCF.IoC
                 foreach (var childItem in localRoot.WorkItems)
                 {
                     if (childItem.Value == instance) continue;
-                    AddEventHandlers(instance, childItem.Value);
+                    AddEventHandlers(instance, childItem.Value, false);
                 }
             }
             else

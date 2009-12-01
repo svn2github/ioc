@@ -17,13 +17,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonServiceLocator.Sample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormStackCS", "Samples\FormStackCS\FormStackCS.csproj", "{61F3374B-B582-4B2C-9F1C-52DFE22FCA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFTestRunner", "CFTestRunner\CFTestRunner.csproj", "{46C5E155-5B16-4911-8986-2E728A06DB32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{5BF9907E-75F3-4F43-8B57-406767286E1E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = OpenNETCF.IoC.Unit.Test\\OpenNETCF.IoC.Unit.Test.csproj
+		SccProjectTopLevelParentUniqueName1 = OpenNETCF.IoC.sln
 		SccProjectName1 = OpenNETCF.IoC.Unit.Test
 		SccLocalPath1 = OpenNETCF.IoC.Unit.Test
 		SccProjectUniqueName2 = OpenNETCF.IoC\\OpenNETCF.IoC.csproj
@@ -33,11 +40,17 @@ Global
 		SccProjectName3 = OpenNETCF.IoC.UI
 		SccLocalPath3 = OpenNETCF.IoC.UI
 		SccProjectUniqueName4 = Samples\\CommonServiceLocator.Sample\\CommonServiceLocator.Sample.csproj
+		SccProjectTopLevelParentUniqueName4 = OpenNETCF.IoC.sln
 		SccProjectName4 = Samples/CommonServiceLocator.Sample
 		SccLocalPath4 = Samples\\CommonServiceLocator.Sample
 		SccProjectUniqueName5 = Samples\\FormStackCS\\FormStackCS.csproj
+		SccProjectTopLevelParentUniqueName5 = OpenNETCF.IoC.sln
 		SccProjectName5 = Samples/FormStackCS
 		SccLocalPath5 = Samples\\FormStackCS
+		SccProjectUniqueName6 = CFTestRunner\\CFTestRunner.csproj
+		SccProjectTopLevelParentUniqueName6 = OpenNETCF.IoC.sln
+		SccProjectName6 = CFTestRunner
+		SccLocalPath6 = CFTestRunner
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -75,8 +88,20 @@ Global
 		{61F3374B-B582-4B2C-9F1C-52DFE22FCA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61F3374B-B582-4B2C-9F1C-52DFE22FCA58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61F3374B-B582-4B2C-9F1C-52DFE22FCA58}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46C5E155-5B16-4911-8986-2E728A06DB32}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8DA3A6C9-A491-4369-B3A4-95333AECADED} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
+		{61F3374B-B582-4B2C-9F1C-52DFE22FCA58} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
+		{46C5E155-5B16-4911-8986-2E728A06DB32} = {5BF9907E-75F3-4F43-8B57-406767286E1E}
+		{78116738-93BC-4131-A81B-817470B2CDB6} = {5BF9907E-75F3-4F43-8B57-406767286E1E}
 	EndGlobalSection
 EndGlobal
