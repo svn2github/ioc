@@ -13,6 +13,8 @@
 using OpenNETCF.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
+using System.Collections.Generic;
+using System;
 
 namespace OpenNETCF.IoC.Unit.Test
 {       
@@ -315,6 +317,67 @@ namespace OpenNETCF.IoC.Unit.Test
                 });
             services.Remove<MockTypeA>();
             Assert.IsTrue(are.WaitOne(100, false));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddNewClassDerivesFromRegisteredTypeTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew(typeof(MockTypeB), typeof(MockTypeA));
+            }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddNewClassDerivesFromRegisteredInterfaceNegativeTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew(typeof(MockTypeB), typeof(IEnumerable<object>));
+            }
+        }
+
+        [TestMethod()]
+        public void AddNewClassDerivesFromRegisteredInterfacePositiveTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew(typeof(MockTypeB), typeof(IMockType));
+            }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddClassDerivesFromRegisteredTypeTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                MockTypeB b = new MockTypeB();
+                root.Services.Add(typeof(MockTypeC), b);
+            }
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddClassDerivesFromRegisteredInterfaceNegativeTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                MockTypeB b = new MockTypeB();
+                root.Services.Add(typeof(IEnumerable<object>), b);
+            }
+        }
+
+        [TestMethod()]
+        public void AddClassDerivesFromRegisteredInterfacePositiveTest()
+        {
+            using (WorkItem root = new WorkItem())
+            {
+                MockTypeB b = new MockTypeB();
+                root.Services.Add(typeof(IMockType), b);
+            }
         }
 
     }

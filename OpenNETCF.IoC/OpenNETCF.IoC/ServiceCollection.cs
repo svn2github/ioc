@@ -48,7 +48,7 @@ namespace OpenNETCF.IoC
 
         public TService AddNew<TService, TRegisterAs>()
             where TRegisterAs : class
-            where TService : class
+            where TService : class, TRegisterAs
         {
             return (TService)AddNew(typeof(TService), typeof(TRegisterAs));
         }
@@ -67,6 +67,18 @@ namespace OpenNETCF.IoC
             if (serviceType == null) throw new ArgumentNullException("serviceType");
             if (registerAs == null) throw new ArgumentNullException("registerAs");
 
+            if (registerAs.IsInterface)
+            {
+                if (!serviceType.Implements(registerAs))
+                {
+                    throw new ArgumentException(string.Format("instance must derive from {0} to be registered as that type", registerAs.Name));
+                }
+            }
+            else if ((serviceType != registerAs) && (!serviceType.IsSubclassOf(registerAs)))
+            {
+                throw new ArgumentException(string.Format("instance must derive from {0} to be registered as that type", registerAs.Name));
+            }
+
             object instance = ObjectFactory.CreateObject(serviceType, m_root);
             Add(instance, null, serviceType, registerAs);
             return instance;
@@ -81,7 +93,7 @@ namespace OpenNETCF.IoC
 
         public void AddOnDemand<TService, TRegisterAs>() 
             where TRegisterAs : class 
-            where TService : class
+            where TService : class, TRegisterAs
         {
             Type t = typeof(TService);
             Add(null, null, t, typeof(TRegisterAs));
@@ -95,13 +107,25 @@ namespace OpenNETCF.IoC
             Add(serviceInstance, null, serviceInstance.GetType(), typeof(TService));
         }
 
-        public void Add(Type serviceType, object serviceInstance)
+        public void Add(Type registerAs, object serviceInstance)
         {
             if (serviceInstance == null) throw new ArgumentNullException("serviceInstance");
-            if (serviceType == null) throw new ArgumentNullException("serviceType");
+            if (registerAs == null) throw new ArgumentNullException("serviceType");
+
+            if (registerAs.IsInterface)
+            {
+                if (!serviceInstance.GetType().Implements(registerAs))
+                {
+                    throw new ArgumentException(string.Format("instance must derive from {0} to be registered as that type", registerAs.Name));
+                }
+            }
+            else if ((serviceInstance.GetType() != registerAs) && (!serviceInstance.GetType().IsSubclassOf(registerAs)))
+            {
+                throw new ArgumentException(string.Format("instance must derive from {0} to be registered as that type", registerAs.Name));
+            }
 
             // generate a name
-            Add(serviceInstance, null, serviceInstance.GetType(), serviceType);
+            Add(serviceInstance, null, serviceInstance.GetType(), registerAs);
         }
 
         private void Add(object instance, string name, Type classType, Type registrationType)

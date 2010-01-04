@@ -30,7 +30,7 @@ namespace OpenNETCF.IoC
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             path = Path.Combine(path, "ProfileCatalog.xml");
             Uri uri = new Uri(path);
-            CatalogFilePath = uri.AbsolutePath;
+            CatalogFilePath = uri.LocalPath;
         }
 
         public string GetModuleListXml()

@@ -88,14 +88,16 @@ namespace OpenNETCF.IoC.Unit.Test
         [TestMethod()]
         public void ServiceDependencySetterInjectionWithExistingAliasedServiceTest()
         {
-            WorkItem root = new WorkItem();
-            root.Services.AddNew<MockTypeA, IMockType>();
-            root.Items.AddNew<ServiceConsumerAI>("idb");
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew<MockTypeA, IMockType>();
+                root.Items.AddNew<ServiceConsumerAI>("idb");
 
-            ServiceConsumerAI a = root.Items["idb"] as ServiceConsumerAI;
-            Assert.IsTrue(root.Items.Contains("idb"), "WorkItem not in collection");
-            Assert.IsFalse(root.Services.Contains<MockTypeA>(), "Alias failure");
-            Assert.AreEqual(a.AService, root.Services.Get<IMockType>(), "Injected item is incorrect");
+                ServiceConsumerAI a = root.Items["idb"] as ServiceConsumerAI;
+                Assert.IsTrue(root.Items.Contains("idb"), "WorkItem not in collection");
+                Assert.IsFalse(root.Services.Contains<MockTypeA>(), "Alias failure");
+                Assert.AreEqual(a.AService, root.Services.Get<IMockType>(), "Injected item is incorrect");
+            }
         }
 
         [TestMethod()]
@@ -133,14 +135,16 @@ namespace OpenNETCF.IoC.Unit.Test
         [TestMethod()]
         public void ServiceDependencyCtorInjectionWithExistingAliasedServiceTest()
         {
-            WorkItem root = new WorkItem();
-            root.Services.AddNew<MockTypeA, IMockType>();
-            root.Items.AddNew<ServiceConsumerCI>("id");
+            using (WorkItem root = new WorkItem())
+            {
+                root.Services.AddNew<MockTypeA, IMockType>();
+                root.Items.AddNew<ServiceConsumerCI>("id");
 
-            ServiceConsumerCI svc = root.Items["id"] as ServiceConsumerCI;
-            Assert.IsTrue(root.Items.Contains("id"), "WorkItem not in collection");
-            Assert.IsFalse(root.Services.Contains<MockTypeA>(), "Alias failure");
-            Assert.AreEqual(svc.AService, root.Services.Get<IMockType>(), "Injected item is incorrect");
+                ServiceConsumerCI svc = root.Items["id"] as ServiceConsumerCI;
+                Assert.IsTrue(root.Items.Contains("id"), "WorkItem not in collection");
+                Assert.IsFalse(root.Services.Contains<MockTypeA>(), "Alias failure");
+                Assert.AreEqual(svc.AService, root.Services.Get<IMockType>(), "Injected item is incorrect");
+            }
         }
 
         [TestMethod()]
@@ -154,13 +158,14 @@ namespace OpenNETCF.IoC.Unit.Test
         [TestMethod()]
         public void ServiceDependencyCtorInjectionAutoCreateServiceTest()
         {
-            WorkItem root = new WorkItem();
-
-            root.Items.AddNew<ServiceConsumerD>("id");
-            ServiceConsumerD svc = root.Items["id"] as ServiceConsumerD;
-            Assert.IsNotNull(svc, "WorkItem creation failed");
-            Assert.IsTrue(root.Services.Contains<MockTypeB>(), "Injected service does not exist");
-            Assert.AreEqual(svc.BService, root.Services.Get<MockTypeB>(), "Injected item is incorrect");
+            using (WorkItem root = new WorkItem())
+            {
+                root.Items.AddNew<ServiceConsumerD>("id");
+                ServiceConsumerD svc = root.Items["id"] as ServiceConsumerD;
+                Assert.IsNotNull(svc, "WorkItem creation failed");
+                Assert.IsTrue(root.Services.Contains<MockTypeB>(), "Injected service does not exist");
+                Assert.AreEqual(svc.BService, root.Services.Get<MockTypeB>(), "Injected item is incorrect");
+            }
         }
     }
 }

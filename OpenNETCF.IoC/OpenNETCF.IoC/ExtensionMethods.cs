@@ -16,5 +16,15 @@ namespace OpenNETCF.IoC
 
             return baseType.GetInterfaces().Contains(typeof(TInterface));
         }
+
+        public static bool Implements(this Type instanceType, Type interfaceType)
+        {
+            if (!(interfaceType.IsInterface))
+            {
+                throw new ArgumentException("interfaceType must be an interface type.");
+            }
+
+            return instanceType.GetInterfaces().Contains(interfaceType);
+        }
     }
 }

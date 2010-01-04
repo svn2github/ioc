@@ -505,59 +505,65 @@ namespace OpenNETCF.IoC
 
                 object item = null;
 
-                // see if there is an item that matches the type
-                object[] itemList = root.Items.FindByType(pi.ParameterType).ToArray();
+                bool isServiceDependency = false;
+                bool createNewRequested = false;
 
-                if (itemList.Length == 0)
+                var attrib = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), true).FirstOrDefault();
+
+                if (attrib != null)
                 {
-                    object[] sdAttribs = pi.GetCustomAttributes(typeof(ServiceDependencyAttribute), true);
+                    isServiceDependency = true;
+                }
+                Type serviceRegiteredAsType = null;
+                if (isServiceDependency)
+                {
+                    ServiceDependencyAttribute sda = (ServiceDependencyAttribute)attrib;
+                    createNewRequested = sda.EnsureExists == true;
+                    serviceRegiteredAsType = sda.RegistrationType;
+                }
+                else
+                {
+                    createNewRequested = pi.GetCustomAttributes(typeof(CreateNewAttribute), true).Count() > 0;
+                }
 
-                    // see if it's marked with a CreateNew attribute
-                    if (pi.GetCustomAttributes(typeof(CreateNewAttribute), true).Count() > 0)
+                // check the service list
+                if (isServiceDependency)
+                {
+                    object service = root.Services.Get(serviceRegiteredAsType == null ? pi.ParameterType : serviceRegiteredAsType);
+                    if (service != null)
+                    {
+                        item = service;
+                    }
+                    else if (createNewRequested)
                     {
                         // create a new one
-                        root.Items.AddNew(pi.ParameterType);
-
-                        // now go find it
-                        itemList = root.Items.FindByType(pi.ParameterType).ToArray();
+                        item = root.Services.AddNew(pi.ParameterType);
                     }
-                    else if((sdAttribs != null) && (sdAttribs.Count() > 0))
+                    else
                     {
-                        ServiceDependencyAttribute attrib = sdAttribs[0] as ServiceDependencyAttribute;
-                        if(attrib.RegistrationType == null) attrib.RegistrationType = pi.ParameterType;
-
-                        // see if the service exists
-                        object svc = root.Services.Get(attrib.RegistrationType);
-                        if ((svc == null) && (attrib.EnsureExists))
-                        {
-                            // doesn't exist but the attribute says create it
-                            root.Services.AddNew(pi.ParameterType, attrib.RegistrationType);
-
-                            // go get the created service and pass it along
-                            svc = root.Services.Get(attrib.RegistrationType);
-                        }
-
-                        // see if we found or created the service
-                        if (svc != null)
-                        {
-                            // put the service in the array for later consumption
-                            itemList = new object[] { svc };
-                        }
-                        else
-                        {
-                            throw new ServiceMissingException(string.Format("Type '{0}' has a service dependency on type '{1}'",
-                                typeName, attrib.RegistrationType.Name));
-                        }
+                        throw new ServiceMissingException(string.Format("Type '{0}' has a service dependency on type '{1}'",
+                            typeName, pi.ParameterType.Name));
                     }
-                    
-                    if (itemList.Length == 0)
+                }
+                else // non service dependencies
+                {
+                    // see if there is an item that matches the type
+                    object[] itemList = root.Items.FindByType(pi.ParameterType).ToArray();
+
+                    if (itemList.Length != 0)
+                    {
+                        item = itemList[0];
+                    }
+                    else if (createNewRequested)
+                    {
+                        item = root.Items.AddNew(pi.ParameterType);
+                    }
+                    else
                     {
                         throw new ArgumentException(string.Format("Injection on type '{0}' requires an item of type '{1}'",
                             typeName, pi.ParameterType.Name));
                     }
                 }
-
-                item = itemList[0];
 
                 paramObjects.Add(item);
             }
