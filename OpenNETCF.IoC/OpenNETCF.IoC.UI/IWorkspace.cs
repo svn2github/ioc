@@ -28,6 +28,7 @@ namespace OpenNETCF.IoC.UI
         void Hide(ISmartPart smartPart);
         void Close(ISmartPart smartPart);
         void Activate(ISmartPart smartPart);
+        void Deactivate(ISmartPart smartPart);
 
         ISmartPart ActiveSmartPart { get; }
         SmartPartCollection SmartParts { get; }

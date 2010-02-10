@@ -20,7 +20,8 @@ namespace OpenNETCF.IoC.UI
 {
     public interface ISmartPart : IDisposable
     {
-//        SmartPartInfo SmartPartInfo { get; set; }
+        event EventHandler<GenericEventArgs<bool>> VisibleChanged;
+
         bool Visible { get;  set; }
         bool Focused { get; }
         void BringToFront();
@@ -30,5 +31,9 @@ namespace OpenNETCF.IoC.UI
         Control Parent { get; }
         bool Enabled { get; set; }
         void OnActivated();
+        void OnDeactivated();
+        void Show();
+        void Hide();
+        IWorkspace Workspace { get; }
     }
 }

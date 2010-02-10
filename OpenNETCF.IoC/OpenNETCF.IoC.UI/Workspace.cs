@@ -36,7 +36,7 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
             
-            OnShow(smartPart);
+            OnShow(smartPart);            
         }
 
         protected virtual void OnShow(ISmartPart smartPart)
@@ -48,10 +48,31 @@ namespace OpenNETCF.IoC.UI
 
             if (!SmartParts.Contains(smartPart))
             {
+                (smartPart as SmartPart).Workspace = this;
                 SmartParts.Add(smartPart);
                 this.Controls.Add(control);
+                Activate(smartPart);
+                smartPart.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(smartPart_VisibleChanged);
             }
-            Activate(smartPart);
+            else
+            {
+                Activate(smartPart);
+            }
+        }
+
+        void smartPart_VisibleChanged(object sender, GenericEventArgs<bool> e)
+        {
+            var smartPart = sender as ISmartPart;
+            if(e.Value)
+            {
+                RaiseSmartPartActivated(smartPart);
+                smartPart.OnActivated();
+            }
+            else
+            {
+                RaiseSmartPartDeactivated(smartPart);
+                smartPart.OnDeactivated();
+            }
         }
 
         public void Hide(ISmartPart smartPart)
@@ -69,7 +90,7 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            smartPart.Visible = false;
+            Deactivate(smartPart);
         }
 
         public void Close(ISmartPart smartPart)
@@ -112,20 +133,57 @@ namespace OpenNETCF.IoC.UI
 
             OnActivate(smartPart);
 
+            InternalActivate(smartPart);
             RaiseSmartPartActivated(smartPart);
-            smartPart.OnActivated();
         }
 
         protected virtual void OnActivate(ISmartPart smartPart)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            smartPart.Visible = true;
+            if (!smartPart.Visible)
+            {
+                smartPart.Visible = true;
+            }
+
             smartPart.BringToFront();
             smartPart.Focus();
         }
 
-        protected void RaiseSmartPartActivated(ISmartPart smartPart)
+        public void Deactivate(ISmartPart smartPart)
+        {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
+            CheckSmartPartExists(smartPart);
+
+            OnDeactivate(smartPart);
+
+            InternalDeactivate(smartPart);
+        }
+
+        internal void InternalDeactivate(ISmartPart smartPart)
+        {
+            RaiseSmartPartDeactivated(smartPart);
+            smartPart.OnDeactivated();
+        }
+
+        internal void InternalActivate(ISmartPart smartPart)
+        {
+            RaiseSmartPartActivated(smartPart);
+            smartPart.OnActivated();
+        }
+
+        protected virtual void OnDeactivate(ISmartPart smartPart)
+        {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
+            if (smartPart.Visible)
+            {
+                smartPart.Visible = false;
+            }
+        }
+
+        protected internal void RaiseSmartPartActivated(ISmartPart smartPart)
         {
             if (SmartPartActivated == null) return;
 
@@ -173,6 +231,10 @@ namespace OpenNETCF.IoC.UI
                 int left = (int)(this.Width - size.Width) / 2;
                 int top = (int)(this.Height - size.Height) / 2;
                 e.Graphics.DrawString(text, this.Font, new SolidBrush(c), left, top);
+            }
+            else
+            {
+                base.OnPaintBackground(e);
             }
         }
 
