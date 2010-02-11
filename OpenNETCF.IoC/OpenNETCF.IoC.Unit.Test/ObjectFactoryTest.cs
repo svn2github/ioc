@@ -42,13 +42,13 @@ namespace OpenNETCF.IoC.Unit.Test
         public void GetEventSinksFromTypeByNameTest()
         {
             Type type = typeof(MockEventSink);
-            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event A").Length,
+            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event A", ThreadOption.Caller).Length,
                 "Unexpected number of methods returned");
 
-            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event B").Length,
+            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event B", ThreadOption.Caller).Length,
                 "Unexpected number of methods returned");
 
-            Assert.AreEqual(0, ObjectFactory.GetEventSinksFromTypeByName(type, "Unknown").Length,
+            Assert.AreEqual(0, ObjectFactory.GetEventSinksFromTypeByName(type, "Unknown", ThreadOption.Caller).Length,
                 "Unexpected number of methods returned");
         }
 
@@ -129,7 +129,7 @@ namespace OpenNETCF.IoC.Unit.Test
             Assert.AreEqual<int>(preCache.Length, postCache.Length, "Lengths not equal");
             Assert.AreEqual<int>(0, preCache.Except(postCache).Count(), "preCache contains values not in postCache");
             Assert.AreEqual<int>(0, postCache.Except(preCache).Count(), "postCache contains values not in preCache");
-            //Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
 
             // uncomment to see actual times
             // Assert.Fail(string.Format("{0} {1}", et1, et2));
@@ -149,7 +149,7 @@ namespace OpenNETCF.IoC.Unit.Test
             Assert.AreEqual<int>(preCache.Length, postCache.Length, "Lengths not equal");
             Assert.AreEqual<int>(0, preCache.Except(postCache).Count(), "preCache contains values not in postCache");
             Assert.AreEqual<int>(0, postCache.Except(preCache).Count(), "postCache contains values not in preCache");
-            //Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
+            Assert.IsTrue(et2 < et1, "Cached retrieval was not faster");
 
             // uncomment to see actual times
             // Assert.Fail(string.Format("{0} {1}", et1, et2));

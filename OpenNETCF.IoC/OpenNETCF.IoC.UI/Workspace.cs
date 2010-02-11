@@ -51,6 +51,7 @@ namespace OpenNETCF.IoC.UI
                 (smartPart as SmartPart).Workspace = this;
                 SmartParts.Add(smartPart);
                 this.Controls.Add(control);
+                smartPart.OnActivated();
                 Activate(smartPart);
                 smartPart.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(smartPart_VisibleChanged);
             }
@@ -132,9 +133,6 @@ namespace OpenNETCF.IoC.UI
             CheckSmartPartExists(smartPart);
 
             OnActivate(smartPart);
-
-            InternalActivate(smartPart);
-            RaiseSmartPartActivated(smartPart);
         }
 
         protected virtual void OnActivate(ISmartPart smartPart)
@@ -145,6 +143,12 @@ namespace OpenNETCF.IoC.UI
             {
                 smartPart.Visible = true;
             }
+            else
+            {
+                smartPart.OnActivated();
+            }
+
+            RaiseSmartPartActivated(smartPart);
 
             smartPart.BringToFront();
             smartPart.Focus();
@@ -157,20 +161,6 @@ namespace OpenNETCF.IoC.UI
             CheckSmartPartExists(smartPart);
 
             OnDeactivate(smartPart);
-
-            InternalDeactivate(smartPart);
-        }
-
-        internal void InternalDeactivate(ISmartPart smartPart)
-        {
-            RaiseSmartPartDeactivated(smartPart);
-            smartPart.OnDeactivated();
-        }
-
-        internal void InternalActivate(ISmartPart smartPart)
-        {
-            RaiseSmartPartActivated(smartPart);
-            smartPart.OnActivated();
         }
 
         protected virtual void OnDeactivate(ISmartPart smartPart)
@@ -181,6 +171,11 @@ namespace OpenNETCF.IoC.UI
             {
                 smartPart.Visible = false;
             }
+            else
+            {
+                smartPart.OnDeactivated();
+            }
+            RaiseSmartPartDeactivated(smartPart);            
         }
 
         protected internal void RaiseSmartPartActivated(ISmartPart smartPart)

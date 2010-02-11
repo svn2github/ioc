@@ -24,6 +24,16 @@ namespace OpenNETCF.IoC.Unit.Test
         public TestContext TestContext { get; set; }
 
         [TestMethod()]
+        [Description("Ensures ...")]
+        [ExpectedExceptionAttribute(typeof(ArgumentException))]
+        public void WorkDuplicateNameTest()
+        {
+            WorkItem parent = new WorkItem();
+            WorkItem child = parent.Items.AddNew<WorkItem>("child");
+            WorkItem dupe = parent.Items.AddNew<WorkItem>("child");
+        }
+
+        [TestMethod()]
         [Description("Ensures that when a child is added via AddNew with an ID, the Parent property gets set")]
         public void WorkItemAddNewWithIDParentTest()
         {

@@ -36,6 +36,9 @@ namespace OpenNETCF.IoC.UI
                 storeService.LoadModulesFromStore(store);
             }
 
+            // add a generic "control" to the Items list.
+            RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
+
             TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
             OnApplicationRun(shellForm);
         }

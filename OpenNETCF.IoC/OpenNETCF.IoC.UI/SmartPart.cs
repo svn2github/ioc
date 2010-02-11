@@ -45,6 +45,8 @@ namespace OpenNETCF.IoC.UI
             get { return base.Visible; }
             set
             {
+                if (Visible == value) return;
+
                 base.Visible = value;
                 RaiseVisibleChanged(Visible);
             }

@@ -24,7 +24,10 @@ namespace OpenNETCF.IoC.UI
         protected override void OnShow(ISmartPart smartPart)
         {
             ISmartPart current = ActiveSmartPart;
-            if (current != null) current.Visible = false;
+            if ((current != null) && (smartPart != current))
+            {
+                current.Visible = false;
+            }
             smartPart.Dock = DockStyle.Fill;
             base.OnShow(smartPart);
         }

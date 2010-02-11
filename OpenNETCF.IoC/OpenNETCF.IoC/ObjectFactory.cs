@@ -159,12 +159,13 @@ namespace OpenNETCF.IoC
 
         }
 
-        internal static MethodInfo[] GetEventSinksFromTypeByName(Type type, string eventName)
+        internal static MethodInfo[] GetEventSinksFromTypeByName(Type type, string eventName, ThreadOption option)
         {
             if (m_subscriptionDescriptorCache.ContainsKey(type))
             {
                 return (from e in m_subscriptionDescriptorCache[type]
                         where e.Subscription.EventName == eventName
+                        && e.Subscription.ThreadOption == option
                         select e.MethodInfo).ToArray();
             }
             else
@@ -173,90 +174,17 @@ namespace OpenNETCF.IoC
                         where
                     (from a in e.GetCustomAttributes(typeof(EventSubscription), true) as EventSubscription[]
                      where a.EventName == eventName
+                     && a.ThreadOption == option
                      select a).Count() > 0
                             select e).ToArray();
-            }
-        }
-
-        private static void AddItemEventHandlers(object instance, WorkItem root, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
-        {
-            foreach (var item in root.Items)
-            {
-                foreach (var source in sourceEvents)
-                {
-                    // wire up events
-                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
-                    {
-                        Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
-                        source.EventInfo.AddEventHandler(instance, d);
-                    }
-                }
-
-                // back-wire any sinks
-                foreach (var sink in eventSinks)
-                {
-                    foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
-                    {
-                        // (type, consumer instance, consumer method)
-                        try
-                        {
-                            Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
-                            ei.AddEventHandler(item.Value, d);
-                        }
-                        catch (ArgumentException)
-                        {
-                            throw new ArgumentException(string.Format("Unable to attach EventHandler '{0}' to '{1}'.\r\nDo the publisher and subscriber signatures match?", ei.Name, instance.GetType().Name));
-                        }
-                    }
-                }
-            }
-        }
-
-        private static void AddServiceEventHandlers(object instance, WorkItem root, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
-        {
-            foreach (var item in root.Services)
-            {
-                if (item.Value == null)
-                {
-                    // TODO: this will happen if a dependency was created with AddOnDemand.  We need to resolve this, but doing so without getting into a 
-                    //       recursive stack overflow is not simple.  For now we'll just throw an exception and the developer will have to use AddNew instead.
-                    throw new ServiceMissingException(item.Key.ToString());
-                }
-
-                foreach (var source in sourceEvents)
-                {
-                    // wire up events
-                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
-                    {
-                        Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
-                        source.EventInfo.AddEventHandler(instance, d);
-
-                    }
-                }
-
-                // back-wire any sinks
-                foreach (var sink in eventSinks)
-                {
-                    foreach (var ei in GetEventSourcesFromTypeByName(item.Value.GetType(), sink.Subscription.EventName))
-                    {
-                        // (type, consumer instance, consumer method)
-                        try
-                        {
-                            Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
-                            ei.AddEventHandler(item.Value, d);
-                        }
-                        catch (ArgumentException)
-                        {
-                            throw new ArgumentException(string.Format("Unable to attach EventHandler '{0}' to '{1}'.\r\nDo the publisher and subscriber signatures match?", ei.Name, instance.GetType().Name));
-                        }
-                    }
-                }
             }
         }
 
         private static void AddCollectionEventHandlers<TKey, TItem>(object instance, IEnumerable<KeyValuePair<TKey, TItem>> collection, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
         {
             if (collection == null) return;
+
+            Control invokerControl = RootWorkItem.Items.Get<Control>("IOCEventInvoker");
 
             foreach (var item in collection)
             {
@@ -265,8 +193,20 @@ namespace OpenNETCF.IoC
                 foreach (var source in sourceEvents)
                 {
                     // wire up events
-                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName))
+                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName, ThreadOption.Caller))
                     {
+                        Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
+                        source.EventInfo.AddEventHandler(instance, d);
+                    }
+
+                    foreach (var sink in GetEventSinksFromTypeByName(item.Value.GetType(), source.Publication.EventName, ThreadOption.UserInterface))
+                    {
+                        // TODO: wire up event handlers on the UI thread
+                        // I'm beginning to think that this can't be done without Emit...
+
+                        // this was created on the UI thread
+                        // invokerControl
+
                         Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
                         source.EventInfo.AddEventHandler(instance, d);
                     }
@@ -281,7 +221,19 @@ namespace OpenNETCF.IoC
                         {
                             // (type, consumer instance, consumer method)
                             Delegate d = Delegate.CreateDelegate(ei.EventHandlerType, instance, sink.MethodInfo);
-                            ei.AddEventHandler(item.Value, d);
+                            if (sink.Subscription.ThreadOption == ThreadOption.Caller)
+                            {
+                                ei.AddEventHandler(item.Value, d);
+                            }
+                            else
+                            {
+                                // TODO: wire up event handlers on the UI thread
+                                // I'm beginning to think that this can't be done without Emit...
+
+                                // this was created on the UI thread
+                                // invokerControl
+                                ei.AddEventHandler(item.Value, d);
+                            }
                         }
                         catch (ArgumentException)
                         {
@@ -297,7 +249,7 @@ namespace OpenNETCF.IoC
                 }
             }
         }
-
+    
         internal static void AddEventHandlers(object instance, WorkItem root)
         {
             AddEventHandlers(instance, root, true);
