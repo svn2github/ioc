@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.Desktop", "OpenNETCF.IoC\OpenNETCF.IoC.Desktop.csproj", "{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.UI.Desktop", "OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.Desktop.csproj", "{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs10.codeplex.com/
+		SccProjectUniqueName0 = OpenNETCF.IoC\\OpenNETCF.IoC.Desktop.csproj
+		SccProjectName0 = OpenNETCF.IoC
+		SccLocalPath0 = OpenNETCF.IoC
+		SccProjectUniqueName1 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.Desktop.csproj
+		SccProjectName1 = OpenNETCF.IoC.UI
+		SccLocalPath1 = OpenNETCF.IoC.UI
+		SccLocalPath2 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
