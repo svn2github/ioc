@@ -52,5 +52,20 @@ namespace OpenNETCF.IoC.UI
             }
         }
 
+        private void InitializeComponent()
+        {
+#if !WindowsCE
+            this.SuspendLayout();
+            // 
+            // SmartPart
+            // 
+            this.DoubleBuffered = true;
+            this.Name = "SmartPart";
+            this.ResumeLayout(false);
+
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+#endif
+        }
+
     }
 }

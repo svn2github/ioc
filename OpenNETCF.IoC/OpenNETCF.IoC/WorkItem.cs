@@ -15,6 +15,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using OpenNETCF.IoC.UI;
+using System.Threading;
 
 namespace OpenNETCF.IoC
 {
@@ -24,8 +26,17 @@ namespace OpenNETCF.IoC
         {
             WorkItems = new ManagedObjectCollection<WorkItem>(this);
             Items = new ManagedObjectCollection<object>(this);
+            SmartParts = new ManagedObjectCollection<ISmartPart>(this);
+            Workspaces = new ManagedObjectCollection<IWorkspace>(this);
             Services = new ServiceCollection(this);
+
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                OnBuiltUp();
+            });
         }
+
+        public virtual void OnBuiltUp() { }
 
         public WorkItem Parent { get; internal set; }
 
@@ -43,6 +54,10 @@ namespace OpenNETCF.IoC
         /// The Services collection contains Components unique by registered type.  Only one Service of a given registering type can exist in the collection.
         /// </summary>
         public ServiceCollection Services { get; private set; }
+
+        public ManagedObjectCollection<ISmartPart> SmartParts { get; private set; }
+
+        public ManagedObjectCollection<IWorkspace> Workspaces { get; private set; }
 
         private bool m_disposed = false;
 
@@ -62,6 +77,21 @@ namespace OpenNETCF.IoC
                 }
 
                 m_disposed = true;
+            }
+        }
+
+        public WorkItem RootWorkItem
+        {
+            get
+            {
+                WorkItem root = this;
+
+                while(root.Parent != null)
+                {
+                    root = root.Parent;
+                }
+
+                return root;
             }
         }
     }

@@ -67,17 +67,16 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IPresenter.cs" />
-    <Compile Include="IWorkspace.cs">
-    </Compile>
+    <Compile Include="ISmartPartInfoProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ISmartPart.cs">
-    </Compile>
     <Compile Include="SmartClientApplication.cs" />
     <Compile Include="SmartPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="SmartPartAttribute.cs" />
     <Compile Include="SmartPartCollection.cs" />
     <Compile Include="SmartPartInfo.cs" />
+    <Compile Include="TabSmartPartInfo.cs" />
     <Compile Include="TabWorkspace.cs">
       <SubType>Component</SubType>
     </Compile>

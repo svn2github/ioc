@@ -21,7 +21,7 @@ namespace OpenNETCF.IoC.UI
 {
     public class DeckWorkspace : Workspace
     {
-        protected override void OnShow(ISmartPart smartPart)
+        protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
             ISmartPart current = ActiveSmartPart;
             if ((current != null) && (smartPart != current))
@@ -29,7 +29,7 @@ namespace OpenNETCF.IoC.UI
                 current.Visible = false;
             }
             smartPart.Dock = DockStyle.Fill;
-            base.OnShow(smartPart);
+            base.OnShow(smartPart, smartPartInfo);
         }
 
         public override ISmartPart ActiveSmartPart

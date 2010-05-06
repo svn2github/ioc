@@ -190,6 +190,11 @@ namespace OpenNETCF.IoC
             {
                 if (item.Value.Equals(instance)) continue;
 
+                if((item.Value is WorkItem) && (collection is ServiceCollection))
+                {
+                    continue;
+                }
+
                 foreach (var source in sourceEvents)
                 {
                     // wire up events

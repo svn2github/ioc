@@ -30,22 +30,53 @@ namespace OpenNETCF.IoC.UI
         {
             // load up the profile catalog here
             IModuleInfoStore store = GetModuleInfoStore();
+
             ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
-            if (store != null)
-            {
-                storeService.LoadModulesFromStore(store);
-            }
 
             // add a generic "control" to the Items list.
             RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
 
             TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
+
+            if (store != null)
+            {
+                storeService.LoadModulesFromStore(store);
+            }
+
+            AfterShellCreated();
+
+            OnApplicationRun(shellForm);
+        }
+
+        public void Start(string profileCatalog)
+        {
+            // load up the profile catalog here
+            IModuleInfoStore store = new DefaultModuleInfoStore(profileCatalog);
+
+            ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
+
+            // add a generic "control" to the Items list.
+            RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
+
+            TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
+
+            if (store != null)
+            {
+                storeService.LoadModulesFromStore(store);
+            }
+
+            AfterShellCreated();
+
             OnApplicationRun(shellForm);
         }
 
         public virtual IModuleInfoStore GetModuleInfoStore()
         {
             return new DefaultModuleInfoStore();
+        }
+
+        protected virtual void AfterShellCreated()
+        {
         }
 
         /// <summary>

@@ -78,18 +78,24 @@
     <Compile Include="Guard.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IModule.cs">
+    <Compile Include="Interfaces\IModule.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IModuleInfoStore.cs">
+    <Compile Include="Interfaces\IModuleInfoStore.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\ISmartPart.cs" />
+    <Compile Include="Interfaces\ISmartPartCollection.cs" />
+    <Compile Include="Interfaces\ISmartPartInfo.cs" />
+    <Compile Include="Interfaces\IWorkItemController.cs" />
+    <Compile Include="Interfaces\IWorkspace.cs" />
     <Compile Include="ModuleInfoStoreService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ModuleInit.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PublicationScope.cs" />
     <Compile Include="RootWorkItem.cs" />
     <Compile Include="ManagedObjectCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,6 +111,7 @@
     <Compile Include="WorkItem.cs" />
     <Compile Include="ServiceCollection.cs" />
     <Compile Include="ObjectFactory.cs" />
+    <Compile Include="WorkItemController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

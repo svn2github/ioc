@@ -17,7 +17,7 @@ using System.Text;
 
 namespace OpenNETCF.IoC.UI
 {
-    public class SmartPartInfo
+    public class SmartPartInfo : ISmartPartInfo
     {
         public string Title { get; set; }
         public string Description { get; set; }

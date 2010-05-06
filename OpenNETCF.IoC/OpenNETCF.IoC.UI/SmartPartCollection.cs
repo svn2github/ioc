@@ -17,7 +17,7 @@ using System.Text;
 
 namespace OpenNETCF.IoC.UI
 {
-    public class SmartPartCollection : IEnumerable<ISmartPart>
+    public class SmartPartCollection : ISmartPartCollection
     {
         private List<ISmartPart> m_smartParts = new List<ISmartPart>();
 
@@ -48,5 +48,11 @@ namespace OpenNETCF.IoC.UI
         {
             return m_smartParts.GetEnumerator();
         }
+
+        public int Count
+        {
+            get { return m_smartParts.Count; }
+        }
+
     }
 }

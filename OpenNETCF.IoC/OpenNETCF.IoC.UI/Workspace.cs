@@ -19,27 +19,38 @@ using System.Drawing;
 
 namespace OpenNETCF.IoC.UI
 {
-    public abstract class Workspace : ContainerControl, IWorkspace
+    public class Workspace : ContainerControl, IWorkspace
     {
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartActivated;
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartDeactivated;
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartClosing;
 
+        private SmartPartCollection m_smartParts;
+
         public Workspace()
         {
-            SmartParts = new SmartPartCollection();
+            m_smartParts = new SmartPartCollection();
         }
 
-        public SmartPartCollection SmartParts { get; private set; }
+        public ISmartPartCollection SmartParts 
+        {
+            get { return m_smartParts; }
+        }
 
         public void Show(ISmartPart smartPart)
         {
-            if (smartPart == null) throw new ArgumentNullException("smartPart");
-            
-            OnShow(smartPart);            
+            this.Show(smartPart, null);
         }
 
-        protected virtual void OnShow(ISmartPart smartPart)
+        public void Show(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
+        {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+            
+            OnShow(smartPart, smartPartInfo);
+        }
+
+        
+        protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
@@ -49,7 +60,7 @@ namespace OpenNETCF.IoC.UI
             if (!SmartParts.Contains(smartPart))
             {
                 (smartPart as SmartPart).Workspace = this;
-                SmartParts.Add(smartPart);
+                m_smartParts.Add(smartPart);
                 this.Controls.Add(control);
                 smartPart.OnActivated();
                 Activate(smartPart);
@@ -115,7 +126,7 @@ namespace OpenNETCF.IoC.UI
             RaiseSmartPartClosing(smartPart);
 
             this.Controls.Remove(control);
-            SmartParts.Remove(smartPart);
+            m_smartParts.Remove(smartPart);
             smartPart.Dispose();
         }
 

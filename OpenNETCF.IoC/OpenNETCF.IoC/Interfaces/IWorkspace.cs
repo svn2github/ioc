@@ -25,12 +25,13 @@ namespace OpenNETCF.IoC.UI
         event EventHandler<DataEventArgs<ISmartPart>> SmartPartClosing;
 
         void Show(ISmartPart smartPart);
+        void Show(ISmartPart smartPart, ISmartPartInfo smartPartInfo);
         void Hide(ISmartPart smartPart);
         void Close(ISmartPart smartPart);
         void Activate(ISmartPart smartPart);
         void Deactivate(ISmartPart smartPart);
 
         ISmartPart ActiveSmartPart { get; }
-        SmartPartCollection SmartParts { get; }
+        ISmartPartCollection SmartParts { get; }
     }
 }

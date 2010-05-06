@@ -20,13 +20,16 @@ namespace OpenNETCF.IoC.UI
 {
     public class TabWorkspace : Workspace
     {
-        TabControl m_tabs;
-        List<TabInfo> m_smartParts;
+        public event EventHandler SelectedIndexChanged; 
+
+        private TabControl m_tabs;
+        private List<TabInfo> m_smartPartTabs;
 
         private class TabInfo
         {
             public TabPage Page { get; set; }
             public ISmartPart SmartPart { get; set; }
+            public ISmartPartInfo SmartPartInfo { get; set; }
         }
 
         public TabWorkspace()
@@ -34,20 +37,32 @@ namespace OpenNETCF.IoC.UI
             m_tabs = new TabControl();
             this.Controls.Add(m_tabs);
             m_tabs.Dock = DockStyle.Fill;
+            m_tabs.SelectedIndexChanged += new EventHandler(m_tabs_SelectedIndexChanged);
 
-            m_smartParts = new List<TabInfo>();
+            DesktopSetup();
+
+            m_smartPartTabs = new List<TabInfo>();
         }
+
+        private void m_tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var handler = SelectedIndexChanged;
+            if (handler == null) return;
+
+            handler(this, e);
+        }
+
 
         protected override void OnActivate(ISmartPart smartPart)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            ShowTab(smartPart, false);
+            ShowTab(smartPart, null, false);
         }
 
         protected override void OnClose(ISmartPart smartPart)
         {
-            TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
+            TabInfo ti = m_smartPartTabs.Find(t => t.SmartPart == smartPart);
 
             if (ti == null) throw new Exception("Tab not found");
 
@@ -56,13 +71,13 @@ namespace OpenNETCF.IoC.UI
             m_tabs.TabPages.RemoveAt(index);
 
             RaiseSmartPartClosing(smartPart);
-            m_smartParts.Remove(ti);
+            m_smartPartTabs.Remove(ti);
             ti.Page.Dispose();
         }
 
         protected override void OnHide(ISmartPart smartPart)
         {
-            TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
+            TabInfo ti = m_smartPartTabs.Find(t => t.SmartPart == smartPart);
 
             if (ti == null) throw new Exception("Tab not found");
 
@@ -71,9 +86,9 @@ namespace OpenNETCF.IoC.UI
             m_tabs.TabPages.RemoveAt(index);
         }
 
-        protected override void OnShow(ISmartPart smartPart)
+        protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
-            ShowTab(smartPart, true);
+            ShowTab(smartPart, smartPartInfo, true);
         }
 
         public void SelectTab(int index)
@@ -85,9 +100,9 @@ namespace OpenNETCF.IoC.UI
             }
         }
 
-        private void ShowTab(ISmartPart smartPart, bool createIfNew)
+        private void ShowTab(ISmartPart smartPart, ISmartPartInfo smartPartInfo, bool createIfNew)
         {
-            TabInfo ti = m_smartParts.Find(t => t.SmartPart == smartPart);
+            TabInfo ti = m_smartPartTabs.Find(t => t.SmartPart == smartPart);
 
             if (ti == null)
             {
@@ -97,14 +112,15 @@ namespace OpenNETCF.IoC.UI
                 }
 
                 TabPage page = new TabPage();
-                page.Text = smartPart.Name;
+                page.Text = smartPartInfo == null ? smartPart.Name : smartPartInfo.Title;
                 smartPart.Dock = DockStyle.Fill;
                 page.ClientRectangle.Inflate(-2, -2);
                 page.Controls.Add((Control)smartPart);
                 m_tabs.TabPages.Add(page);
 
-                ti = new TabInfo { Page = page, SmartPart = smartPart };
-                m_smartParts.Add(ti);
+                ti = new TabInfo { Page = page, SmartPart = smartPart, SmartPartInfo = smartPartInfo };
+                
+                m_smartPartTabs.Add(ti);
             }
             int index = m_tabs.TabPages.IndexOf(ti.Page);
             if (index < 0)
@@ -116,6 +132,66 @@ namespace OpenNETCF.IoC.UI
 
             RaiseSmartPartActivated(smartPart);
             smartPart.OnActivated();
+        }
+
+        public virtual void ClearTabs()
+        {
+        }
+
+        public System.Windows.Forms.TabControl.TabPageCollection TabPages
+        {
+            get { return m_tabs.TabPages; }
+        }
+
+        public TabPage SelectedTab
+        {
+            get 
+            {
+#if WindowsCE
+                return m_tabs.TabPages[m_tabs.SelectedIndex];
+#else
+                return m_tabs.SelectedTab; 
+#endif
+            }
+        }
+
+        public int SelectedIndex
+        {
+            get { return m_tabs.SelectedIndex; }
+            set { m_tabs.SelectedIndex = value; }
+        }
+#if !WindowsCE
+        public event DrawItemEventHandler DrawItem;
+
+        public TabDrawMode DrawMode
+        {
+            get { return m_tabs.DrawMode; }
+            set { m_tabs.DrawMode = value; }
+        }
+
+        public TabSizeMode SizeMode
+        {
+            get { return m_tabs.SizeMode; }
+            set { m_tabs.SizeMode = value; }
+        }
+
+        private void m_tabs_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var handler = DrawItem;
+            if (handler == null) return;
+
+            handler(sender, e);
+        }
+
+#endif
+        private void DesktopSetup()
+        {
+#if !WindowsCE
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
+            m_tabs.DrawItem += new DrawItemEventHandler(m_tabs_DrawItem);
+#endif
         }
     }
 }

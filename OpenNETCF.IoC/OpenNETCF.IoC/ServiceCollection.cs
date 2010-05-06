@@ -30,6 +30,16 @@ namespace OpenNETCF.IoC
         internal ServiceCollection(WorkItem root)
         {
             m_root = root;
+
+            ComponentDescriptor descriptor = new ComponentDescriptor
+            {
+                ClassType = m_root.GetType(),
+                Instance = m_root,
+                Name = "WorkItem",
+                RegistrationType = m_root.GetType()
+            };
+
+            m_services.Add(descriptor);
         }
 
         internal int GetInstanciatedServiceCount()
@@ -332,6 +342,8 @@ namespace OpenNETCF.IoC
             {
                 this.Remove(vals[i]);
             }
+
+            m_services.Clear();
         }
 
         public override string ToString()

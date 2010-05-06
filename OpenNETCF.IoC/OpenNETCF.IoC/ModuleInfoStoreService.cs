@@ -33,6 +33,8 @@ namespace OpenNETCF.IoC
 
     public sealed class ModuleInfoStoreService
     {
+        public event EventHandler<GenericEventArgs<string>> ModuleLoaded;
+
         List<IModuleInfo> m_loadedModules = new List<IModuleInfo>();
 
         internal ModuleInfoStoreService()
@@ -73,9 +75,11 @@ namespace OpenNETCF.IoC
 
             if (imodule == null) return;
 
-            object instance = Activator.CreateInstance(imodule);
+            object instance = ObjectFactory.CreateObject(imodule, RootWorkItem.Instance);
 
-            m_loadedModules.Add(new ModuleInfo { AssemblyFile = assembly.GetName().CodeBase });
+            var assemblyName = assembly.GetName();
+
+            m_loadedModules.Add(new ModuleInfo { AssemblyFile = assemblyName.CodeBase });
 
             var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
             if (loadMethod != null)
@@ -102,6 +106,16 @@ namespace OpenNETCF.IoC
                     throw ex.InnerException;
                 }
             }
+
+            RaiseModuleLoaded(assemblyName.Name);
+        }
+
+        private void RaiseModuleLoaded(string moduleName)
+        {
+            EventHandler<GenericEventArgs<string>> handler = ModuleLoaded;
+            if (handler == null) return;
+
+            handler(this, new GenericEventArgs<string>(moduleName));
         }
 
         private void LoadAssemblies(IEnumerable<string> assemblyNames)
@@ -109,12 +123,15 @@ namespace OpenNETCF.IoC
             Guard.ArgumentNotNull(assemblyNames, "assemblyNames");
 
             string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            Uri pathasURI = new Uri(rootFolder);
+
             Assembly asm;
 
             foreach (var s in assemblyNames)
             {
                 asm = null;
-                FileInfo fi = new FileInfo(Path.Combine(rootFolder, s));
+
+                FileInfo fi = new FileInfo(Path.Combine(pathasURI.LocalPath, s));
 
                 if (fi.Exists)
                 {

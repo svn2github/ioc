@@ -22,4 +22,15 @@ namespace OpenNETCF.IoC.UI
     {
         void Run();
     }
+
+    public class Presenter<TView>
+    {
+        public TView View { get; set; }
+        public virtual void OnViewReady()
+        {
+        }
+        public virtual void OnCloseView()
+        {
+        }
+    }
 }

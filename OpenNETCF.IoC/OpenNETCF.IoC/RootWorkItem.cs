@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using OpenNETCF.IoC.UI;
 
 namespace OpenNETCF.IoC
 {
@@ -34,6 +35,16 @@ namespace OpenNETCF.IoC
         public static ManagedObjectCollection<object> Items 
         {
             get { return m_workItem.Items; }
+        }
+        
+        public static ManagedObjectCollection<ISmartPart> SmartParts
+        {
+            get { return m_workItem.SmartParts; }
+        }
+
+        public static ManagedObjectCollection<IWorkspace> Workspaces
+        {
+            get { return m_workItem.Workspaces; }
         }
         
         public static ServiceCollection Services

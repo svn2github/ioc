@@ -191,7 +191,7 @@ namespace OpenNETCF.IoC
             return default(TTypeToGet);
         }
 
-        public object this[string id]
+        public TItem this[string id]
         {
             get { return this.Get(id); }
         }

@@ -56,15 +56,22 @@ namespace OpenNETCF.IoC
     [AttributeUsage(AttributeTargets.Event)]
     public sealed class EventPublication : Attribute
     {
-        public EventPublication(string eventName)
+        public EventPublication(string eventName, PublicationScope scope)
         {
             if(eventName == null) throw new ArgumentNullException();
             if(eventName == string.Empty) throw new ArgumentException();
 
             this.EventName = eventName;
+            this.PublicationScope = scope;
+        }
+
+        public EventPublication(string eventName)
+            : this(eventName, PublicationScope.Global)
+        {
         }
 
         public string EventName { get; set; }    
+        public PublicationScope PublicationScope { get; set; }
     }
 
     public enum ThreadOption

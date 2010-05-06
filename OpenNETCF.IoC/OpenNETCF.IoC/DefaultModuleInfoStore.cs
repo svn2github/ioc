@@ -33,6 +33,15 @@ namespace OpenNETCF.IoC
             CatalogFilePath = uri.LocalPath;
         }
 
+        public DefaultModuleInfoStore(string profilePath)
+        {
+            // use a Uri because the desktop will add in the "file//:" prefix
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            path = Path.Combine(path, profilePath);
+            Uri uri = new Uri(path);
+            CatalogFilePath = uri.LocalPath;
+        }
+
         public string GetModuleListXml()
         {
             try
@@ -48,7 +57,7 @@ namespace OpenNETCF.IoC
                     return reader.ReadToEnd();
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return null;
             }
