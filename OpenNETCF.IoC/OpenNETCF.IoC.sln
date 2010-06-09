@@ -26,9 +26,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkspaceDisposal", "Sample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventMarshalTest", "Samples\EventMarshalTest\EventMarshalTest.csproj", "{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuIntegration", "Samples\MenuIntegration\MenuIntegration.csproj", "{39C2F3B6-6634-4F7C-8E69-B395501736DD}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -62,6 +64,10 @@ Global
 		SccProjectTopLevelParentUniqueName8 = OpenNETCF.IoC.sln
 		SccProjectName8 = Samples/EventMarshalTest
 		SccLocalPath8 = Samples\\EventMarshalTest
+		SccProjectUniqueName9 = Samples\\MenuIntegration\\MenuIntegration.csproj
+		SccProjectTopLevelParentUniqueName9 = OpenNETCF.IoC.sln
+		SccProjectName9 = Samples/MenuIntegration
+		SccLocalPath9 = Samples\\MenuIntegration
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -115,6 +121,12 @@ Global
 		{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,5 +138,6 @@ Global
 		{8DA3A6C9-A491-4369-B3A4-95333AECADED} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
 		{D3DFF0C2-1F0C-4E92-BC97-B1BED16A4868} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
 		{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
+		{39C2F3B6-6634-4F7C-8E69-B395501736DD} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
 	EndGlobalSection
 EndGlobal
