@@ -21,15 +21,23 @@ namespace EventMarshalTest
             InitializeComponent();
         }
 
-        [EventSubscription(MyService.EventName, ThreadOption.UserInterface)]
-        public void ServiceEventHandler(object sender, GenericEventArgs<int> e)
+        [EventSubscription(MyService.EventNameA, ThreadOption.UserInterface)]
+        public void ServiceEventHandlerA(object sender, GenericEventArgs<int> e)
         {
             result.Text = e.Value.ToString();
         }
 
+        [EventSubscription(MyService.EventNameB, ThreadOption.UserInterface)]
+        public void ServiceEventHandlerB(object sender, EventArgs e)
+        {
+            // note that InvokeRequired will be "false" here
+//            var args = (e as IntArgs);
+//            result.Text = args.Value.ToString();
+        }
+
         private void ui_Click(object sender, EventArgs e)
         {
-            Service.RaiseServiceEvent();
+            Service.RaiseServiceEvents();
         }
 
         private void background_Click(object sender, EventArgs e)
