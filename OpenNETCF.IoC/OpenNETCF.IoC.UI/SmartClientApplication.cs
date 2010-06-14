@@ -40,6 +40,7 @@ namespace OpenNETCF.IoC.UI
 
             if (store != null)
             {
+                storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
                 storeService.LoadModulesFromStore(store);
             }
 
@@ -70,6 +71,11 @@ namespace OpenNETCF.IoC.UI
             OnApplicationRun(shellForm);
         }
 
+        void storeService_ModuleLoaded(object sender, GenericEventArgs<string> e)
+        {
+            OnModuleLoadComplete(e.Value);
+        }
+
         public virtual IModuleInfoStore GetModuleInfoStore()
         {
             return new DefaultModuleInfoStore();
@@ -92,6 +98,10 @@ namespace OpenNETCF.IoC.UI
         public virtual void OnApplicationRun(Form form)
         {
             Application.Run(form);
+        }
+
+        public virtual void OnModuleLoadComplete(string moduleName)
+        {
         }
     }
 }
