@@ -31,22 +31,7 @@ namespace OpenNETCF.IoC.UI
             // load up the profile catalog here
             IModuleInfoStore store = GetModuleInfoStore();
 
-            ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
-
-            // add a generic "control" to the Items list.
-            RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
-
-            TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
-
-            if (store != null)
-            {
-                storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
-                storeService.LoadModulesFromStore(store);
-            }
-
-            AfterShellCreated();
-
-            OnApplicationRun(shellForm);
+            Start(store);
         }
 
         public void Start(string profileCatalog)
@@ -54,17 +39,24 @@ namespace OpenNETCF.IoC.UI
             // load up the profile catalog here
             IModuleInfoStore store = new DefaultModuleInfoStore(profileCatalog);
 
+            Start(store);
+        }
+
+        private void Start(IModuleInfoStore store)
+        {
             ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
 
             // add a generic "control" to the Items list.
             RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
 
-            TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
-
             if (store != null)
             {
+                storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
                 storeService.LoadModulesFromStore(store);
             }
+
+            // create the shell form after all modules are loaded
+            TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
 
             AfterShellCreated();
 

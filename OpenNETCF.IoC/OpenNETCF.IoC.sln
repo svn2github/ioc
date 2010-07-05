@@ -28,9 +28,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventMarshalTest", "Samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuIntegration", "Samples\MenuIntegration\MenuIntegration.csproj", "{39C2F3B6-6634-4F7C-8E69-B395501736DD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurvey.Shell", "Samples\WiFiSurvey\Shell\WiFiSurvey.Shell\WiFiSurvey.Shell.csproj", "{1D63ABCC-F4EB-442E-96E0-3164900371B4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WiFiSurvey", "WiFiSurvey", "{3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurvey.Infrastructure.Interface", "Samples\WiFiSurvey\Infrastructure\WiFiSurvey.Infrastructure.Interface\WiFiSurvey.Infrastructure.Interface.csproj", "{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurvey.Infrastructure.Module", "Samples\WiFiSurvey\Infrastructure\WiFiSurvey.Infrastructure.Module\WiFiSurvey.Infrastructure.Module.csproj", "{7F319E26-A83B-4388-8D51-0FD713364FB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurvey.Configuration.Module", "Samples\WiFiSurvey\Configuration\WiFiSurvey.Configuration.Module\WiFiSurvey.Configuration.Module.csproj", "{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -68,6 +78,22 @@ Global
 		SccProjectTopLevelParentUniqueName9 = OpenNETCF.IoC.sln
 		SccProjectName9 = Samples/MenuIntegration
 		SccLocalPath9 = Samples\\MenuIntegration
+		SccProjectUniqueName10 = Samples\\WiFiSurvey\\Shell\\WiFiSurvey.Shell\\WiFiSurvey.Shell.csproj
+		SccProjectTopLevelParentUniqueName10 = OpenNETCF.IoC.sln
+		SccProjectName10 = Samples/WiFiSurvey/Shell/WiFiSurvey.Shell
+		SccLocalPath10 = Samples\\WiFiSurvey\\Shell\\WiFiSurvey.Shell
+		SccProjectUniqueName11 = Samples\\WiFiSurvey\\Infrastructure\\WiFiSurvey.Infrastructure.Interface\\WiFiSurvey.Infrastructure.Interface.csproj
+		SccProjectTopLevelParentUniqueName11 = OpenNETCF.IoC.sln
+		SccProjectName11 = Samples/WiFiSurvey/Infrastructure/WiFiSurvey.Infrastructure.Interface
+		SccLocalPath11 = Samples\\WiFiSurvey\\Infrastructure\\WiFiSurvey.Infrastructure.Interface
+		SccProjectUniqueName12 = Samples\\WiFiSurvey\\Infrastructure\\WiFiSurvey.Infrastructure.Module\\WiFiSurvey.Infrastructure.Module.csproj
+		SccProjectTopLevelParentUniqueName12 = OpenNETCF.IoC.sln
+		SccProjectName12 = Samples/WiFiSurvey/Infrastructure/WiFiSurvey.Infrastructure.Module
+		SccLocalPath12 = Samples\\WiFiSurvey\\Infrastructure\\WiFiSurvey.Infrastructure.Module
+		SccProjectUniqueName13 = Samples\\WiFiSurvey\\Configuration\\WiFiSurvey.Configuration.Module\\WiFiSurvey.Configuration.Module.csproj
+		SccProjectTopLevelParentUniqueName13 = OpenNETCF.IoC.sln
+		SccProjectName13 = Samples/WiFiSurvey/Configuration/WiFiSurvey.Configuration.Module
+		SccLocalPath13 = Samples\\WiFiSurvey\\Configuration\\WiFiSurvey.Configuration.Module
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -127,6 +153,24 @@ Global
 		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39C2F3B6-6634-4F7C-8E69-B395501736DD}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F319E26-A83B-4388-8D51-0FD713364FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F319E26-A83B-4388-8D51-0FD713364FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F319E26-A83B-4388-8D51-0FD713364FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F319E26-A83B-4388-8D51-0FD713364FB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,5 +183,10 @@ Global
 		{D3DFF0C2-1F0C-4E92-BC97-B1BED16A4868} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
 		{C2E1F8BF-70E7-4055-AB80-C4C3D4B1374A} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
 		{39C2F3B6-6634-4F7C-8E69-B395501736DD} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
+		{3AD05C71-5747-4CCD-B199-CCF8C6F07CF4} = {B13B76AF-DC89-4237-ADC9-CE5B29DF7BF8}
+		{1D63ABCC-F4EB-442E-96E0-3164900371B4} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
+		{48D2AFD0-2C29-4467-AAFA-0F31CABD464D} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
+		{7F319E26-A83B-4388-8D51-0FD713364FB2} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
+		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
 	EndGlobalSection
 EndGlobal
