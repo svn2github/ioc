@@ -56,5 +56,10 @@ namespace OpenNETCF.IoC
         {
             get { return m_workItem; }
         }
+
+        public static void RegisterType(Type concreteType, Type registerAs)
+        {
+            Instance.RegisterType(concreteType, registerAs);
+        }
     }
 }
