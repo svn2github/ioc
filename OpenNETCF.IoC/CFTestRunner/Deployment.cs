@@ -20,7 +20,7 @@ namespace OpenNETCF.MsTest
         private static Deployment m_instance = null;
 
         // tests that don't finish in this period of time are considered failures
-        private const int TEST_TIMEOUT_MILLISECONDS = 10000;
+        private const int TEST_TIMEOUT_MILLISECONDS = 100000;
  
         private Deployment()
         {

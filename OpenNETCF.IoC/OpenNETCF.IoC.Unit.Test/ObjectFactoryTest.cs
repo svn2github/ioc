@@ -25,6 +25,26 @@ namespace OpenNETCF.IoC.Unit.Test
         public TestContext TestContext { get; set; }
 
         [TestMethod()]
+        public void CreateUsingResiteredTypeTest()
+        {
+            using(var wi = new WorkItem())
+            {
+                try
+                {
+                    var item = wi.Items.AddNew<IMockType>();
+                }
+                catch (IOCException ex)
+                {
+                    // this is expected
+                }
+
+                wi.Items.RegisterType(typeof(MockTypeA), typeof(IMockType));
+                var newItem = wi.Items.AddNew<IMockType>();
+            }
+        }
+
+
+        [TestMethod()]
         public void GetEventSourcesFromTypeByNameTest()
         {
             Type type = typeof(MockEventSource);

@@ -24,6 +24,7 @@ namespace OpenNETCF.IoC
         private Dictionary<string, TItem> m_items = new Dictionary<string, TItem>();
         private object m_syncRoot = new object();
         private WorkItem m_root;
+        private Dictionary<Type, Type> m_typeRegistrations = new Dictionary<Type, Type>();
 
         public event EventHandler<DataEventArgs<KeyValuePair<string, TItem>>> Added;
         public event EventHandler<DataEventArgs<KeyValuePair<string, TItem>>> Removed;
@@ -31,6 +32,19 @@ namespace OpenNETCF.IoC
         internal ManagedObjectCollection(WorkItem root)
         {
             m_root = root;
+        }
+
+        public void RegisterType(Type concreteType, Type registerAs)
+        {
+            if (m_typeRegistrations.ContainsKey(registerAs))
+            {
+                // replace the registration
+                m_typeRegistrations[registerAs] = concreteType;
+            }
+            else
+            {
+                m_typeRegistrations.Add(registerAs, concreteType);
+            }
         }
 
         public object AddNew(Type typeToBuild)
@@ -77,6 +91,11 @@ namespace OpenNETCF.IoC
             }
 
             if (typeToBuild == null) throw new ArgumentNullException("typeToBuild");
+
+            if (m_typeRegistrations.ContainsKey(typeToBuild))
+            {
+                typeToBuild = m_typeRegistrations[typeToBuild];
+            }
 
             object instance = ObjectFactory.CreateObject(typeToBuild, m_root);
 

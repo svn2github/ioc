@@ -24,6 +24,22 @@ namespace OpenNETCF.IoC.Unit.Test
         public TestContext TestContext { get; set; }
 
         [TestMethod()]
+        [Description("Ensures that events published by a SmartPart (in the SmartParts collection) will get properly dispatched")]
+        public void SmartPartPublisherTest()
+        {
+            using (WorkItem wi = new WorkItem())
+            {
+                var source = wi.SmartParts.AddNew<MockEventPublishingSmartPart>("source");
+                var sink = wi.Items.AddNew<MockEventSink>("sink");
+
+                sink.AEventReceived = false;
+                source.RaiseEventA();
+
+                Assert.IsTrue(sink.AEventReceived, "Event A not received by sink");
+            }
+        }
+
+        [TestMethod()]
         [Description("Ensures that events get dispatched when the publisher is created before the subscriber")]
         public void PublisherBeforeSubscriberTest()
         {

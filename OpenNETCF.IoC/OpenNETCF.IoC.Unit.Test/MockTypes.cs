@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using OpenNETCF.IoC.UI;
 
 namespace OpenNETCF.IoC.Unit.Test
 {
@@ -159,6 +160,21 @@ namespace OpenNETCF.IoC.Unit.Test
         public string Name { get; set; }
     }
 
+    public class OnDemandServiceConsumer : IMockType
+    {
+        private static int m_instanceCount = 0;
+
+        public OnDemandServiceConsumer()
+        {
+            Name = "Type OnDemandServiceConsumer - instance " + m_instanceCount;
+        }
+
+        [ServiceDependency(EnsureExists=false)]
+        public MockTypeB BService { set; get; }
+
+        public string Name { get; set; }
+    }
+
     public class ServiceConsumerC : IMockType
     {
         private static int m_instanceCount = 0;
@@ -262,7 +278,7 @@ namespace OpenNETCF.IoC.Unit.Test
         [EventPublication("IoC Event B")]
         public event EventHandler OnEventB;
 
-        [EventSubscription("IoC Event A", ThreadOption.Caller)]
+        [EventSubscription(EventNames.EventA, ThreadOption.Caller)]
         public void MyAHandler(object senter, EventArgs a)
         {
             AEventReceived = true;
@@ -273,10 +289,10 @@ namespace OpenNETCF.IoC.Unit.Test
 
     public class MockEventSource : WorkItem
     {
-        [EventPublication("IoC Event A")]
+        [EventPublication(EventNames.EventA)]
         public event EventHandler OnEventA;
 
-        [EventPublication("IoC Event A")]
+        [EventPublication(EventNames.EventA)]
         public event EventHandler OnEventA2;
 
         [EventPublication("IoC Event B")]
@@ -324,7 +340,7 @@ namespace OpenNETCF.IoC.Unit.Test
             BEventReceived = false;
         }
 
-        [EventSubscription("IoC Event A", ThreadOption.Caller)]
+        [EventSubscription(EventNames.EventA, ThreadOption.Caller)]
         public void MyAHandler(object senter, EventArgs a)
         {
             ACount++;
@@ -340,5 +356,19 @@ namespace OpenNETCF.IoC.Unit.Test
 
         public bool AEventReceived { get; set; }
         public bool BEventReceived { get; set; }
+    }
+
+    public class MockEventPublishingSmartPart : SmartPart
+    {
+        [EventPublication(EventNames.EventA)]
+        public event EventHandler EventA;
+
+        public void RaiseEventA()
+        {
+            if (EventA == null) return;
+
+            EventA(this, null);
+        }
+
     }
 }

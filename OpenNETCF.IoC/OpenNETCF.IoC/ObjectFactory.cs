@@ -311,6 +311,8 @@ namespace OpenNETCF.IoC
                 AddCollectionEventHandlers(instance, localRoot.Items, sourceEvents, eventSinks);
                 AddCollectionEventHandlers(instance, localRoot.Services, sourceEvents, eventSinks);
                 AddCollectionEventHandlers(instance, localRoot.WorkItems, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, localRoot.SmartParts, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, localRoot.Workspaces, sourceEvents, eventSinks);
 
                 foreach (var childItem in localRoot.WorkItems)
                 {

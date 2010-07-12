@@ -29,12 +29,16 @@ namespace OpenNETCF.IoC.Unit.Test
             WorkItem root = new WorkItem();
             ServiceCollection services = new ServiceCollection(root);
 
+            var serviceCount = services.GetInstanciatedServiceCount();
+
             services.AddOnDemand<MockTypeA>();
 
-            Assert.AreEqual(0, services.GetInstanciatedServiceCount());
+            // service count should not change
+            Assert.AreEqual(serviceCount, services.GetInstanciatedServiceCount());
 
             MockTypeA o = services.Get<MockTypeA>();
 
+            Assert.AreEqual(serviceCount + 1, services.GetInstanciatedServiceCount());
             Assert.IsNotNull(o);
         }
 

@@ -61,6 +61,19 @@ namespace OpenNETCF.IoC
 
         private bool m_disposed = false;
 
+        /// <summary>
+        /// Sets the concrete type registration for all contained ManagedObjectCollections
+        /// </summary>
+        /// <param name="concreteType"></param>
+        /// <param name="registerAs"></param>
+        public void RegisterType(Type concreteType, Type registerAs)
+        {
+            WorkItems.RegisterType(concreteType, registerAs);
+            Items.RegisterType(concreteType, registerAs);
+            SmartParts.RegisterType(concreteType, registerAs);
+            Workspaces.RegisterType(concreteType, registerAs);
+        }
+
         public void Dispose()
         {
             Dispose(true);

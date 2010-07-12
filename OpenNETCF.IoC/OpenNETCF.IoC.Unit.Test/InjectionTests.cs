@@ -23,6 +23,18 @@ namespace OpenNETCF.IoC.Unit.Test
         public TestContext TestContext { get; set; }
 
         [TestMethod()]
+        [Description("Tests that if we have a service dependency with EnsureExists == false and that serve does not exist, that we get an exception")]
+        [ExpectedException(typeof(ServiceMissingException))]
+        public void ServiceDependencyAutoCreateFalseMissingServiceTest()
+        {
+            using (var root = new WorkItem())
+            {
+                root.Items.AddNew<OnDemandServiceConsumer>("idd");
+                var b = root.Items["idd"] as OnDemandServiceConsumer;
+            }
+        }
+
+        [TestMethod()]
         public void TestInjectionMethodPositive()
         {
             WorkItem root = new WorkItem();
