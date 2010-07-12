@@ -6,4 +6,4 @@ using System.Reflection;
 // see http://modland.nascom.nasa.gov/browse/calendar.html
 
 // July 5, 2010
-[assembly: AssemblyVersion("1.0.10187.0")]
+[assembly: AssemblyVersion("1.0.10194.0")]
