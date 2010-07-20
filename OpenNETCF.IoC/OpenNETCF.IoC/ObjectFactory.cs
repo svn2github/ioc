@@ -192,6 +192,7 @@ namespace OpenNETCF.IoC
 
                 if((item.Value is WorkItem) && (collection is ServiceCollection))
                 {
+                    // this prevents recursion (and a stack overflow) for WorkItems
                     continue;
                 }
 
@@ -210,20 +211,20 @@ namespace OpenNETCF.IoC
                         Delegate d = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, item.Value, sink);
                         source.EventInfo.AddEventHandler(instance, d);
 
-                        if (source.EventInfo.EventHandlerType == typeof(EventHandler))
-                        {
-                            // unsure why so far but this fails if the EventHandler signature takes a subclass of EventArgs as the second param
-                            // and if you use just EventArgs, the arg data gets lost
-                            BasicInvoker invoker = new BasicInvoker(invokerControl, d);
-                            Delegate intermediate = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, invoker, invoker.HandlerMethod);
-                            source.EventInfo.AddEventHandler(item.Value, intermediate);
-                        }
-                        else if ((source.EventInfo.EventHandlerType.IsGenericType) && (source.EventInfo.EventHandlerType.GetGenericTypeDefinition().Name == "EventHandler`1"))
-                        {
-                            BasicInvoker invoker = new BasicInvoker(invokerControl, d);
-                            Delegate intermediate = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, invoker, invoker.HandlerMethod);
-                            source.EventInfo.AddEventHandler(item.Value, intermediate);
-                        }
+                        //if (source.EventInfo.EventHandlerType == typeof(EventHandler))
+                        //{
+                        //    // unsure why so far but this fails if the EventHandler signature takes a subclass of EventArgs as the second param
+                        //    // and if you use just EventArgs, the arg data gets lost
+                        //    BasicInvoker invoker = new BasicInvoker(invokerControl, d);
+                        //    Delegate intermediate = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, invoker, invoker.HandlerMethod);
+                        //    source.EventInfo.AddEventHandler(item.Value, intermediate);
+                        //}
+                        //else if ((source.EventInfo.EventHandlerType.IsGenericType) && (source.EventInfo.EventHandlerType.GetGenericTypeDefinition().Name == "EventHandler`1"))
+                        //{
+                        //    BasicInvoker invoker = new BasicInvoker(invokerControl, d);
+                        //    Delegate intermediate = Delegate.CreateDelegate(source.EventInfo.EventHandlerType, invoker, invoker.HandlerMethod);
+                        //    source.EventInfo.AddEventHandler(item.Value, intermediate);
+                        //}
                     }
                 }
 

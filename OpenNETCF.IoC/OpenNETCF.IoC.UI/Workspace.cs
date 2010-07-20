@@ -49,7 +49,6 @@ namespace OpenNETCF.IoC.UI
             OnShow(smartPart, smartPartInfo);
         }
 
-        
         protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
@@ -109,8 +108,6 @@ namespace OpenNETCF.IoC.UI
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
             CheckSmartPartExists(smartPart);
-
-            RaiseSmartPartClosing(smartPart);
 
             OnClose(smartPart);
         }
@@ -217,6 +214,14 @@ namespace OpenNETCF.IoC.UI
             if (!SmartParts.Contains(smartPart))
             {
                 throw new Exception("ISmartPart not in Workspace");
+            }
+        }
+
+        protected void AddSmartPartToCollectionIfRequired(ISmartPart smartPart)
+        {
+            if (!SmartParts.Contains(smartPart))
+            {
+                m_smartParts.Add(smartPart);
             }
         }
 

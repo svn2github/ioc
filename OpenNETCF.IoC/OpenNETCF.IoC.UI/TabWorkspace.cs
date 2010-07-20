@@ -130,6 +130,8 @@ namespace OpenNETCF.IoC.UI
             }
             m_tabs.SelectedIndex = index;
 
+            AddSmartPartToCollectionIfRequired(smartPart);
+
             RaiseSmartPartActivated(smartPart);
             smartPart.OnActivated();
         }
