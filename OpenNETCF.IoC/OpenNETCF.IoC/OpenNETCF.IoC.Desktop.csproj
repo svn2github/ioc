@@ -54,6 +54,7 @@
       <Link>Properties\OpenNETCF.IoC.Version.cs</Link>
     </Compile>
     <Compile Include="Attributes.cs" />
+    <Compile Include="BasicInvoker.cs" />
     <Compile Include="ComponentDescriptor.cs" />
     <Compile Include="DataEventArgs.cs" />
     <Compile Include="DefaultModuleInfoStore.cs" />
