@@ -45,16 +45,20 @@ namespace OpenNETCF.IoC.Unit.Test
         [TestMethod()]
         public void AddNewTestPositive()
         {
-            WorkItem root = new WorkItem();
-            ServiceCollection services = new ServiceCollection(root);
+            using (WorkItem root = new WorkItem())
+            {
+                ServiceCollection services = new ServiceCollection(root);
 
-            services.AddNew<MockTypeA>();
+                var initialCount = services.GetInstanciatedServiceCount();
 
-            Assert.AreEqual(1, services.GetInstanciatedServiceCount());
+                services.AddNew<MockTypeA>();
 
-            MockTypeA o = services.Get<MockTypeA>();
+                Assert.AreEqual(initialCount + 1, services.GetInstanciatedServiceCount());
 
-            Assert.IsNotNull(o);
+                MockTypeA o = services.Get<MockTypeA>();
+
+                Assert.IsNotNull(o);
+            }
         }
 
         [TestMethod()]
@@ -145,20 +149,22 @@ namespace OpenNETCF.IoC.Unit.Test
 
                 Assert.IsNotNull(services, "ServiceCollection not created");
 
+                var initialCount = services.GetInstanciatedServiceCount();
+
                 services.AddOnDemand<MockTypeA>();
-                Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "First type add failed");
+                Assert.AreEqual(initialCount, services.GetInstanciatedServiceCount(), "First type add failed");
 
                 services.AddOnDemand<MockTypeB>();
-                Assert.AreEqual(0, services.GetInstanciatedServiceCount(), "Second type add failed");
+                Assert.AreEqual(initialCount, services.GetInstanciatedServiceCount(), "Second type add failed");
 
                 MockTypeA a = services.Get<MockTypeA>();
                 Assert.IsNotNull(a, "did not retrieve MockTypeA");
-                Assert.AreEqual(1, services.GetInstanciatedServiceCount());
+                Assert.AreEqual(initialCount + 1, services.GetInstanciatedServiceCount());
                 Assert.IsNotNull(a, "First type created failed");
 
                 MockTypeB b = services.Get<MockTypeB>();
                 Assert.IsNotNull(b, "did not retrieve MockTypeA");
-                Assert.AreEqual(2, services.GetInstanciatedServiceCount());
+                Assert.AreEqual(initialCount + 2, services.GetInstanciatedServiceCount());
                 Assert.IsNotNull(b, "Second type created failed");
             }
         }
@@ -169,12 +175,13 @@ namespace OpenNETCF.IoC.Unit.Test
             using (WorkItem root = new WorkItem())
             {
                 ServiceCollection services = new ServiceCollection(root);
+                var initialCount = services.GetInstanciatedServiceCount();
 
                 services.AddNew<MockTypeA>();
-                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "First type add failed");
+                Assert.AreEqual(initialCount + 1, services.GetInstanciatedServiceCount(), "First type add failed");
 
                 services.AddNew<MockTypeB>();
-                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "Second type add failed");
+                Assert.AreEqual(initialCount + 2, services.GetInstanciatedServiceCount(), "Second type add failed");
             }
         }
 
@@ -235,13 +242,14 @@ namespace OpenNETCF.IoC.Unit.Test
             using (WorkItem root = new WorkItem())
             {
                 ServiceCollection services = new ServiceCollection(root);
+                var initialCount = services.GetInstanciatedServiceCount();
 
                 services.AddNew<MockTypeA>();
                 services.AddNew<MockTypeB>();
-                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
+                Assert.AreEqual(initialCount + 2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
                 services.Remove<MockTypeA>();
-                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+                Assert.AreEqual(initialCount + 1, services.GetInstanciatedServiceCount(), "Remove failure");
             }
         }
 
@@ -251,15 +259,16 @@ namespace OpenNETCF.IoC.Unit.Test
             using (WorkItem root = new WorkItem())
             {
                 ServiceCollection services = new ServiceCollection(root);
+                var initialCount = services.GetInstanciatedServiceCount();
 
                 services.AddNew<MockTypeA>();
                 services.AddNew<MockTypeB>();
-                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
+                Assert.AreEqual(initialCount + 2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
                 MockTypeB b = services.Get<MockTypeB>();
 
                 services.Remove(b);
-                Assert.AreEqual(1, services.GetInstanciatedServiceCount(), "Remove failure");
+                Assert.AreEqual(initialCount + 1, services.GetInstanciatedServiceCount(), "Remove failure");
             }
         }
 
@@ -269,10 +278,11 @@ namespace OpenNETCF.IoC.Unit.Test
             using (WorkItem root = new WorkItem())
             {
                 ServiceCollection services = new ServiceCollection(root);
+                var initialCount = services.GetInstanciatedServiceCount();
 
                 services.AddNew<MockTypeA>();
                 services.AddNew<MockTypeB>();
-                Assert.AreEqual(2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
+                Assert.AreEqual(initialCount + 2, services.GetInstanciatedServiceCount(), "incorrect number of initial services");
 
                 MockTypeB b = services.Get<MockTypeB>();
                 AutoResetEvent are = new AutoResetEvent(false);

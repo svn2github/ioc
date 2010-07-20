@@ -48,7 +48,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void GetEventSourcesFromTypeByNameTest()
         {
             Type type = typeof(MockEventSource);
-            Assert.AreEqual(2, ObjectFactory.GetEventSourcesFromTypeByName(type, "IoC Event A").Length,
+            Assert.AreEqual(2, ObjectFactory.GetEventSourcesFromTypeByName(type, EventNames.EventA).Length,
                 "Unexpected number of events returned");
 
             Assert.AreEqual(1, ObjectFactory.GetEventSourcesFromTypeByName(type, "IoC Event B").Length,
@@ -62,7 +62,7 @@ namespace OpenNETCF.IoC.Unit.Test
         public void GetEventSinksFromTypeByNameTest()
         {
             Type type = typeof(MockEventSink);
-            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event A", ThreadOption.Caller).Length,
+            Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, EventNames.EventA, ThreadOption.Caller).Length,
                 "Unexpected number of methods returned");
 
             Assert.AreEqual(1, ObjectFactory.GetEventSinksFromTypeByName(type, "IoC Event B", ThreadOption.Caller).Length,

@@ -325,6 +325,8 @@ namespace OpenNETCF.IoC
                 AddCollectionEventHandlers(instance, root.Items, sourceEvents, eventSinks);
                 AddCollectionEventHandlers(instance, root.Services, sourceEvents, eventSinks);
                 AddCollectionEventHandlers(instance, root.WorkItems, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, root.SmartParts, sourceEvents, eventSinks);
+                AddCollectionEventHandlers(instance, root.Workspaces, sourceEvents, eventSinks);
             }
         }
 
