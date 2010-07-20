@@ -62,7 +62,6 @@ namespace OpenNETCF.IoC.UI
                 (smartPart as SmartPart).Workspace = this;
                 m_smartParts.Add(smartPart);
                 this.Controls.Add(control);
-                smartPart.OnActivated();
                 Activate(smartPart);
                 smartPart.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(smartPart_VisibleChanged);
             }
