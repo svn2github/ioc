@@ -70,6 +70,7 @@ namespace OpenNETCF.IoC.UI
             int index = m_tabs.TabPages.IndexOf(ti.Page);
             m_tabs.TabPages.RemoveAt(index);
 
+            RaiseSmartPartDeactivated(smartPart);
             RaiseSmartPartClosing(smartPart);
             m_smartPartTabs.Remove(ti);
             ti.Page.Dispose();
@@ -84,6 +85,7 @@ namespace OpenNETCF.IoC.UI
             // "hiding" is removing it from the tabcontrol
             int index = m_tabs.TabPages.IndexOf(ti.Page);
             m_tabs.TabPages.RemoveAt(index);
+            Deactivate(smartPart);
         }
 
         protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)

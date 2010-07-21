@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenNETCF.IoC;
 using OpenNETCF.IoC.UI;
+using System.Diagnostics;
 
 namespace WorkspaceDisposal
 {
@@ -20,7 +21,26 @@ namespace WorkspaceDisposal
         public Form2()
         {
             InitializeComponent();
+            deckWorkspace1.SmartPartActivated += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartActivated);
+            deckWorkspace1.SmartPartDeactivated += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartDeactivated);
+            deckWorkspace1.SmartPartClosing += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartClosing);
+
             deckWorkspace1.Show(view);
+        }
+
+        void deckWorkspace1_SmartPartClosing(object sender, DataEventArgs<ISmartPart> e)
+        {
+            Debug.WriteLine("SmartPartClosing");
+        }
+
+        void deckWorkspace1_SmartPartDeactivated(object sender, DataEventArgs<ISmartPart> e)
+        {
+            Debug.WriteLine("SmartPartDeactivated");
+        }
+
+        void deckWorkspace1_SmartPartActivated(object sender, DataEventArgs<ISmartPart> e)
+        {
+            Debug.WriteLine("SmartPartActivated");
         }
 
         private void close_Click(object sender, EventArgs e)

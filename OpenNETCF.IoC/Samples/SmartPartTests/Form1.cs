@@ -29,11 +29,17 @@ namespace SmartPartTests
 
             workspace.SmartPartActivated += new EventHandler<DataEventArgs<OpenNETCF.IoC.UI.ISmartPart>>(workspace_SmartPartActivated);
             workspace.SmartPartClosing += new EventHandler<DataEventArgs<OpenNETCF.IoC.UI.ISmartPart>>(workspace_SmartPartClosing);
+            workspace.SmartPartDeactivated += new EventHandler<DataEventArgs<OpenNETCF.IoC.UI.ISmartPart>>(workspace_SmartPartDeactivated);
             
             Presenter = RootWorkItem.Items.AddNew<Presenter>();
 
             UpdateAction();
             action.Click += new EventHandler(action_Click);
+        }
+
+        void workspace_SmartPartDeactivated(object sender, DataEventArgs<OpenNETCF.IoC.UI.ISmartPart> e)
+        {
+            Debug.WriteLine(string.Format("SmartPart '{0}' Deactivated", e.Data.Name));
         }
 
         void workspace_SmartPartClosing(object sender, DataEventArgs<OpenNETCF.IoC.UI.ISmartPart> e)

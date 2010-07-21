@@ -118,7 +118,8 @@ namespace OpenNETCF.IoC.UI
 
             Control control = smartPart as Control;
             if (control == null) throw new ArgumentException("smartPart must be a Control");
-            
+
+            RaiseSmartPartDeactivated(smartPart);
             RaiseSmartPartClosing(smartPart);
 
             this.Controls.Remove(control);
@@ -150,10 +151,8 @@ namespace OpenNETCF.IoC.UI
             {
                 smartPart.Visible = true;
             }
-            else
-            {
-                smartPart.OnActivated();
-            }
+
+            smartPart.OnActivated();
 
             RaiseSmartPartActivated(smartPart);
 

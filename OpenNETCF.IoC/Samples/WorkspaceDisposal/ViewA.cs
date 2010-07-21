@@ -16,6 +16,13 @@ namespace WorkspaceDisposal
         public ViewA()
         {
             InitializeComponent();
+
+            this.VisibleChanged += new EventHandler<OpenNETCF.IoC.GenericEventArgs<bool>>(ViewA_VisibleChanged);
+        }
+
+        void ViewA_VisibleChanged(object sender, OpenNETCF.IoC.GenericEventArgs<bool> e)
+        {
+            Debug.WriteLine("Visible = " + e.Value.ToString());
         }
 
         public override void OnActivated()
