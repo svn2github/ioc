@@ -42,9 +42,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WiFiSurvey.DAL.Module", "Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartPartTests", "Samples\SmartPartTests\SmartPartTests.csproj", "{8C460537-A0FF-4BB4-8F49-45EA2AD96172}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{B1BBEC57-8B78-4220-A721-34D20917541B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{05053DDA-A699-4B8C-B722-B03CB8AFD28F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Location", "Location", "{000463F8-B213-4422-9304-0173C9681173}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.Location.Module", "Modules\Location\OpenNETCF.Location.Module\OpenNETCF.Location.Module.csproj", "{12C1C89A-9824-4ABE-A94B-0408A359A4CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.Location.Interface", "Modules\Location\OpenNETCF.Location.Interface\OpenNETCF.Location.Interface.csproj", "{D50EF70C-7C27-411A-B097-9F4AEC747CDB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -53,9 +63,11 @@ Global
 		SccProjectName1 = OpenNETCF.IoC.Unit.Test
 		SccLocalPath1 = OpenNETCF.IoC.Unit.Test
 		SccProjectUniqueName2 = OpenNETCF.IoC\\OpenNETCF.IoC.csproj
+		SccProjectTopLevelParentUniqueName2 = OpenNETCF.IoC.sln
 		SccProjectName2 = OpenNETCF.IoC
 		SccLocalPath2 = OpenNETCF.IoC
 		SccProjectUniqueName3 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.csproj
+		SccProjectTopLevelParentUniqueName3 = OpenNETCF.IoC.sln
 		SccProjectName3 = OpenNETCF.IoC.UI
 		SccLocalPath3 = OpenNETCF.IoC.UI
 		SccProjectUniqueName4 = Samples\\CommonServiceLocator.Sample\\CommonServiceLocator.Sample.csproj
@@ -106,6 +118,14 @@ Global
 		SccProjectTopLevelParentUniqueName15 = OpenNETCF.IoC.sln
 		SccProjectName15 = Samples/SmartPartTests
 		SccLocalPath15 = Samples\\SmartPartTests
+		SccProjectUniqueName16 = Modules\\Location\\OpenNETCF.Location.Module\\OpenNETCF.Location.Module.csproj
+		SccProjectTopLevelParentUniqueName16 = OpenNETCF.IoC.sln
+		SccProjectName16 = Modules/Location/OpenNETCF.Location.Module
+		SccLocalPath16 = Modules\\Location\\OpenNETCF.Location.Module
+		SccProjectUniqueName17 = Modules\\Location\\OpenNETCF.Location.Interface\\OpenNETCF.Location.Interface.csproj
+		SccProjectTopLevelParentUniqueName17 = OpenNETCF.IoC.sln
+		SccProjectName17 = Modules/Location/OpenNETCF.Location.Interface
+		SccLocalPath17 = Modules\\Location\\OpenNETCF.Location.Interface
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -193,6 +213,14 @@ Global
 		{8C460537-A0FF-4BB4-8F49-45EA2AD96172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C460537-A0FF-4BB4-8F49-45EA2AD96172}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8C460537-A0FF-4BB4-8F49-45EA2AD96172}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{12C1C89A-9824-4ABE-A94B-0408A359A4CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C1C89A-9824-4ABE-A94B-0408A359A4CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C1C89A-9824-4ABE-A94B-0408A359A4CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C1C89A-9824-4ABE-A94B-0408A359A4CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50EF70C-7C27-411A-B097-9F4AEC747CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50EF70C-7C27-411A-B097-9F4AEC747CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50EF70C-7C27-411A-B097-9F4AEC747CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50EF70C-7C27-411A-B097-9F4AEC747CDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,5 +240,10 @@ Global
 		{7F319E26-A83B-4388-8D51-0FD713364FB2} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
 		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
 		{A5AF600E-F1CD-40A1-9211-47B319A7876B} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
+		{E2095D96-8EC2-4382-AEEF-55D9DF2325C0} = {B1BBEC57-8B78-4220-A721-34D20917541B}
+		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887} = {B1BBEC57-8B78-4220-A721-34D20917541B}
+		{000463F8-B213-4422-9304-0173C9681173} = {05053DDA-A699-4B8C-B722-B03CB8AFD28F}
+		{12C1C89A-9824-4ABE-A94B-0408A359A4CF} = {000463F8-B213-4422-9304-0173C9681173}
+		{D50EF70C-7C27-411A-B097-9F4AEC747CDB} = {000463F8-B213-4422-9304-0173C9681173}
 	EndGlobalSection
 EndGlobal
