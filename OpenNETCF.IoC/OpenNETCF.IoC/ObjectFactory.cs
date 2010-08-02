@@ -188,7 +188,7 @@ namespace OpenNETCF.IoC
 
             foreach (var item in collection)
             {
-                if (item.Value.Equals(instance)) continue;
+                if (instance.Equals(item.Value)) continue;
 
                 if((item.Value is WorkItem) && (collection is ServiceCollection))
                 {
