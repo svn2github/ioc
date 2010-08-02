@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.Phone", "OpenNETCF.IoC\OpenNETCF.IoC.Phone.csproj", "{14C33A2A-1501-43A1-826F-4FE6CAD597EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinPhoneSample", "Samples\WinPhoneSample\WinPhoneSample.csproj", "{3D3844C0-7F74-40AA-9A5B-21A9D504499D}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = OpenNETCF.IoC\\OpenNETCF.IoC.Phone.csproj
+		SccProjectName1 = OpenNETCF.IoC
+		SccLocalPath1 = OpenNETCF.IoC
+		SccProjectUniqueName2 = Samples\\WinPhoneSample\\WinPhoneSample.csproj
+		SccProjectName2 = Samples/WinPhoneSample
+		SccLocalPath2 = Samples\\WinPhoneSample
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14C33A2A-1501-43A1-826F-4FE6CAD597EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C33A2A-1501-43A1-826F-4FE6CAD597EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C33A2A-1501-43A1-826F-4FE6CAD597EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C33A2A-1501-43A1-826F-4FE6CAD597EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D3844C0-7F74-40AA-9A5B-21A9D504499D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
