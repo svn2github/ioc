@@ -178,7 +178,7 @@ namespace OpenNETCF.IoC
 
         private ComponentDescriptor GetDescriptor(Type registrationType)
         {
-            return m_services.Find(s => s.RegistrationType == registrationType);
+            return m_services.FirstOrDefault(s => s.RegistrationType == registrationType);
         }
 
         private void UpdateDescriptor(ComponentDescriptor descriptor)
@@ -191,19 +191,6 @@ namespace OpenNETCF.IoC
 
                 m_services[index] = descriptor;
             }
-        }
-
-        /// <summary>
-        /// Gets an existing service of a given type if it already exists in the collection.  If it does not exist, it creates and adds a new instance.
-        /// </summary>
-        /// <typeparam name="TService"></typeparam>
-        /// <returns></returns>
-        public TService GetOrCreate<TService>()
-            where TService : class
-        {
-            TService service = Get<TService>();
-            if (service != null) return service;
-            return AddNew<TService>();
         }
 
         public TService Get<TService>() where TService : class

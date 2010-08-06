@@ -37,5 +37,29 @@ namespace OpenNETCF.IoC
 
             return instanceType.GetInterfaces().Contains(interfaceType);
         }
+
+        public static TWorkItem GetOrAdd<TWorkItem>(this ManagedObjectCollection<WorkItem> collection, string id)
+            where TWorkItem : class
+        {
+            if (collection.Contains(id))
+            {
+                return collection.Get<TWorkItem>(id);
+            }
+
+            return collection.AddNew<TWorkItem>(id);
+        }
+
+        /// <summary>
+        /// Gets an existing service of a given type if it already exists in the collection.  If it does not exist, it creates and adds a new instance.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <returns></returns>
+        public static TService GetOrAdd<TService>(this ServiceCollection collection)
+            where TService : class
+        {
+            var service = collection.Get<TService>();
+            if (service != null) return service;
+            return collection.AddNew<TService>();
+        }
     }
 }
