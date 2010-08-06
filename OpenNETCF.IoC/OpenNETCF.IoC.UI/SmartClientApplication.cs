@@ -49,6 +49,8 @@ namespace OpenNETCF.IoC.UI
             // add a generic "control" to the Items list.
             RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
 
+            AddServices();
+
             if (store != null)
             {
                 storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
@@ -93,6 +95,13 @@ namespace OpenNETCF.IoC.UI
         }
 
         public virtual void OnModuleLoadComplete(string moduleName)
+        {
+        }
+
+        /// <summary>
+        /// When overridden, allows an application to add Services to the RootWorkItem before modules are loaded.
+        /// </summary>
+        public virtual void AddServices()
         {
         }
     }
