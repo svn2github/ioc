@@ -13,23 +13,30 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 using System.Reflection;
+
+#if WINDOWS_PHONE
+using TheInvoker = System.Windows.Threading.Dispatcher;
+#elif IPHONE
+using TheInvoker = System.Object;
+#else
+using TheInvoker = System.Windows.Forms.Control;
+#endif
 
 namespace OpenNETCF.IoC
 {
     internal class BasicInvoker
     {
-        private Control m_invoker;
+        private TheInvoker m_invoker;
         private Delegate m_targetDelegate;
         private MethodInfo m_methodInfo = null;
 
-        public BasicInvoker(Control invoker)
+        public BasicInvoker(TheInvoker invoker)
         {
             m_invoker = invoker;
         }
 
-        public BasicInvoker(Control invoker, Delegate targetDelegate)
+        public BasicInvoker(TheInvoker invoker, Delegate targetDelegate)
         {
             m_invoker = invoker;
             m_targetDelegate = targetDelegate;
@@ -37,7 +44,11 @@ namespace OpenNETCF.IoC
 
         public void Handler(object source, EventArgs args)
         {
-            m_invoker.Invoke(m_targetDelegate, new object[] { source, args });
+#if IPHONE
+            m_targetDelegate.DynamicInvoke(args);
+#else
+            m_invoker.BeginInvoke(m_targetDelegate, new object[] { source, args });
+#endif
         }
 
         public MethodInfo HandlerMethod

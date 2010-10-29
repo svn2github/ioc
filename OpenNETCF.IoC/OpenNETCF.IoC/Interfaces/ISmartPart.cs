@@ -14,7 +14,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Forms;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -26,14 +25,17 @@ namespace OpenNETCF.IoC.UI
         bool Focused { get; }
         void BringToFront();
         bool Focus();
-        DockStyle Dock { set; }
         string Name { get; set; }
-        Control Parent { get; }
         bool Enabled { get; set; }
         void OnActivated();
         void OnDeactivated();
         void Show();
         void Hide();
         IWorkspace Workspace { get; }
+
+#if !(WINDOWS_PHONE || IPHONE) 
+        System.Windows.Forms.DockStyle Dock { set; }
+        System.Windows.Forms.Control Parent { get; }
+#endif
     }
 }

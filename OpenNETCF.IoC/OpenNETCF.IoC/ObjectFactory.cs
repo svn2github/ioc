@@ -16,7 +16,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Diagnostics;
-using System.Windows.Forms;
+
+#if WINDOWS_PHONE
+using TheInvoker = System.Windows.Threading.Dispatcher;
+#elif IPHONE
+using TheInvoker = System.Object;
+#else
+using TheInvoker = System.Windows.Forms.Control;
+#endif
 
 namespace OpenNETCF.IoC
 {
@@ -184,7 +191,7 @@ namespace OpenNETCF.IoC
         {
             if (collection == null) return;
 
-            Control invokerControl = RootWorkItem.Items.Get<Control>("IOCEventInvoker");
+            var invokerControl = RootWorkItem.Items.Get<TheInvoker>("IOCEventInvoker");
 
             foreach (var item in collection)
             {
@@ -290,10 +297,10 @@ namespace OpenNETCF.IoC
             Type instanceType = instance.GetType();
 
             // get all of the sources from the object
-            var sourceEvents = GetEventSources(instance.GetType());
+            var sourceEvents = GetEventSources(instanceType);
 
             // get all of the sinks in the object
-            var eventSinks = GetEventSinks(instance.GetType());
+            var eventSinks = GetEventSinks(instanceType);
 
             // find any items that subscribe to the source events
             WorkItem wi = instance as WorkItem;
