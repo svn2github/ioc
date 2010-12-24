@@ -16,6 +16,14 @@ using System.Collections.Generic;
 using System.Text;
 using OpenNETCF.IoC.UI;
 
+#if WINDOWS_PHONE
+using TheInvoker = System.Windows.Threading.Dispatcher;
+#elif IPHONE
+using TheInvoker = System.Object;
+#else
+using TheInvoker = System.Windows.Forms.Control;
+#endif
+
 namespace OpenNETCF.IoC
 {
     public static class RootWorkItem
@@ -60,6 +68,18 @@ namespace OpenNETCF.IoC
         public static void RegisterType(Type concreteType, Type registerAs)
         {
             Instance.RegisterType(concreteType, registerAs);
+        }
+
+        public static void Invoke(Delegate method)
+        {
+            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            invoker.Invoke(method);
+        }
+
+        public static void Invoke(Delegate method, params object[] args)
+        {
+            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            invoker.Invoke(method, args);
         }
     }
 }

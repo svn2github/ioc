@@ -24,11 +24,13 @@ namespace OpenNETCF.IoC
     public interface IModuleInfo
     {
         string AssemblyFile { get; }
+        Assembly Assembly { get; }
     }
 
     public class ModuleInfo : IModuleInfo
     {
         public string AssemblyFile { get; internal set; }
+        public Assembly Assembly { get; internal set; }
     }
 
     public sealed class ModuleInfoStoreService
@@ -79,7 +81,12 @@ namespace OpenNETCF.IoC
 
             var assemblyName = assembly.GetName();
 
-            m_loadedModules.Add(new ModuleInfo { AssemblyFile = assemblyName.CodeBase });
+            m_loadedModules.Add(
+                new ModuleInfo 
+                { 
+                    Assembly = assembly,
+                    AssemblyFile = assemblyName.CodeBase 
+                });
 
             var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
             if (loadMethod != null)

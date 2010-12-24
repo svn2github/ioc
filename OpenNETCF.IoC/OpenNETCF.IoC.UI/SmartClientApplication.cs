@@ -44,10 +44,13 @@ namespace OpenNETCF.IoC.UI
 
         private void Start(IModuleInfoStore store)
         {
-            ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
-
             // add a generic "control" to the Items list.
-            RootWorkItem.Items.AddNew<Control>("IOCEventInvoker");
+            var invoker = new Control();
+            // force handle creation
+            var handle = invoker.Handle;
+            RootWorkItem.Items.Add(invoker, "IOCEventInvoker");
+
+            ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
 
             AddServices();
 
