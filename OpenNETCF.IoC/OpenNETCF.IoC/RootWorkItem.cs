@@ -70,6 +70,18 @@ namespace OpenNETCF.IoC
             Instance.RegisterType(concreteType, registerAs);
         }
 
+        public static void BeginInvoke(Delegate method)
+        {
+            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            invoker.BeginInvoke(method);
+        }
+
+        public static void BeginInvoke(Delegate method, params object[] args)
+        {
+            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            invoker.BeginInvoke(method, args);
+        }
+#if !WINDOWS_PHONE
         public static void Invoke(Delegate method)
         {
             var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
@@ -81,5 +93,6 @@ namespace OpenNETCF.IoC
             var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
             invoker.Invoke(method, args);
         }
+#endif
     }
 }
