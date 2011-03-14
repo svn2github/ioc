@@ -32,9 +32,9 @@ namespace ImageButtonDemo
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewMulti));
             this.pushCheckbox = new System.Windows.Forms.Button();
             this.pushGradient = new System.Windows.Forms.Button();
-            this.imageButton1 = new ImageButtonDemo.ImageButton();
-            this.imageButton2 = new ImageButtonDemo.ImageButton();
-            this.imageButton3 = new ImageButtonDemo.ImageButton();
+            this.imageButton1 = new ImageButton();
+            this.imageButton2 = new ImageButton();
+            this.imageButton3 = new ImageButton();
             this.SuspendLayout();
             // 
             // pushCheckbox
@@ -63,7 +63,7 @@ namespace ImageButtonDemo
             this.imageButton1.DownImage = ((System.Drawing.Image)(resources.GetObject("imageButton1.DownImage")));
             this.imageButton1.DownTextColor = System.Drawing.Color.White;
             this.imageButton1.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-            this.imageButton1.Location = new System.Drawing.Point(12, 46);
+            this.imageButton1.Location = new System.Drawing.Point(12, 68);
             this.imageButton1.Name = "imageButton1";
             this.imageButton1.Size = new System.Drawing.Size(216, 37);
             this.imageButton1.TabIndex = 2;
@@ -76,7 +76,7 @@ namespace ImageButtonDemo
             this.imageButton2.DownTextColor = System.Drawing.Color.White;
             this.imageButton2.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.imageButton2.LeftText = "Left Test Text";
-            this.imageButton2.Location = new System.Drawing.Point(12, 89);
+            this.imageButton2.Location = new System.Drawing.Point(12, 111);
             this.imageButton2.Name = "imageButton2";
             this.imageButton2.Size = new System.Drawing.Size(216, 37);
             this.imageButton2.TabIndex = 3;
@@ -88,7 +88,7 @@ namespace ImageButtonDemo
             this.imageButton3.DownImage = ((System.Drawing.Image)(resources.GetObject("imageButton3.DownImage")));
             this.imageButton3.DownTextColor = System.Drawing.Color.White;
             this.imageButton3.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-            this.imageButton3.Location = new System.Drawing.Point(12, 132);
+            this.imageButton3.Location = new System.Drawing.Point(12, 154);
             this.imageButton3.Name = "imageButton3";
             this.imageButton3.RightText = "Right Test Text";
             this.imageButton3.Size = new System.Drawing.Size(216, 37);
@@ -101,6 +101,7 @@ namespace ImageButtonDemo
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlText;
+            this.ClientSize = new System.Drawing.Size(240, 294);
             this.Controls.Add(this.imageButton3);
             this.Controls.Add(this.imageButton2);
             this.Controls.Add(this.imageButton1);
@@ -108,7 +109,6 @@ namespace ImageButtonDemo
             this.Controls.Add(this.pushCheckbox);
             this.ForeColor = System.Drawing.SystemColors.Window;
             this.Name = "ViewMulti";
-            this.Size = new System.Drawing.Size(240, 294);
             this.ResumeLayout(false);
 
         }

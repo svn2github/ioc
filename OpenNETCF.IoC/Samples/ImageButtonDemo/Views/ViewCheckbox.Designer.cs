@@ -63,7 +63,7 @@ namespace ImageButtonDemo
             this.chkOne.DownImage = ((System.Drawing.Image)(resources.GetObject("chkOne.DownImage")));
             this.chkOne.Location = new System.Drawing.Point(18, 71);
             this.chkOne.Name = "chkOne";
-            this.chkOne.Size = new System.Drawing.Size(15, 15);
+            this.chkOne.Size = new System.Drawing.Size(18, 18);
             this.chkOne.TabIndex = 8;
             this.chkOne.UpImage = ((System.Drawing.Image)(resources.GetObject("chkOne.UpImage")));
             this.chkOne.Click += new System.EventHandler(this.chkOne_Click);
@@ -73,7 +73,7 @@ namespace ImageButtonDemo
             this.chkTwo.DownImage = ((System.Drawing.Image)(resources.GetObject("chkTwo.DownImage")));
             this.chkTwo.Location = new System.Drawing.Point(18, 107);
             this.chkTwo.Name = "chkTwo";
-            this.chkTwo.Size = new System.Drawing.Size(14, 14);
+            this.chkTwo.Size = new System.Drawing.Size(18, 18);
             this.chkTwo.TabIndex = 9;
             this.chkTwo.UpImage = ((System.Drawing.Image)(resources.GetObject("chkTwo.UpImage")));
             this.chkTwo.Click += new System.EventHandler(this.chkTwo_Click);

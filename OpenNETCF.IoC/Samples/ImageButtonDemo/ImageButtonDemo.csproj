@@ -50,6 +50,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="OpenNETCF.Drawing, Version=2.3.0.11010, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdParty\OpenNETCF.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -164,6 +168,12 @@
     <EmbeddedResource Include="Resources\LeftButton_UP.png" />
     <EmbeddedResource Include="Resources\RightButton_DWN.png" />
     <EmbeddedResource Include="Resources\RightButton_UP.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Admin_ClockOff.png" />
+    <EmbeddedResource Include="Resources\Admin_ClockOn.png" />
+    <EmbeddedResource Include="Resources\pin_button_dwn.png" />
+    <EmbeddedResource Include="Resources\pin_button_up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

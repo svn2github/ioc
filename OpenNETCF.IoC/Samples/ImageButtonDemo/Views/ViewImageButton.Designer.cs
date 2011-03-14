@@ -29,11 +29,9 @@ namespace ImageButtonDemo
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewImageButton));
             this.pushGradient = new System.Windows.Forms.Button();
             this.pushMulti = new System.Windows.Forms.Button();
-            this.imgButtonLeft = new ImageButton();
-            this.imgButtonRight = new ImageButton();
+            this.imgButtonToggle = new ImageButtonDemo.ImageButton();
             this.SuspendLayout();
             // 
             // pushGradient
@@ -58,21 +56,11 @@ namespace ImageButtonDemo
             // 
             // imgButtonLeft
             // 
-            this.imgButtonLeft.DownImage = ((System.Drawing.Image)(resources.GetObject("imgButtonLeft.DownImage")));
-            this.imgButtonLeft.Location = new System.Drawing.Point(56, 72);
-            this.imgButtonLeft.Name = "imgButtonLeft";
-            this.imgButtonLeft.Size = new System.Drawing.Size(50, 25);
-            this.imgButtonLeft.TabIndex = 8;
-            this.imgButtonLeft.UpImage = ((System.Drawing.Image)(resources.GetObject("imgButtonLeft.UpImage")));
-            // 
-            // imgButtonRight
-            // 
-            this.imgButtonRight.DownImage = ((System.Drawing.Image)(resources.GetObject("imgButtonRight.DownImage")));
-            this.imgButtonRight.Location = new System.Drawing.Point(134, 72);
-            this.imgButtonRight.Name = "imgButtonRight";
-            this.imgButtonRight.Size = new System.Drawing.Size(50, 25);
-            this.imgButtonRight.TabIndex = 9;
-            this.imgButtonRight.UpImage = ((System.Drawing.Image)(resources.GetObject("imgButtonRight.UpImage")));
+            this.imgButtonToggle.Location = new System.Drawing.Point(79, 72);
+            this.imgButtonToggle.Name = "imgButtonLeft";
+            this.imgButtonToggle.Size = new System.Drawing.Size(94, 35);
+            this.imgButtonToggle.TabIndex = 8;
+            this.imgButtonToggle.Click += new System.EventHandler(this.imgButtonLeft_Click);
             // 
             // ViewImageButton
             // 
@@ -80,8 +68,7 @@ namespace ImageButtonDemo
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Desktop;
             this.ClientSize = new System.Drawing.Size(240, 294);
-            this.Controls.Add(this.imgButtonRight);
-            this.Controls.Add(this.imgButtonLeft);
+            this.Controls.Add(this.imgButtonToggle);
             this.Controls.Add(this.pushMulti);
             this.Controls.Add(this.pushGradient);
             this.ForeColor = System.Drawing.SystemColors.Window;
@@ -94,7 +81,6 @@ namespace ImageButtonDemo
 
         private System.Windows.Forms.Button pushGradient;
         private System.Windows.Forms.Button pushMulti;
-        private ImageButton imgButtonLeft;
-        private ImageButton imgButtonRight;
+        private ImageButton imgButtonToggle;
     }
 }
