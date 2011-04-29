@@ -22,7 +22,7 @@ namespace OpenNETCF.IoC
         where TItem : class
     {
         private Dictionary<string, TItem> m_items = new Dictionary<string, TItem>();
-        private object m_syncRoot = new object();
+        private object m_syncRoot;
         private WorkItem m_root;
         private Dictionary<Type, Type> m_typeRegistrations = new Dictionary<Type, Type>();
 
@@ -31,7 +31,13 @@ namespace OpenNETCF.IoC
 
         internal ManagedObjectCollection(WorkItem root)
         {
+            m_syncRoot = new object();
             m_root = root;
+        }
+
+        public void RegisterType<TConcrete, TRegisterAs>()
+        {
+            RegisterType(typeof(TConcrete), typeof(TRegisterAs));
         }
 
         public void RegisterType(Type concreteType, Type registerAs)

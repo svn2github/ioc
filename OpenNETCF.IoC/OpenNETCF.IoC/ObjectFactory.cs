@@ -23,6 +23,7 @@ using TheInvoker = System.Windows.Threading.Dispatcher;
 using TheInvoker = System.Object;
 #else
 using TheInvoker = System.Windows.Forms.Control;
+using System.Windows.Forms;
 #endif
 
 namespace OpenNETCF.IoC
@@ -252,16 +253,17 @@ namespace OpenNETCF.IoC
                             else
                             {
                                 // wire up event handlers on the UI thread
-                                if (ei.EventHandlerType == typeof(EventHandler))
+                                if ((ei.EventHandlerType.IsGenericType) && (ei.EventHandlerType.GetGenericTypeDefinition().Name == "EventHandler`1")
+                                    || (ei.EventHandlerType == typeof(EventHandler))
+#if !WINDOWS_PHONE
+                                    || (ei.EventHandlerType == typeof(KeyEventHandler))
+#endif
+                                    )
                                 {
                                     // unsure why so far but this fails if the EventHandler signature takes a subclass of EventArgs as the second param
                                     // and if you use just EventArgs, the arg data gets lost
-                                    BasicInvoker invoker = new BasicInvoker(invokerControl, d);
-                                    Delegate intermediate = Delegate.CreateDelegate(ei.EventHandlerType, invoker, invoker.HandlerMethod);
-                                    ei.AddEventHandler(item.Value, intermediate);
-                                }
-                                else if ((ei.EventHandlerType.IsGenericType) && (ei.EventHandlerType.GetGenericTypeDefinition().Name == "EventHandler`1"))
-                                {
+
+                                
                                     BasicInvoker invoker = new BasicInvoker(invokerControl, d);
                                     Delegate intermediate = Delegate.CreateDelegate(ei.EventHandlerType, invoker, invoker.HandlerMethod);
                                     ei.AddEventHandler(item.Value, intermediate);
@@ -522,7 +524,8 @@ namespace OpenNETCF.IoC
                 // check the service list
                 if (isServiceDependency)
                 {
-                    object service = root.Services.Get(serviceRegiteredAsType == null ? pi.ParameterType : serviceRegiteredAsType);
+                    var requiredServiceType = serviceRegiteredAsType == null ? pi.ParameterType : serviceRegiteredAsType;
+                    object service = root.Services.Get(requiredServiceType);
                     if (service != null)
                     {
                         item = service;
@@ -532,8 +535,22 @@ namespace OpenNETCF.IoC
                         // create a new one
                         item = root.Services.AddNew(pi.ParameterType);
                     }
+                    else if (root.Services.TypeRegistrations.ContainsKey(requiredServiceType))
+                    {
+                        // check the service list again as we might be recursing
+                        service = root.Services.Get(requiredServiceType);
+                        if (service == null)
+                        {
+                            item = root.Services.AddNew(root.Services.TypeRegistrations[requiredServiceType]);
+                        }
                     else
                     {
+                            item = service;
+                        }
+                    }
+                    else
+                    {
+
                         throw new ServiceMissingException(string.Format("Type '{0}' has a service dependency on type '{1}'",
                             typeName, pi.ParameterType.Name));
                     }

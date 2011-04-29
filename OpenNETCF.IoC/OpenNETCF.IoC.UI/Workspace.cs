@@ -60,6 +60,7 @@ namespace OpenNETCF.IoC.UI
             {
                 (smartPart as SmartPart).Workspace = this;
                 m_smartParts.Add(smartPart);
+                RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                 this.Controls.Add(control);
                 Activate(smartPart);
                 smartPart.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(smartPart_VisibleChanged);
@@ -124,6 +125,7 @@ namespace OpenNETCF.IoC.UI
 
             this.Controls.Remove(control);
             m_smartParts.Remove(smartPart);
+            RootWorkItem.SmartParts.Remove(smartPart);
             smartPart.Dispose();
         }
 

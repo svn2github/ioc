@@ -17,6 +17,7 @@ using System.Reflection;
 
 #if WINDOWS_PHONE
 using TheInvoker = System.Windows.Threading.Dispatcher;
+using System.Diagnostics;
 #elif IPHONE
 using TheInvoker = System.Object;
 #else
@@ -42,14 +43,25 @@ namespace OpenNETCF.IoC
             m_targetDelegate = targetDelegate;
         }
 
+#if IPHONE
         public void Handler(object source, EventArgs args)
         {
-#if IPHONE
-            m_targetDelegate.DynamicInvoke(args);
-#else
-            m_invoker.BeginInvoke(m_targetDelegate, new object[] { source, args });
-#endif
         }
+#elif WINDOWS_PHONE
+        public void Handler(object source, EventArgs args)
+        {
+            m_targetDelegate.DynamicInvoke(args);
+            m_invoker.BeginInvoke(m_targetDelegate, new object[] { source, args });
+        }
+#else
+        public void Handler(object source, EventArgs args)
+        {
+            if (!m_invoker.IsDisposed)
+            {
+                m_invoker.Invoke(m_targetDelegate, new object[] { source, args });
+            }
+        }
+#endif
 
         public MethodInfo HandlerMethod
         {

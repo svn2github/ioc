@@ -24,6 +24,7 @@ namespace OpenNETCF.IoC
         public event EventHandler<DataEventArgs<object>> Removed;
 
         private List<ComponentDescriptor> m_services = new List<ComponentDescriptor>();
+        internal Dictionary<Type, Type> TypeRegistrations = new Dictionary<Type, Type>();
         private object m_syncRoot = new object();
         private WorkItem m_root;
 
@@ -40,6 +41,24 @@ namespace OpenNETCF.IoC
             };
 
             m_services.Add(descriptor);
+        }
+
+        public void RegisterType<TConcrete, TRegisterAs>()
+        {
+            RegisterType(typeof(TConcrete), typeof(TRegisterAs));
+        }
+
+        public void RegisterType(Type concreteType, Type registerAs)
+        {
+            if (TypeRegistrations.ContainsKey(registerAs))
+            {
+                // replace the registration
+                TypeRegistrations[registerAs] = concreteType;
+            }
+            else
+            {
+                TypeRegistrations.Add(registerAs, concreteType);
+            }
         }
 
         internal int GetInstanciatedServiceCount()
@@ -67,11 +86,19 @@ namespace OpenNETCF.IoC
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
 
-            object instance = ObjectFactory.CreateObject(serviceType, m_root);
-            Add(instance, null, serviceType, null);
-            return instance;
+            var descriptor = this.m_services.FirstOrDefault(s => s.ClassType.Equals(serviceType));
+            if (descriptor == null)
+            {
+                var instance = ObjectFactory.CreateObject(serviceType, m_root);
+                Add(instance, null, serviceType, null);
+                return instance;
+            }
+            else
+            {
+                return descriptor.Instance;
+            }
         }
-        
+
         public object AddNew(Type serviceType, Type registerAs)
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
@@ -101,8 +128,8 @@ namespace OpenNETCF.IoC
             Add(null, null, t, null);
         }
 
-        public void AddOnDemand<TService, TRegisterAs>() 
-            where TRegisterAs : class 
+        public void AddOnDemand<TService, TRegisterAs>()
+            where TRegisterAs : class
             where TService : class, TRegisterAs
         {
             Type t = typeof(TService);
@@ -164,7 +191,7 @@ namespace OpenNETCF.IoC
                 };
 
                 m_services.Add(descriptor);
-                
+
                 if (instance != null)
                 {
                     ObjectFactory.DoInjections(instance, m_root);

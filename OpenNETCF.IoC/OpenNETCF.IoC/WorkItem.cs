@@ -55,8 +55,14 @@ namespace OpenNETCF.IoC
         /// </summary>
         public ServiceCollection Services { get; private set; }
 
+        /// <summary>
+        /// The SmartParts collection contains ISmartParts unique by string ID.  Multiple Components of the same type can be added
+        /// </summary>
         public ManagedObjectCollection<ISmartPart> SmartParts { get; private set; }
 
+        /// <summary>
+        /// The Workspaces collection contains IWorkspace unique by string ID.  Multiple Components of the same type can be added
+        /// </summary>
         public ManagedObjectCollection<IWorkspace> Workspaces { get; private set; }
 
         private bool m_disposed = false;
@@ -72,6 +78,21 @@ namespace OpenNETCF.IoC
             Items.RegisterType(concreteType, registerAs);
             SmartParts.RegisterType(concreteType, registerAs);
             Workspaces.RegisterType(concreteType, registerAs);
+            Services.RegisterType(concreteType, registerAs);
+        }
+
+        /// <summary>
+        /// Sets the concrete type registration for all contained ManagedObjectCollections
+        /// </summary>
+        /// <param name="concreteType"></param>
+        /// <param name="registerAs"></param>
+        public void RegisterType<TConcrete, TRegisterAs>()
+        {
+            WorkItems.RegisterType<TConcrete, TRegisterAs>();
+            Items.RegisterType<TConcrete, TRegisterAs>();
+            SmartParts.RegisterType<TConcrete, TRegisterAs>();
+            Workspaces.RegisterType<TConcrete, TRegisterAs>();
+            Services.RegisterType<TConcrete, TRegisterAs>();
         }
 
         public void Dispose()
@@ -93,6 +114,9 @@ namespace OpenNETCF.IoC
             }
         }
 
+        /// <summary>
+        /// The root WorkItem that contains this WorkItem
+        /// </summary>
         public WorkItem RootWorkItem
         {
             get

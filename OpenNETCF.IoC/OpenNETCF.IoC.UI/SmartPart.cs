@@ -20,7 +20,7 @@ namespace OpenNETCF.IoC.UI
 {
     public class SmartPart : UserControl, ISmartPart
     {
-        public event EventHandler<GenericEventArgs<bool>> VisibleChanged;
+        public new event EventHandler<GenericEventArgs<bool>> VisibleChanged;
 
         public IWorkspace Workspace { get; set; }
 
