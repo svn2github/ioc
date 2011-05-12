@@ -31,7 +31,7 @@ namespace OpenNETCF.IoC.UI
         void OnDeactivated();
         void Show();
         void Hide();
-        IWorkspace Workspace { get; }
+        IWorkspace Workspace { get; set; }
 
 #if !(WINDOWS_PHONE || IPHONE) 
         System.Windows.Forms.DockStyle Dock { set; }

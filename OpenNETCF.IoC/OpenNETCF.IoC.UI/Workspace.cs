@@ -58,7 +58,7 @@ namespace OpenNETCF.IoC.UI
 
             if (!SmartParts.Contains(smartPart))
             {
-                (smartPart as SmartPart).Workspace = this;
+                (smartPart as ISmartPart).Workspace = this;
                 m_smartParts.Add(smartPart);
                 RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                 this.Controls.Add(control);
