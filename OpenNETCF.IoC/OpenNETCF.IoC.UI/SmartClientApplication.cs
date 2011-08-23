@@ -16,12 +16,37 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace OpenNETCF.IoC.UI
 {
+    internal static class NativeMethods
+    {
+#if !WindowsCE
+        private const string DLL_NAME = "user32.dll";
+#else
+        private const string DLL_NAME = "coredll.dll";
+#endif
+        [DllImport(DLL_NAME)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport(DLL_NAME)]
+        public static extern bool ShowWindow(IntPtr hwnd, uint windowStyle);
+    }
+
     public abstract class SmartClientApplication<TShell>
         where TShell : Form
     {
+        /// <summary>
+        /// If <b>true</b>, only one instance of the application will run.  Subsequent attempts will activate the existing app
+        /// </summary>
+        public virtual bool IsSingletonApp
+        {
+            get { return true; }
+        }
+
         /// <summary>
         /// This method loads the Profile Catalog Modules by calling GetModuleInfoStore which, unless overridden, uses a DefaultModuleInfoStore instance.
         /// It then creates an instance of TShell and calls Application.Run with that instance.
@@ -42,8 +67,42 @@ namespace OpenNETCF.IoC.UI
             Start(store);
         }
 
+#if DESKTOP
+        private Mutex m_singletonMutex;
+        private const int SW_RESTORE = 9;
+
+        private bool HandleSingleton()
+        {
+            var mutexName = Assembly.GetEntryAssembly().GetName().Name + "_mutex";
+
+            bool createdNew;
+            m_singletonMutex = new Mutex(true, mutexName, out createdNew);
+            if (createdNew)
+            {
+                //// first instance
+                return false;
+            }
+            else
+            {
+                // subsequent instance
+                var name = Assembly.GetEntryAssembly().GetName().Name;
+                var p = Process.GetProcessesByName(name).FirstOrDefault();
+                NativeMethods.SetForegroundWindow(p.MainWindowHandle);
+                return true;
+            }
+        }
+#endif
+
         private void Start(IModuleInfoStore store)
         {
+
+#if DESKTOP
+            if (IsSingletonApp)
+            {
+                if (HandleSingleton()) return;
+            }
+#endif
+
             // add a generic "control" to the Items list.
             var invoker = new Control();
             // force handle creation
@@ -59,6 +118,8 @@ namespace OpenNETCF.IoC.UI
                 storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
                 storeService.LoadModulesFromStore(store);
             }
+
+            BeforeShellCreated();
 
             // create the shell form after all modules are loaded
             TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
@@ -79,6 +140,10 @@ namespace OpenNETCF.IoC.UI
         }
 
         protected virtual void AfterShellCreated()
+        {
+        }
+
+        protected virtual void BeforeShellCreated()
         {
         }
 

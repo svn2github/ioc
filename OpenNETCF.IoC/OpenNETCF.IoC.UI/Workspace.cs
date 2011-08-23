@@ -37,6 +37,18 @@ namespace OpenNETCF.IoC.UI
             get { return m_smartParts; }
         }
 
+        public void Show<TSmartPart>()
+            where TSmartPart : SmartPart
+        {
+            var existing = SmartParts.FirstOrDefault(s => s is TSmartPart);
+            if(existing == null)
+            {
+                existing = RootWorkItem.SmartParts.AddNew<TSmartPart>();
+            }
+
+            OnShow(existing, null);
+        }
+
         public void Show(ISmartPart smartPart)
         {
             this.Show(smartPart, null);

@@ -9,6 +9,7 @@ using OpenNETCF.Net.NetworkInformation;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
 using System.Diagnostics;
+using OpenNETCF;
 
 namespace WiFiSurvey.Infrastructure.Services
 {

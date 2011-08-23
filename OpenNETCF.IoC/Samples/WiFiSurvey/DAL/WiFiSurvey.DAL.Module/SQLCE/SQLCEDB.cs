@@ -8,7 +8,6 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 using System.IO;
 using WiFiSurvey.DAL.BusinessObjects;
 using System.Reflection;
-using OpenNETCF;
 
 namespace WiFiSurvey.DAL.SQLCE
 {

@@ -18,6 +18,7 @@ using Microsoft.Win32;
 using OpenNETCF.Threading;
 using WiFiSurvey.Infrastructure;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell.Views
 {

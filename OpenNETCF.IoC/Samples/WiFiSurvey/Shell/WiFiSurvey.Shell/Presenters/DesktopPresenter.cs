@@ -6,6 +6,7 @@ using WiFiSurvey.Infrastructure;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell.Presenters
 {

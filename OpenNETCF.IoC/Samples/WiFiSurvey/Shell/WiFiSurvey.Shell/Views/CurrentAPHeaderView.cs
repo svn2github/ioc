@@ -14,6 +14,7 @@ using WiFiSurvey.Infrastructure.Services;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
 using System.Diagnostics;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell.Views
 {

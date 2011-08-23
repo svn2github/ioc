@@ -13,6 +13,7 @@ using WiFiSurvey.Infrastructure.BusinessObjects;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Shell.Presenters;
 using WiFiSurvey.Infrastructure;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell.Views
 {

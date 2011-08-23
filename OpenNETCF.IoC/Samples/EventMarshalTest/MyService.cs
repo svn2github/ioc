@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenNETCF.IoC;
 using System.Threading;
+using OpenNETCF;
 
 namespace EventMarshalTest
 {

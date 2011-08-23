@@ -45,6 +45,18 @@ namespace OpenNETCF.IoC
             return t.Name + "Service";
         }
 
+        internal static string GenerateItemName<TItem>(Type t, ManagedObjectCollection<TItem> parent)
+            where TItem : class
+        {
+            string name = string.Empty;
+            int i = 0;
+            do
+            {
+                name = t.Name + (++i).ToString();
+            } while (parent[name] != null);
+            return name;
+        }
+
         internal static string GenerateItemName(Type t, WorkItem root)
         {
             string name = string.Empty;
@@ -77,7 +89,9 @@ namespace OpenNETCF.IoC
 
             var methods =
             from n in type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-            where n.GetCustomAttributes(typeof(EventSubscription), true).Length > 0
+            where 
+            !n.IsVirtual &&
+            n.GetCustomAttributes(typeof(EventSubscription), true).Length > 0
             select n;
 
             List<SubscriptionDescriptor> descriptors = new List<SubscriptionDescriptor>();
@@ -445,7 +459,9 @@ namespace OpenNETCF.IoC
             Type t = instance.GetType();
 
             var injectionmethods = (from c in t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                    where c.GetCustomAttributes(typeof(InjectionMethodAttribute), true).Count() > 0
+                                    where 
+                                    !c.IsVirtual && 
+                                    c.GetCustomAttributes(typeof(InjectionMethodAttribute), true).Count() > 0
                                     select c);
 
             foreach (MethodInfo mi in injectionmethods)

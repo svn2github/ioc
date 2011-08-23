@@ -12,6 +12,7 @@ using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure;
 using System.Diagnostics;
 using WiFiSurvey.Infrastructure.Services;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell
 {

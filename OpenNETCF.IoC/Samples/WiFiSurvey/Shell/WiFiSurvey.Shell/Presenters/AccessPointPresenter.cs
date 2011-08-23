@@ -9,6 +9,7 @@ using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure.BusinessObjects;
 using System.Threading;
 using WiFiSurvey.Infrastructure;
+using OpenNETCF;
 
 namespace WiFiSurvey.Shell.Presenters
 {

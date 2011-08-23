@@ -37,6 +37,10 @@
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="OpenNETCF.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\OpenNETCF.IoC.Shared\FFx\OpenNETCF.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -60,6 +64,7 @@
     <Compile Include="DeckWorkspace.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="IconicSmartPartInfo.cs" />
     <Compile Include="IPresenter.cs" />
     <Compile Include="ISmartPartInfoProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -20,9 +20,9 @@ namespace OpenNETCF.Location.Simulation
 {
     internal class SimulatedGpsReceiver : IGpsReceiver
     {
-        public event EventHandler<OpenNETCF.IoC.GenericEventArgs<IGpsDevice>> GPSStateChange;
-        public event EventHandler<OpenNETCF.IoC.GenericEventArgs<PositionRecord>> PositionChange;
-        public event EventHandler<OpenNETCF.IoC.GenericEventArgs<SatelliteRecord>> SatelliteChange;
+        public event EventHandler<GenericEventArgs<IGpsDevice>> GPSStateChange;
+        public event EventHandler<GenericEventArgs<PositionRecord>> PositionChange;
+        public event EventHandler<GenericEventArgs<SatelliteRecord>> SatelliteChange;
         
         private Thread m_receiverThread;
         private bool m_shutdown;
@@ -68,7 +68,7 @@ namespace OpenNETCF.Location.Simulation
                 {
                     if (PositionChange != null)
                     {
-                        PositionChange(this, new OpenNETCF.IoC.GenericEventArgs<PositionRecord>(position));
+                        PositionChange(this, new GenericEventArgs<PositionRecord>(position));
                     }
                 }
             }

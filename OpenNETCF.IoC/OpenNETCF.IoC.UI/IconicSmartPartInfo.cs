@@ -9,22 +9,20 @@
 // OpenNETCF will maintain an "official" version of this software at www.opennetcf.com and public 
 // submissions of changes, fixes or updates are welcomed but not required
 //
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
+using System.Drawing;
 
-namespace OpenNETCF.IoC
+namespace OpenNETCF.IoC.UI
 {
-    public class GenericEventArgs<T> : EventArgs
+    public class IconicSmartPartInfo : SmartPartInfo
     {
-        [DebuggerStepThrough]
-        public GenericEventArgs(T value)
-        {
-            Value = value;
-        }
-
-        public T Value { get; private set; }
+        /// <summary>
+        /// Icon of this SmartPart.
+        /// </summary>
+        public Icon Icon { get; set; }
     }
 }

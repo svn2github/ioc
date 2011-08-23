@@ -65,7 +65,6 @@
     <Compile Include="DisposableWrappedObject.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="GenericEventArgs.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Interfaces\IModule.cs" />
     <Compile Include="Interfaces\IModuleInfoStore.cs" />

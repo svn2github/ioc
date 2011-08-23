@@ -144,6 +144,11 @@ namespace OpenNETCF.IoC
             Add(serviceInstance, null, serviceInstance.GetType(), typeof(TService));
         }
 
+        public void Add(object serviceInstance)
+        {
+            Add(serviceInstance.GetType(), serviceInstance);
+        }
+
         public void Add(Type registerAs, object serviceInstance)
         {
             if (serviceInstance == null) throw new ArgumentNullException("serviceInstance");
@@ -229,6 +234,14 @@ namespace OpenNETCF.IoC
         {
             Type t = typeof(TService);
             return Get(t, ensureExists) as TService;
+        }
+
+        public TService GetOrCreate<TService>() where TService : class
+        {
+            TService instance = Get<TService>(false);
+            if (instance != null) return instance;
+
+            return AddNew <TService>();
         }
 
         public object GetOrCreate(Type serviceType)

@@ -5,6 +5,7 @@ using System.Text;
 using WiFiSurvey.Infrastructure.Constants;
 using OpenNETCF.IoC;
 using System.Diagnostics;
+using OpenNETCF;
 
 namespace WiFiSurvey.Infrastructure.Services
 {

@@ -24,7 +24,9 @@ namespace OpenNETCF.IoC.UI
 
         private TabControl m_tabs;
         private List<TabInfo> m_smartPartTabs;
-
+#if !WindowsCE
+        private ImageList m_tabImages;
+#endif
         private class TabInfo
         {
             public TabPage Page { get; set; }
@@ -35,6 +37,16 @@ namespace OpenNETCF.IoC.UI
         public TabWorkspace()
         {
             m_tabs = new TabControl();
+
+#if !WindowsCE
+            m_tabImages = new ImageList()
+            {
+                ColorDepth = ColorDepth.Depth32Bit,
+                ImageSize = new System.Drawing.Size(24, 24)
+            };
+
+            m_tabs.ImageList = m_tabImages;
+#endif
             this.Controls.Add(m_tabs);
             m_tabs.Dock = DockStyle.Fill;
             m_tabs.SelectedIndexChanged += new EventHandler(m_tabs_SelectedIndexChanged);
@@ -115,6 +127,15 @@ namespace OpenNETCF.IoC.UI
 
                 TabPage page = new TabPage();
                 page.Text = smartPartInfo == null ? smartPart.Name : smartPartInfo.Title;
+#if !WindowsCE
+                var iconInfo = smartPartInfo as IconicSmartPartInfo;
+                if ((iconInfo != null) && (iconInfo.Icon != null))
+                {
+                    int imageIndex = m_tabImages.Images.Count;
+                    m_tabImages.Images.Add(iconInfo.Icon);
+                    page.ImageIndex = imageIndex;
+                }
+#endif
                 smartPart.Dock = DockStyle.Fill;
                 page.ClientRectangle.Inflate(-2, -2);
                 page.Controls.Add((Control)smartPart);

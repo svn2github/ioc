@@ -14,6 +14,7 @@ using WiFiSurvey.DAL.SQLCE;
 using WiFiSurvey.DAL.Unit_of_Work;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure;
+using OpenNETCF;
 
 namespace WiFiSurvey.DAL.Services
 {

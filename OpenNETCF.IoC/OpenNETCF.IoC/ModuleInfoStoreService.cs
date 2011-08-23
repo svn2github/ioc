@@ -18,6 +18,7 @@ using System.Xml;
 using System.Reflection;
 using System.Xml.Linq;
 using System.IO;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {
@@ -71,10 +72,28 @@ namespace OpenNETCF.IoC
 
         internal void LoadAssembly(Assembly assembly)
         {
-            var imodule = (from t in assembly.GetTypes()
+            Type imodule;
+
+            try
+            {
+                imodule = (from t in assembly.GetTypes()
                            where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
                            select t).FirstOrDefault();
-
+            }
+#if !WindowsCE
+            catch (ReflectionTypeLoadException ex)
+            {
+                // this is for debugging
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
+#else
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
+#endif
             if (imodule == null) return;
 
             object instance = ObjectFactory.CreateObject(imodule, RootWorkItem.Instance);

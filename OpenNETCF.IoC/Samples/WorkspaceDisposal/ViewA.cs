@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenNETCF.IoC.UI;
 using System.Diagnostics;
+using OpenNETCF;
 
 namespace WorkspaceDisposal
 {
@@ -17,10 +18,10 @@ namespace WorkspaceDisposal
         {
             InitializeComponent();
 
-            this.VisibleChanged += new EventHandler<OpenNETCF.IoC.GenericEventArgs<bool>>(ViewA_VisibleChanged);
+            this.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(ViewA_VisibleChanged);
         }
 
-        void ViewA_VisibleChanged(object sender, OpenNETCF.IoC.GenericEventArgs<bool> e)
+        void ViewA_VisibleChanged(object sender, GenericEventArgs<bool> e)
         {
             Debug.WriteLine("Visible = " + e.Value.ToString());
         }

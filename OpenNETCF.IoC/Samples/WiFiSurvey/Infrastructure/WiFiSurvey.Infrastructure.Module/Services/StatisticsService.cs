@@ -6,6 +6,7 @@ using OpenNETCF.Diagnostics;
 using OpenNETCF.IoC;
 using WiFiSurvey.Infrastructure.Constants;
 using WiFiSurvey.Infrastructure.BusinessObjects;
+using OpenNETCF;
 
 namespace WiFiSurvey.Infrastructure.Services
 {

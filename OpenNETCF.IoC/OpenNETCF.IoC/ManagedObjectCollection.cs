@@ -160,7 +160,7 @@ namespace OpenNETCF.IoC
 
         public void Add(TItem item)
         {
-            Add(item, ObjectFactory.GenerateItemName(item.GetType(), m_root));
+            Add(item, ObjectFactory.GenerateItemName<TItem>(item.GetType(), this));
         }
 
         public void Add(TItem item, string id)
@@ -199,6 +199,14 @@ namespace OpenNETCF.IoC
             if (m_items.ContainsKey(id)) return m_items[id];
 
             return default(TItem);
+        }
+
+        public IEnumerable<TTypeToGet> Get<TTypeToGet>()
+            where TTypeToGet : class
+        {
+            return from i in m_items
+                   where (i.Value as TTypeToGet) != null
+                   select i.Value as TTypeToGet;
         }
 
         public TTypeToGet Get<TTypeToGet>(string id)
