@@ -23,5 +23,8 @@ namespace OpenNETCF.IoC
 
         public virtual void AddServices() { }
         public virtual void Load() { }
+
+        public virtual void OnContainerLoadComplete() { }
+
     }
 }

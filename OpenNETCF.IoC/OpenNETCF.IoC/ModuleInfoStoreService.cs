@@ -32,6 +32,7 @@ namespace OpenNETCF.IoC
     {
         public string AssemblyFile { get; internal set; }
         public Assembly Assembly { get; internal set; }
+        internal object Instance { get; set; }
     }
 
     public sealed class ModuleInfoStoreService
@@ -66,8 +67,30 @@ namespace OpenNETCF.IoC
                              where n.Name == "ModuleInfo"
                              select n.Attribute("AssemblyFile").Value;
 
-
+            // laod each assembly
             LoadAssemblies(assemblies);
+
+            // now notify all assemblies that all other assemblies are loaded (this is useful when there are module interdependencies
+            NotifyAssembliesOfContainerCompletion();
+        }
+
+        private void NotifyAssembliesOfContainerCompletion()
+        {
+            foreach (var m in m_loadedModules)
+            {
+                var loadComplete = ((ModuleInfo)m).Instance.GetType().GetMethod("OnContainerLoadComplete", BindingFlags.Public | BindingFlags.Instance);
+                if (loadComplete != null)
+                {
+                    try
+                    {
+                        loadComplete.Invoke(((ModuleInfo)m).Instance, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
         }
 
         internal void LoadAssembly(Assembly assembly)
@@ -104,7 +127,8 @@ namespace OpenNETCF.IoC
                 new ModuleInfo 
                 { 
                     Assembly = assembly,
-                    AssemblyFile = assemblyName.CodeBase 
+                    AssemblyFile = assemblyName.CodeBase,
+                    Instance = instance
                 });
 
             var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
