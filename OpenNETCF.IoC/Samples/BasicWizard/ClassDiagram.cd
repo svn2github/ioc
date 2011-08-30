@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BasicWizard.Entities.SetupOptions" Collapsed="true">
+    <Position X="1.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAACAcAAAAAA=</HashCode>
+      <FileName>Entities\SetupOptions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BasicWizard.Presenters.WizardPresenter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="4.25" Width="1.5" />
+    <AssociationLine Name="WizardService" Type="BasicWizard.Services.WizardService" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.75" Y="4.25" />
+        <Point X="3.75" Y="3.438" />
+        <Point X="2.75" Y="3.438" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.079" Y="-0.252" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAoAAAAAQgBABAAAAgACAAgAAAgAAAACAAQAEAAAA=</HashCode>
+      <FileName>Presenters\WizardPresenter.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="WizardService" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BasicWizard.WizardForm" Collapsed="true">
+    <Position X="4.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABEAACAAAAAAAADIJAACAAgAMAAAICAAACIAAAA=</HashCode>
+      <FileName>WizardForm.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="WizardService" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BasicWizard.Services.WizardService" Collapsed="true">
+    <Position X="1.25" Y="3" Width="1.5" />
+    <AssociationLine Name="Presenter" Type="BasicWizard.Presenters.WizardPresenter" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="2.079" Y="3.562" />
+        <Point X="2.079" Y="4.438" />
+        <Point X="3" Y="4.438" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>kwAIAAIAQCBAAAAAAAAAAAAAAAAAAAAAIAAAAIBAAQA=</HashCode>
+      <FileName>Services\WizardService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Presenter" />
+      <Property Name="Options" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BasicWizard.Views.Step1" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <AssociationLine Name="Presenter" Type="BasicWizard.Presenters.WizardPresenter" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.016" Y="6" />
+        <Point X="1.016" Y="4.688" />
+        <Point X="3" Y="4.688" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.464" Y="-0.211" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAgBAAEACAIAACEAAAAAAAIAAAAAAAIAA=</HashCode>
+      <FileName>Views\Step1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Presenter" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BasicWizard.Views.Step2" Collapsed="true">
+    <Position X="2.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAIBgAAACAAAACAAAAAAAgIAAAAAAAAAI=</HashCode>
+      <FileName>Views\Step2.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Presenter" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BasicWizard.Views.Step3" Collapsed="true">
+    <Position X="4" Y="6" Width="1.5" />
+    <AssociationLine Name="Presenter" Type="BasicWizard.Presenters.WizardPresenter">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.869" Y="0.164" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgHAAABAAAACAAAACAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Views\Step3.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Presenter" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BasicWizard.Views.Step4" Collapsed="true">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAQABAAAACAAAACAAAAAAAAIAAAABAAAAQ=</HashCode>
+      <FileName>Views\Step4.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Presenter" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
