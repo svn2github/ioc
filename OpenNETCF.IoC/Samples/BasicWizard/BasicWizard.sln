@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicWizard", "BasicWizard.csproj", "{E0A39D09-6278-45C4-919C-732EE975DA85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.UI", "..\..\OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.csproj", "{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC", "..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj", "{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
+		SccProjectUniqueName0 = ..\\..\\OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.csproj
+		SccProjectName0 = ../../OpenNETCF.IoC.UI
+		SccLocalPath0 = ..\\..\\OpenNETCF.IoC.UI
+		SccProjectUniqueName1 = ..\\..\\OpenNETCF.IoC\\OpenNETCF.IoC.csproj
+		SccProjectName1 = ../../OpenNETCF.IoC
+		SccLocalPath1 = ..\\..\\OpenNETCF.IoC
+		SccLocalPath2 = .
+		SccProjectUniqueName3 = BasicWizard.csproj
+		SccLocalPath3 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0A39D09-6278-45C4-919C-732EE975DA85}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
