@@ -37,16 +37,18 @@ namespace OpenNETCF.IoC.UI
             get { return m_smartParts; }
         }
 
-        public void Show<TSmartPart>()
+        public TSmartPart Show<TSmartPart>()
             where TSmartPart : SmartPart
         {
-            var existing = SmartParts.FirstOrDefault(s => s is TSmartPart);
+            var existing = SmartParts.FirstOrDefault(s => s is TSmartPart) as TSmartPart;
             if(existing == null)
             {
                 existing = RootWorkItem.SmartParts.AddNew<TSmartPart>();
             }
 
             OnShow(existing, null);
+
+            return existing;
         }
 
         public void Show(ISmartPart smartPart)
@@ -75,7 +77,7 @@ namespace OpenNETCF.IoC.UI
                 RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                 this.Controls.Add(control);
                 Activate(smartPart);
-                smartPart.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(smartPart_VisibleChanged);
+                smartPart.VisibleChanged += smartPart_VisibleChanged;
             }
             else
             {
@@ -83,10 +85,10 @@ namespace OpenNETCF.IoC.UI
             }
         }
 
-        void smartPart_VisibleChanged(object sender, GenericEventArgs<bool> e)
+        void smartPart_VisibleChanged(object sender, EventArgs e)
         {
             var smartPart = sender as ISmartPart;
-            if(e.Value)
+            if(smartPart.Visible)
             {
                 RaiseSmartPartActivated(smartPart);
                 smartPart.OnActivated();

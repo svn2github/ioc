@@ -224,6 +224,24 @@ namespace OpenNETCF.IoC
             return default(TTypeToGet);
         }
 
+        public TTypeToGet GetFirstOrCreate<TTypeToGet>() 
+            where TTypeToGet : class
+        {
+            var item = Get<TTypeToGet>().FirstOrDefault();
+            if (item != null) return item;
+
+            return AddNew<TTypeToGet>();
+        }
+
+        public TTypeToGet GetOrCreate<TTypeToGet>(string id)
+            where TTypeToGet : class
+        {
+            var item = Get<TTypeToGet>(id);
+            if (item != null) return item;
+
+            return AddNew<TTypeToGet>();
+        }
+
         public TItem this[string id]
         {
             get { return this.Get(id); }
