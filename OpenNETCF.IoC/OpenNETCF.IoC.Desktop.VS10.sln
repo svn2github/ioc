@@ -1,0 +1,120 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{D78FD06D-6110-4C4C-AACB-48C259CE2E60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.Desktop", "OpenNETCF.IoC\OpenNETCF.IoC.Desktop.csproj", "{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.UI.Desktop", "OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.Desktop.csproj", "{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{35FA8A9A-B815-449D-ACB3-8E4D3F9D1AF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schedule", "Schedule", "{EDDBEE23-6CFE-4450-8DDD-993E2495BF68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Module.FFx", "Modules\Schedule\Schedule.Module\Schedule.Module.FFx.csproj", "{60DFA989-3A25-4EAC-91ED-6FD897F7002E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Unit.Test", "Modules\Schedule\Schedule.Unit.Test\Schedule.Unit.Test.csproj", "{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5AC7A2F0-6509-4DBC-91FB-1D04C257E536}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIEventSample.FFx", "UIEventSample\UIEventSample.FFx.csproj", "{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
+		SccProjectUniqueName0 = OpenNETCF.IoC\\OpenNETCF.IoC.Desktop.csproj
+		SccProjectTopLevelParentUniqueName0 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName0 = OpenNETCF.IoC
+		SccLocalPath0 = OpenNETCF.IoC
+		SccProjectUniqueName1 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.Desktop.csproj
+		SccProjectTopLevelParentUniqueName1 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName1 = OpenNETCF.IoC.UI
+		SccLocalPath1 = OpenNETCF.IoC.UI
+		SccProjectUniqueName2 = Modules\\Schedule\\Schedule.Module\\Schedule.Module.FFx.csproj
+		SccProjectTopLevelParentUniqueName2 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName2 = Modules/Schedule/Schedule.Module
+		SccLocalPath2 = Modules\\Schedule\\Schedule.Module
+		SccProjectUniqueName3 = Modules\\Schedule\\Schedule.Unit.Test\\Schedule.Unit.Test.csproj
+		SccProjectTopLevelParentUniqueName3 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName3 = Modules/Schedule/Schedule.Unit.Test
+		SccLocalPath3 = Modules\\Schedule\\Schedule.Unit.Test
+		SccProjectUniqueName4 = UIEventSample\\UIEventSample.FFx.csproj
+		SccProjectTopLevelParentUniqueName4 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName4 = UIEventSample
+		SccLocalPath4 = UIEventSample
+		SccLocalPath5 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}.Release|x86.ActiveCfg = Release|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E}.Release|x86.ActiveCfg = Release|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A}.Release|x86.ActiveCfg = Release|Any CPU
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Debug|x86.ActiveCfg = Debug|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Debug|x86.Build.0 = Debug|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|Any CPU.ActiveCfg = Release|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|Mixed Platforms.Build.0 = Release|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|x86.ActiveCfg = Release|x86
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9} = {D78FD06D-6110-4C4C-AACB-48C259CE2E60}
+		{BCD73E42-C3CA-4E31-BE73-F583A09A80F6} = {D78FD06D-6110-4C4C-AACB-48C259CE2E60}
+		{EDDBEE23-6CFE-4450-8DDD-993E2495BF68} = {35FA8A9A-B815-449D-ACB3-8E4D3F9D1AF8}
+		{60DFA989-3A25-4EAC-91ED-6FD897F7002E} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
+		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
+		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
+	EndGlobalSection
+EndGlobal

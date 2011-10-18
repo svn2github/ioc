@@ -21,23 +21,23 @@ namespace OpenNETCF.IoC.UI
 {
     public class DeckWorkspace : Workspace
     {
-        protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
-        {
-            ISmartPart current = ActiveSmartPart;
-            if ((current != null) && (smartPart != current))
-            {
-                current.Visible = false;
-            }
-            smartPart.Dock = DockStyle.Fill;
-            base.OnShow(smartPart, smartPartInfo);
-        }
+        //protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
+        //{
+        //    ISmartPart current = ActiveSmartPart;
+        //    if ((current != null) && (smartPart != current))
+        //    {
+        //        current.Visible = false;
+        //    }
+        //    smartPart.Dock = DockStyle.Fill;
+        //    base.OnShow(smartPart, smartPartInfo);
+        //}
 
-        public override ISmartPart ActiveSmartPart
-        {
-            get
-            {
-                return SmartParts.FirstOrDefault(s => s.Visible);
-            }
-        }
+        //public override ISmartPart ActiveSmartPart
+        //{
+        //    get
+        //    {
+        //        return SmartParts.FirstOrDefault(s => s.Visible);
+        //    }
+        //}
     }
 }

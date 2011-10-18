@@ -15,25 +15,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenNETCF.IoC.UI
+namespace OpenNETCF.Schedule
 {
-    public interface ISmartPart : IDisposable
+    public class SingleEvent : ScheduleEvent
     {
-        bool Visible { get;  set; }
-        bool Focused { get; }
-        void BringToFront();
-        bool Focus();
-        string Name { get; set; }
-        bool Enabled { get; set; }
-        void OnActivated();
-        void OnDeactivated();
-        void Show();
-        void Hide();
-        IWorkspace Workspace { get; set; }
-
-#if !(WINDOWS_PHONE || IPHONE) 
-        System.Windows.Forms.DockStyle Dock { set; }
-        System.Windows.Forms.Control Parent { get; }
-#endif
     }
 }

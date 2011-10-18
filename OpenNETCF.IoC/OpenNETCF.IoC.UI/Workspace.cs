@@ -27,6 +27,8 @@ namespace OpenNETCF.IoC.UI
 
         private SmartPartCollection m_smartParts;
 
+        public virtual ISmartPart ActiveSmartPart { get; protected set; }
+
         public Workspace()
         {
             m_smartParts = new SmartPartCollection();
@@ -46,7 +48,7 @@ namespace OpenNETCF.IoC.UI
                 existing = RootWorkItem.SmartParts.AddNew<TSmartPart>();
             }
 
-            OnShow(existing, null);
+            Show(existing, null);
 
             return existing;
         }
@@ -69,34 +71,19 @@ namespace OpenNETCF.IoC.UI
 
             Control control = smartPart as Control;
             if (control == null) throw new ArgumentException("smartPart must be a Control");
+            control.Dock = DockStyle.Fill;
 
             if (!SmartParts.Contains(smartPart))
             {
-                (smartPart as ISmartPart).Workspace = this;
+                smartPart.Workspace = this;
                 m_smartParts.Add(smartPart);
                 RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                 this.Controls.Add(control);
                 Activate(smartPart);
-                smartPart.VisibleChanged += smartPart_VisibleChanged;
             }
             else
             {
                 Activate(smartPart);
-            }
-        }
-
-        void smartPart_VisibleChanged(object sender, EventArgs e)
-        {
-            var smartPart = sender as ISmartPart;
-            if(smartPart.Visible)
-            {
-                RaiseSmartPartActivated(smartPart);
-                smartPart.OnActivated();
-            }
-            else
-            {
-                RaiseSmartPartDeactivated(smartPart);
-                smartPart.OnDeactivated();
             }
         }
 
@@ -154,8 +141,12 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            CheckSmartPartExists(smartPart);
+            AddSmartPartToCollectionIfRequired(smartPart);
 
+            if (smartPart == ActiveSmartPart) return;
+
+            if (ActiveSmartPart != null) OnDeactivate(ActiveSmartPart);
+            ActiveSmartPart = smartPart;
             OnActivate(smartPart);
         }
 
@@ -165,10 +156,14 @@ namespace OpenNETCF.IoC.UI
 
             if (!smartPart.Visible)
             {
+                // this will call OnActivated for us
                 smartPart.Visible = true;
             }
-
-            smartPart.OnActivated();
+            else
+            {
+                // for activation of an already-visible SmartPart
+                smartPart.OnActivated();
+            }
 
             RaiseSmartPartActivated(smartPart);
 
@@ -214,20 +209,12 @@ namespace OpenNETCF.IoC.UI
             SmartPartDeactivated(this, new DataEventArgs<ISmartPart>(smartPart));
         }
 
-        public virtual ISmartPart ActiveSmartPart
-        {
-            get
-            {
-                return SmartParts.FirstOrDefault(c => c.Focused == true);
-            }
-        }
-
         private void CheckSmartPartExists(ISmartPart smartPart)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
             if (!SmartParts.Contains(smartPart))
-            {
+            {                
                 throw new Exception("ISmartPart not in Workspace");
             }
         }

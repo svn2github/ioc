@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -24,6 +25,7 @@ namespace OpenNETCF.IoC.UI
 
         private TabControl m_tabs;
         private List<TabInfo> m_smartPartTabs;
+        private bool m_inShowTab = false;
 #if !WindowsCE
         private ImageList m_tabImages;
 #endif
@@ -69,7 +71,7 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            ShowTab(smartPart, null, false);
+            ShowTab(smartPart, null, true);
         }
 
         protected override void OnClose(ISmartPart smartPart)
@@ -100,6 +102,16 @@ namespace OpenNETCF.IoC.UI
             Deactivate(smartPart);
         }
 
+        protected override void OnDeactivate(ISmartPart smartPart)
+        {
+            // we must override becasue the base "hides" the deactivated control and for a tab, we want to stay visible
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
+            smartPart.OnDeactivated();
+
+            RaiseSmartPartDeactivated(smartPart);            
+        }
+
         protected override void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
             ShowTab(smartPart, smartPartInfo, true);
@@ -116,47 +128,57 @@ namespace OpenNETCF.IoC.UI
 
         private void ShowTab(ISmartPart smartPart, ISmartPartInfo smartPartInfo, bool createIfNew)
         {
-            TabInfo ti = m_smartPartTabs.Find(t => t.SmartPart == smartPart);
-
-            if (ti == null)
+            if (m_inShowTab) return;
+            m_inShowTab = true;
+            try
             {
-                if (!createIfNew)
-                {
-                    throw new Exception("Tab not found");
-                }
+                TabInfo ti = m_smartPartTabs.Find(t => t.SmartPart == smartPart);
 
-                TabPage page = new TabPage();
-                page.Text = smartPartInfo == null ? smartPart.Name : smartPartInfo.Title;
+                if (ti == null)
+                {
+                    if (!createIfNew)
+                    {
+                        throw new Exception("Tab not found");
+                    }
+
+                    TabPage page = new TabPage();
+                    page.Text = smartPartInfo == null ? smartPart.Name : smartPartInfo.Title;
 #if !WindowsCE
-                var iconInfo = smartPartInfo as IconicSmartPartInfo;
-                if ((iconInfo != null) && (iconInfo.Icon != null))
-                {
-                    int imageIndex = m_tabImages.Images.Count;
-                    m_tabImages.Images.Add(iconInfo.Icon);
-                    page.ImageIndex = imageIndex;
-                }
+                    var iconInfo = smartPartInfo as IconicSmartPartInfo;
+                    if ((iconInfo != null) && (iconInfo.Icon != null))
+                    {
+                        int imageIndex = m_tabImages.Images.Count;
+                        m_tabImages.Images.Add(iconInfo.Icon);
+                        page.ImageIndex = imageIndex;
+                    }
 #endif
-                smartPart.Dock = DockStyle.Fill;
-                page.ClientRectangle.Inflate(-2, -2);
-                page.Controls.Add((Control)smartPart);
-                m_tabs.TabPages.Add(page);
+                    smartPart.Dock = DockStyle.Fill;
+                    page.ClientRectangle.Inflate(-2, -2);
+                    page.Controls.Add((Control)smartPart);
+                    m_tabs.TabPages.Add(page);
 
-                ti = new TabInfo { Page = page, SmartPart = smartPart, SmartPartInfo = smartPartInfo };
-                
-                m_smartPartTabs.Add(ti);
+                    ti = new TabInfo { Page = page, SmartPart = smartPart, SmartPartInfo = smartPartInfo };
+
+                    m_smartPartTabs.Add(ti);
+                }
+                int index = m_tabs.TabPages.IndexOf(ti.Page);
+                if (index < 0)
+                {
+                    m_tabs.TabPages.Add(ti.Page);
+                    index = m_tabs.TabPages.IndexOf(ti.Page);
+                }
+                m_tabs.SelectedIndex = index;
+
+                AddSmartPartToCollectionIfRequired(smartPart);
+
+                Activate(smartPart);
+                //            RaiseSmartPartActivated(smartPart);
+                smartPart.OnActivated();
             }
-            int index = m_tabs.TabPages.IndexOf(ti.Page);
-            if (index < 0)
+            finally
             {
-                m_tabs.TabPages.Add(ti.Page);
-                index = m_tabs.TabPages.IndexOf(ti.Page);
+                m_inShowTab = false;
             }
-            m_tabs.SelectedIndex = index;
-
-            AddSmartPartToCollectionIfRequired(smartPart);
-
-            RaiseSmartPartActivated(smartPart);
-            smartPart.OnActivated();
         }
 
         public virtual void ClearTabs()

@@ -83,7 +83,7 @@ namespace OpenNETCF.IoC
             {
                 if (expectNullId)
                 {
-                    id = ObjectFactory.GenerateItemName(typeToBuild, m_root);
+                    id = ObjectFactory.GenerateItemName(typeToBuild, this);
                 }
                 else
                 {

@@ -18,12 +18,12 @@ namespace WorkspaceDisposal
         {
             InitializeComponent();
 
-            this.VisibleChanged += new EventHandler<GenericEventArgs<bool>>(ViewA_VisibleChanged);
+//            this.VisibleChanged += ViewA_VisibleChanged;
         }
 
-        void ViewA_VisibleChanged(object sender, GenericEventArgs<bool> e)
+        void ViewA_VisibleChanged(object sender, EventArgs e)
         {
-            Debug.WriteLine("Visible = " + e.Value.ToString());
+            Debug.WriteLine("Visible = " + this.Visible.ToString());
         }
 
         public override void OnActivated()

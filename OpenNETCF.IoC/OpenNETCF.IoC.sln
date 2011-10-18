@@ -54,9 +54,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.Location.Interfac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageButtonDemo", "Samples\ImageButtonDemo\ImageButtonDemo.csproj", "{16E40012-C7FC-417B-90C8-48B4180F8B03}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schedule", "Schedule", "{8CC69C7A-6C4D-4EC3-B7AB-C0EA64A8CFE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Module.CF", "Modules\Schedule\Schedule.Module\Schedule.Module.CF.csproj", "{C5C94204-9B2D-4E3C-9856-4E23972B768C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -132,6 +136,10 @@ Global
 		SccProjectTopLevelParentUniqueName18 = OpenNETCF.IoC.sln
 		SccProjectName18 = Samples/ImageButtonDemo
 		SccLocalPath18 = Samples\\ImageButtonDemo
+		SccProjectUniqueName19 = Modules\\Schedule\\Schedule.Module\\Schedule.Module.CF.csproj
+		SccProjectTopLevelParentUniqueName19 = OpenNETCF.IoC.sln
+		SccProjectName19 = Modules/Schedule/Schedule.Module
+		SccLocalPath19 = Modules\\Schedule\\Schedule.Module
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -233,6 +241,10 @@ Global
 		{16E40012-C7FC-417B-90C8-48B4180F8B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16E40012-C7FC-417B-90C8-48B4180F8B03}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16E40012-C7FC-417B-90C8-48B4180F8B03}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,7 +268,9 @@ Global
 		{7CC76F15-DB27-45BE-AC4E-6458CA5C24A1} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
 		{A5AF600E-F1CD-40A1-9211-47B319A7876B} = {3AD05C71-5747-4CCD-B199-CCF8C6F07CF4}
 		{000463F8-B213-4422-9304-0173C9681173} = {05053DDA-A699-4B8C-B722-B03CB8AFD28F}
+		{8CC69C7A-6C4D-4EC3-B7AB-C0EA64A8CFE8} = {05053DDA-A699-4B8C-B722-B03CB8AFD28F}
 		{12C1C89A-9824-4ABE-A94B-0408A359A4CF} = {000463F8-B213-4422-9304-0173C9681173}
 		{D50EF70C-7C27-411A-B097-9F4AEC747CDB} = {000463F8-B213-4422-9304-0173C9681173}
+		{C5C94204-9B2D-4E3C-9856-4E23972B768C} = {8CC69C7A-6C4D-4EC3-B7AB-C0EA64A8CFE8}
 	EndGlobalSection
 EndGlobal

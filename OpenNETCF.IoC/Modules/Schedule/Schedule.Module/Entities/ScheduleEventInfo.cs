@@ -15,25 +15,17 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenNETCF.IoC.UI
+namespace OpenNETCF.Schedule
 {
-    public interface ISmartPart : IDisposable
+    public class ScheduleEventInfo
     {
-        bool Visible { get;  set; }
-        bool Focused { get; }
-        void BringToFront();
-        bool Focus();
-        string Name { get; set; }
-        bool Enabled { get; set; }
-        void OnActivated();
-        void OnDeactivated();
-        void Show();
-        void Hide();
-        IWorkspace Workspace { get; set; }
+        public DateTime Start { get; set; }
+        public double Duration { get; set; }
+        public string Description { get; set; }
 
-#if !(WINDOWS_PHONE || IPHONE) 
-        System.Windows.Forms.DockStyle Dock { set; }
-        System.Windows.Forms.Control Parent { get; }
-#endif
+        public override string ToString()
+        {
+            return Start.ToString("MM/dd/yy HH:mm:ss");
+        }
     }
 }

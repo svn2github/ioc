@@ -15,25 +15,19 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenNETCF.IoC.UI
+namespace OpenNETCF.Schedule
 {
-    public interface ISmartPart : IDisposable
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>The date portion of Start is ignored for recurring events</remarks>
+    public class RecurringEvent : ScheduleEvent
     {
-        bool Visible { get;  set; }
-        bool Focused { get; }
-        void BringToFront();
-        bool Focus();
-        string Name { get; set; }
-        bool Enabled { get; set; }
-        void OnActivated();
-        void OnDeactivated();
-        void Show();
-        void Hide();
-        IWorkspace Workspace { get; set; }
-
-#if !(WINDOWS_PHONE || IPHONE) 
-        System.Windows.Forms.DockStyle Dock { set; }
-        System.Windows.Forms.Control Parent { get; }
-#endif
+        public ScheduleDay Days { get; set; }
+        public TimeSpan StartTime 
+        {
+            get { return Start.TimeOfDay; }
+            set { Start = new DateTime(2011, 1, 1, value.Hours, value.Minutes, value.Seconds); }
+        }
     }
 }

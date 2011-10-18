@@ -15,25 +15,22 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenNETCF.IoC.UI
+namespace OpenNETCF.Schedule
 {
-    public interface ISmartPart : IDisposable
+    [Flags]
+    public enum ScheduleDay
     {
-        bool Visible { get;  set; }
-        bool Focused { get; }
-        void BringToFront();
-        bool Focus();
-        string Name { get; set; }
-        bool Enabled { get; set; }
-        void OnActivated();
-        void OnDeactivated();
-        void Show();
-        void Hide();
-        IWorkspace Workspace { get; set; }
+        None = 0,
+        Sunday = 0x01,
+        Monday = 0x02,
+        Tuesday = 0x04,
+        Wednesday = 0x08,
+        Thursday = 0x10,
+        Friday = 0x20,
+        Saturday = 0x40,
 
-#if !(WINDOWS_PHONE || IPHONE) 
-        System.Windows.Forms.DockStyle Dock { set; }
-        System.Windows.Forms.Control Parent { get; }
-#endif
+        Weekdays = Monday | Tuesday | Wednesday | Thursday | Friday,
+        Weekends = Saturday | Sunday,
+        All = Sunday | Monday | Tuesday | Wednesday | Thursday | Friday | Saturday
     }
 }

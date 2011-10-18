@@ -20,9 +20,21 @@ namespace OpenNETCF.IoC.UI
 {
     public class SmartPart : UserControl, ISmartPart
     {
-        public new event EventHandler<GenericEventArgs<bool>> VisibleChanged;
-
         public IWorkspace Workspace { get; set; }
+
+        public SmartPart()
+        {
+#if !WindowsCE
+            this.SuspendLayout();
+            // 
+            // SmartPart
+            // 
+            this.DoubleBuffered = true;
+            this.Name = "SmartPart";
+            this.Size = new System.Drawing.Size(171, 169);
+            this.ResumeLayout(false);
+#endif
+        }
 
         public virtual void OnActivated() 
         { 
@@ -31,25 +43,29 @@ namespace OpenNETCF.IoC.UI
         public virtual void OnDeactivated() 
         { 
         }
-
-        private void RaiseVisibleChanged(bool visible)
-        {
-            var handler = VisibleChanged;
-            if(handler == null) return;
-            
-            VisibleChanged(this, new GenericEventArgs<bool>(visible));
-        }
-
+        
         public new void Hide()
         {
-            base.Hide();
-            RaiseVisibleChanged(Visible);
+            var wasVisible = this.Visible;
+
+            SetVisibleCore(false);
+
+            if (wasVisible)
+            {
+                OnDeactivated();
+            }
         }
 
         public new void Show()
         {
-            base.Show();
-            RaiseVisibleChanged(Visible);
+            var wasVisible = this.Visible;
+
+            SetVisibleCore(true);
+
+            if (!wasVisible)
+            {
+                OnActivated();
+            }
         }
 
         public new bool Visible
@@ -59,25 +75,31 @@ namespace OpenNETCF.IoC.UI
             {
                 if (Visible == value) return;
 
-                base.Visible = value;
-                RaiseVisibleChanged(value);
+                SetVisibleCore(value);
+
+                if (value)
+                {
+                    OnActivated();
+                }
+                else
+                {
+                    OnDeactivated();
+                }
             }
         }
 
-        private void InitializeComponent()
+#if WindowsCE
+        private void SetVisibleCore(bool value)
         {
-#if !WindowsCE
-            this.SuspendLayout();
-            // 
-            // SmartPart
-            // 
-            this.DoubleBuffered = true;
-            this.Name = "SmartPart";
-            this.ResumeLayout(false);
-
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-#endif
+            if(value)
+            {
+                base.Show();
+            }
+            else
+            {
+                base.Hide();
+            }
         }
-
+#endif
     }
 }

@@ -14,26 +14,19 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using OpenNETCF.IoC;
 
-namespace OpenNETCF.IoC.UI
+namespace OpenNETCF.Schedule
 {
-    public interface ISmartPart : IDisposable
+    public class Module : ModuleInit
     {
-        bool Visible { get;  set; }
-        bool Focused { get; }
-        void BringToFront();
-        bool Focus();
-        string Name { get; set; }
-        bool Enabled { get; set; }
-        void OnActivated();
-        void OnDeactivated();
-        void Show();
-        void Hide();
-        IWorkspace Workspace { get; set; }
+        public override void Load()
+        {
+        }
 
-#if !(WINDOWS_PHONE || IPHONE) 
-        System.Windows.Forms.DockStyle Dock { set; }
-        System.Windows.Forms.Control Parent { get; }
-#endif
+        public override void AddServices()
+        {
+            RootWorkItem.Services.AddNew<ScheduleService>();
+        }
     }
 }
