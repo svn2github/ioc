@@ -19,32 +19,38 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5AC7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIEventSample.FFx", "UIEventSample\UIEventSample.FFx.csproj", "{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.Schedule.Interface.FFx.VS10", "Modules\Schedule\Schedule.Interface\OpenNETCF.Schedule.Interface.FFx.VS10.csproj", "{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
-		SccProjectUniqueName0 = OpenNETCF.IoC\\OpenNETCF.IoC.Desktop.csproj
-		SccProjectTopLevelParentUniqueName0 = OpenNETCF.IoC.Desktop.VS10.sln
-		SccProjectName0 = OpenNETCF.IoC
-		SccLocalPath0 = OpenNETCF.IoC
-		SccProjectUniqueName1 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.Desktop.csproj
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = OpenNETCF.IoC\\OpenNETCF.IoC.Desktop.csproj
 		SccProjectTopLevelParentUniqueName1 = OpenNETCF.IoC.Desktop.VS10.sln
-		SccProjectName1 = OpenNETCF.IoC.UI
-		SccLocalPath1 = OpenNETCF.IoC.UI
-		SccProjectUniqueName2 = Modules\\Schedule\\Schedule.Module\\Schedule.Module.FFx.csproj
+		SccProjectName1 = OpenNETCF.IoC
+		SccLocalPath1 = OpenNETCF.IoC
+		SccProjectUniqueName2 = OpenNETCF.IoC.UI\\OpenNETCF.IoC.UI.Desktop.csproj
 		SccProjectTopLevelParentUniqueName2 = OpenNETCF.IoC.Desktop.VS10.sln
-		SccProjectName2 = Modules/Schedule/Schedule.Module
-		SccLocalPath2 = Modules\\Schedule\\Schedule.Module
-		SccProjectUniqueName3 = Modules\\Schedule\\Schedule.Unit.Test\\Schedule.Unit.Test.csproj
+		SccProjectName2 = OpenNETCF.IoC.UI
+		SccLocalPath2 = OpenNETCF.IoC.UI
+		SccProjectUniqueName3 = Modules\\Schedule\\Schedule.Module\\Schedule.Module.FFx.csproj
 		SccProjectTopLevelParentUniqueName3 = OpenNETCF.IoC.Desktop.VS10.sln
-		SccProjectName3 = Modules/Schedule/Schedule.Unit.Test
-		SccLocalPath3 = Modules\\Schedule\\Schedule.Unit.Test
-		SccProjectUniqueName4 = UIEventSample\\UIEventSample.FFx.csproj
+		SccProjectName3 = Modules/Schedule/Schedule.Module
+		SccLocalPath3 = Modules\\Schedule\\Schedule.Module
+		SccProjectUniqueName4 = Modules\\Schedule\\Schedule.Unit.Test\\Schedule.Unit.Test.csproj
 		SccProjectTopLevelParentUniqueName4 = OpenNETCF.IoC.Desktop.VS10.sln
-		SccProjectName4 = UIEventSample
-		SccLocalPath4 = UIEventSample
-		SccLocalPath5 = .
+		SccProjectName4 = Modules/Schedule/Schedule.Unit.Test
+		SccLocalPath4 = Modules\\Schedule\\Schedule.Unit.Test
+		SccProjectUniqueName5 = UIEventSample\\UIEventSample.FFx.csproj
+		SccProjectTopLevelParentUniqueName5 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName5 = UIEventSample
+		SccLocalPath5 = UIEventSample
+		SccProjectUniqueName6 = Modules\\Schedule\\Schedule.Interface\\OpenNETCF.Schedule.Interface.FFx.VS10.csproj
+		SccProjectTopLevelParentUniqueName6 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName6 = Modules/Schedule/Schedule.Interface
+		SccLocalPath6 = Modules\\Schedule\\Schedule.Interface
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +111,16 @@ Global
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|Mixed Platforms.Build.0 = Release|x86
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|x86.ActiveCfg = Release|x86
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2}.Release|x86.Build.0 = Release|x86
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +131,7 @@ Global
 		{EDDBEE23-6CFE-4450-8DDD-993E2495BF68} = {35FA8A9A-B815-449D-ACB3-8E4D3F9D1AF8}
 		{60DFA989-3A25-4EAC-91ED-6FD897F7002E} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
 		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
+		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
 	EndGlobalSection
 EndGlobal

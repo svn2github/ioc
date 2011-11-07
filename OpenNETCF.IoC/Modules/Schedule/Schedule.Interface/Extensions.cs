@@ -24,6 +24,20 @@ namespace OpenNETCF.Schedule
             return dt.DayOfWeek.GetScheduleDay();
         }
 
+        public static DateTime StartOfDay(this DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
+        }
+
+        public static bool FallsOnSameDayAs(this DateTime dt, DateTime testDate)
+        {
+            if (dt.Year != testDate.Year) return false;
+            if (dt.DayOfYear != testDate.DayOfYear) return false;
+
+            return true;
+        }
+
+
         public static ScheduleDay GetScheduleDay(this DayOfWeek dow)
         {
             switch (dow)

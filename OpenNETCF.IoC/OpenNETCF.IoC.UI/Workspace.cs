@@ -215,7 +215,15 @@ namespace OpenNETCF.IoC.UI
 
             if (!SmartParts.Contains(smartPart))
             {                
-                throw new Exception("ISmartPart not in Workspace");
+                // check to see if it's the RootWorkItem SmartParts collection (i.e. added to the RootWorkItem.SmartParts directly)
+                if (RootWorkItem.SmartParts.ContainsObject(smartPart))
+                {
+                    m_smartParts.Add(smartPart);
+                }
+                else
+                {
+                    throw new Exception("ISmartPart not in Workspace");
+                }
             }
         }
 

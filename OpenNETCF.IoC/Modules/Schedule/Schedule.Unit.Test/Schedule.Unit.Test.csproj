@@ -58,6 +58,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Schedule.Interface\OpenNETCF.Schedule.Interface.FFx.VS10.csproj">
+      <Project>{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}</Project>
+      <Name>OpenNETCF.Schedule.Interface.FFx.VS10</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Schedule.Module\Schedule.Module.FFx.csproj">
       <Project>{60DFA989-3A25-4EAC-91ED-6FD897F7002E}</Project>
       <Name>Schedule.Module.FFx</Name>

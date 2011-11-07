@@ -14,20 +14,17 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+using System.Threading;
 
 namespace OpenNETCF.Schedule
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>The date portion of Start is ignored for recurring events</remarks>
-    public class RecurringEvent : ScheduleEvent
+    internal interface IScheduler
     {
-        public ScheduleDay Days { get; set; }
-        public TimeSpan StartTime 
-        {
-            get { return Start.TimeOfDay; }
-            set { Start = new DateTime(2011, 1, 1, value.Hours, value.Minutes, value.Seconds); }
-        }
+        event EventHandler<GenericEventArgs<ScheduleEventInfo>> StartTimeArrived;
+
+        void RegisterNextEvent(ScheduleEventInfo nextEvent, TimeSpan offset);
+        void Stop();
+        void Start();
     }
 }

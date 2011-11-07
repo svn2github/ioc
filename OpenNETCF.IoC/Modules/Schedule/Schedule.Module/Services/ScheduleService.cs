@@ -14,18 +14,93 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using OpenNETCF.IoC;
+using System.Diagnostics;
+using System.Threading;
 
 namespace OpenNETCF.Schedule
 {
-    internal class ScheduleService
+    internal class ScheduleService : IScheduleService
     {
+        [EventPublication(EventNames.ScheduleServiceReady)]
+        public event EventHandler ScheduleServiceReady;
+
+        public event EventHandler<GenericEventArgs<ScheduleEventInfo>> ScheduleEventStart;
+
         private List<RecurringEvent> m_recurring;
         private List<SingleEvent> m_single;
+
+        private IScheduler m_scheduler;
+        private ScheduleEventInfo m_nextEvent = null;
+        private bool m_enabled = false;
 
         public ScheduleService()
         {
             m_recurring = new List<RecurringEvent>();
             m_single = new List<SingleEvent>();
+
+            m_scheduler = new BasicScheduler();
+
+            m_scheduler.StartTimeArrived += new EventHandler<GenericEventArgs<ScheduleEventInfo>>(OnStartTimeArrived);
+        }
+
+        public bool Enabled 
+        {
+            get { return m_enabled; }
+            set
+            {
+                if (value == Enabled) return;
+                m_enabled = value;
+
+                if (value)
+                {
+                    m_scheduler.Start();
+                    UpdateScheduler();
+                }
+                else
+                {
+                    m_scheduler.Stop();
+                }
+            }
+        }
+
+        public virtual void Initialize()
+        {
+            // this can't happen in the ctor becasue the event handler doesn't get wired up until *after* the instance is created
+            var handler = ScheduleServiceReady;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual DateTime CurrentTime
+        {
+            get { return DateTime.Now; }
+        }
+
+        private void OnStartTimeArrived(object sender, GenericEventArgs<ScheduleEventInfo> e)
+        {
+            Debug.WriteLine("ScheduleService.OnStartTimeArrived");
+
+            var handler = ScheduleEventStart;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+
+            m_nextEvent = null;
+
+            // wait to ensure that we don't reschedule for the same event
+            Thread.Sleep(2000);
+
+            UpdateScheduler();
+        }
+
+        public ScheduleEventInfo GetNextEvent()
+        {
+            return GetNextEvent(CurrentTime);
         }
 
         public ScheduleEventInfo GetNextEvent(DateTime startPoint)
@@ -39,6 +114,22 @@ namespace OpenNETCF.Schedule
             return recur;
         }
 
+        public T[] GetAllEvents<T>() 
+            where T : ScheduleEvent
+        {
+            if (typeof(T).Equals(typeof(RecurringEvent)))
+            {
+                return m_recurring.ToArray() as T[];
+            }
+
+            if (typeof(T).Equals(typeof(SingleEvent)))
+            {
+                return m_single.ToArray() as T[];
+            }
+
+            throw new NotSupportedException();
+        }
+        
         public ScheduleEventInfo GetNextRecurring(DateTime startPoint)
         {
             var checkDay = startPoint.DayOfWeek.GetScheduleDay();
@@ -101,23 +192,49 @@ namespace OpenNETCF.Schedule
             throw new NotImplementedException();
         }
 
-        public void AddEvent(SingleEvent @event)
+        public virtual void AddEvent(SingleEvent @event)
         {
             throw new NotImplementedException();
         }
 
-        public void AddEvent(RecurringEvent @event)
+        public virtual void AddEvent(RecurringEvent @event)
         {
-            // todo: ensure it's not a duplicate
-            // todo: sort?
-            m_recurring.Add(@event);
+            Debug.WriteLine("ScheduleService.AddEvent(recurring)");
+
+            // ensure it's not a duplicate
+            if (!m_recurring.Contains(@event))
+            {
+                // todo: sort?
+                m_recurring.Add(@event);
+            }
+
+            UpdateScheduler();
+        }
+
+        private void UpdateScheduler()
+        {
+            var apparentNow = CurrentTime;
+            var platformNow = DateTime.Now;
+            var offset = apparentNow - platformNow;
+
+            var next = GetNextEvent(apparentNow);
+            if (next == null) return;
+
+            // see if we need to schedule this (the scheduler will give us an event when it occurs)
+            if ((m_nextEvent == null)
+                || (m_nextEvent.Start < apparentNow)
+                || (next.Start < m_nextEvent.Start))
+            {
+                m_nextEvent = next;
+                m_scheduler.RegisterNextEvent(m_nextEvent, offset);
+            }
         }
 
         /// <summary>
         /// Deletes a scheduled event based on the provided event's Identifier
         /// </summary>
         /// <param name="event"></param>
-        public void DeleteEvent(ScheduleEvent @event)
+        public virtual void DeleteEvent(ScheduleEvent @event)
         {
             DeleteEvent(@event.Identifier);
         }
@@ -126,7 +243,7 @@ namespace OpenNETCF.Schedule
         /// Deletes a scheduled event based on the provided event Identifier
         /// </summary>
         /// <param name="event"></param>
-        public void DeleteEvent(Guid eventIdentifier)
+        public virtual void DeleteEvent(Guid eventIdentifier)
         {
             m_recurring.RemoveAll(e => e.Identifier.Equals(eventIdentifier));
             m_single.RemoveAll(e => e.Identifier.Equals(eventIdentifier));
@@ -138,9 +255,21 @@ namespace OpenNETCF.Schedule
         /// <remarks>The time of the input DateTime is ignored, so events that occur before the specified time, but on that day, will still be retrieved </remarks>
         /// <param name="day"></param>
         /// <returns></returns>
-        public ScheduleEventInfo GetEvents(DateTime day)
+        public ScheduleEventInfo[] GetDaysEvents(DateTime day)
         {
-            throw new NotImplementedException();
+            var events = new List<ScheduleEventInfo>();
+            
+            ScheduleEventInfo next = null;
+            var start = day.StartOfDay();
+            do
+            {
+                next = GetNextEvent(start);
+                if ((next == null) || (!next.Start.FallsOnSameDayAs(day))) break;
+                events.Add(next);
+                start = next.Start;
+            } while (true);
+
+            return events.ToArray();
         }
 
         /// <summary>

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{60DFA989-3A25-4EAC-91ED-6FD897F7002E}</ProjectGuid>
+    <ProjectGuid>{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Schedule.Module.FFx</RootNamespace>
-    <AssemblyName>Schedule.Module.FFx</AssemblyName>
+    <RootNamespace>OpenNETCF.Schedule.Interface.FFx.VS10</RootNamespace>
+    <AssemblyName>OpenNETCF.Schedule.Interface.FFx.VS10</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenNETCF.Extensions, Version=1.0.11235.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OpenNETCF.Extensions, Version=1.0.11236.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\OpenNETCF.IoC.Shared\FFx\OpenNETCF.Extensions.dll</HintPath>
     </Reference>
@@ -47,22 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\BasicScheduler.cs" />
-    <Compile Include="Interfaces\IScheduler.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="Constants\EventNames.cs" />
+    <Compile Include="Constants\ScheduleDay.cs" />
+    <Compile Include="Entities\RecurringEvent.cs" />
+    <Compile Include="Entities\ScheduleEvent.cs" />
+    <Compile Include="Entities\ScheduleEventInfo.cs" />
+    <Compile Include="Entities\SingleEvent.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IScheduleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ScheduleService.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.Desktop.csproj">
-      <Project>{AAD0D35C-626C-4777-95D6-DBACEBD3B5C9}</Project>
-      <Name>OpenNETCF.IoC.Desktop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Schedule.Interface\OpenNETCF.Schedule.Interface.FFx.VS10.csproj">
-      <Project>{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3}</Project>
-      <Name>OpenNETCF.Schedule.Interface.FFx.VS10</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

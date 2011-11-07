@@ -24,6 +24,11 @@ namespace OpenNETCF.Schedule
             Identifier = Guid.NewGuid();
         }
 
+        public ScheduleEvent(Guid id)
+        {
+            Identifier = id;
+        }
+
         public Guid Identifier { get; private set; }
         public DateTime Start { get; set; }
         public double Duration { get; set; }

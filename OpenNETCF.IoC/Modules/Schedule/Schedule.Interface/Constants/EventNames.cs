@@ -14,19 +14,11 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using OpenNETCF.IoC;
 
 namespace OpenNETCF.Schedule
 {
-    public class Module : ModuleInit
+    public static class EventNames
     {
-        public override void Load()
-        {
-        }
-
-        public override void AddServices()
-        {
-            RootWorkItem.Services.AddNew<ScheduleService, IScheduleService>();
-        }
+        public const string ScheduleServiceReady = "evt:ScheduleServiceReady";
     }
 }
