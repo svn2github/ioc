@@ -65,13 +65,16 @@ namespace OpenNETCF.IoC.UI
             OnShow(smartPart, smartPartInfo);
         }
 
-        protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
+        /// <summary>
+        /// Adds a SmartPart to the Workspace without showing it
+        /// </summary>
+        /// <param name="smartPart"></param>
+        public virtual void Add(ISmartPart smartPart)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            Control control = smartPart as Control;
+            var control = smartPart as Control;
             if (control == null) throw new ArgumentException("smartPart must be a Control");
-            control.Dock = DockStyle.Fill;
 
             if (!SmartParts.Contains(smartPart))
             {
@@ -79,12 +82,19 @@ namespace OpenNETCF.IoC.UI
                 m_smartParts.Add(smartPart);
                 RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                 this.Controls.Add(control);
-                Activate(smartPart);
             }
-            else
-            {
-                Activate(smartPart);
-            }
+        }
+
+        protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
+        {
+            if (smartPart == null) throw new ArgumentNullException("smartPart");
+
+            var control = smartPart as Control;
+            if (control == null) throw new ArgumentException("smartPart must be a Control");
+            control.Dock = DockStyle.Fill;
+
+            Add(smartPart);
+            Activate(smartPart);
         }
 
         public void Hide(ISmartPart smartPart)
@@ -212,6 +222,8 @@ namespace OpenNETCF.IoC.UI
         private void CheckSmartPartExists(ISmartPart smartPart)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
+            var control = smartPart as Control;
+            if (control == null) throw new ArgumentException("smartPart must be a Control");
 
             if (!SmartParts.Contains(smartPart))
             {                
@@ -219,6 +231,7 @@ namespace OpenNETCF.IoC.UI
                 if (RootWorkItem.SmartParts.ContainsObject(smartPart))
                 {
                     m_smartParts.Add(smartPart);
+                    this.Controls.Add(control);
                 }
                 else
                 {
