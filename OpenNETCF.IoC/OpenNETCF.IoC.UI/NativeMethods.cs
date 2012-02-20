@@ -14,17 +14,25 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
+using System.Windows.Forms;
+using System.Reflection;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace OpenNETCF.IoC.UI
 {
-#if !WindowsCE
-    public class IconicSmartPartInfo : SmartPartInfo
+    internal static class NativeMethods
     {
-        /// <summary>
-        /// Icon of this SmartPart.
-        /// </summary>
-        public Icon Icon { get; set; }
-    }
+#if !WindowsCE
+        private const string DLL_NAME = "user32.dll";
+#else
+        private const string DLL_NAME = "coredll.dll";
 #endif
+        [DllImport(DLL_NAME)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport(DLL_NAME)]
+        public static extern bool ShowWindow(IntPtr hwnd, uint windowStyle);
+    }
 }
