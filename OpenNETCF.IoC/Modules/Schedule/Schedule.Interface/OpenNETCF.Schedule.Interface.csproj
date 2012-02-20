@@ -4,16 +4,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C5C94204-9B2D-4E3C-9856-4E23972B768C}</ProjectGuid>
+    <ProjectGuid>{25A2DEE7-1572-4DFB-BF72-E8C08D263331}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenNETCF.Schedule</RootNamespace>
-    <AssemblyName>OpenNETCF.Schedule.Module</AssemblyName>
+    <RootNamespace>OpenNETCF.Schedule.Interface</RootNamespace>
+    <AssemblyName>OpenNETCF.Schedule.Interface</AssemblyName>
     <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>WindowsCE</PlatformFamilyName>
     <PlatformID>E2BECB1F-8C8C-41ba-B736-9BE7D946A398</PlatformID>
     <OSVersion>5.0</OSVersion>
-    <DeployDirSuffix>Schedule.Module</DeployDirSuffix>
+    <DeployDirSuffix>OpenNETCF.Schedule.Interface</DeployDirSuffix>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
@@ -50,10 +50,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="OpenNETCF.Extensions, Version=1.0.11235.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\OpenNETCF.IoC.Shared\CF\OpenNETCF.Extensions.dll</HintPath>
-    </Reference>
+    <Reference Include="OpenNETCF.Extensions, Version=1.0.11235.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -62,24 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Schedulers.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="Constants\EventNames.cs" />
+    <Compile Include="Constants\ScheduleDay.cs" />
+    <Compile Include="Entities\RecurringEvent.cs" />
+    <Compile Include="Entities\ScheduleEvent.cs" />
+    <Compile Include="Entities\ScheduleEventInfo.cs" />
+    <Compile Include="Entities\SingleEvent.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Interfaces\IScheduleService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ScheduleService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj">
-      <Project>{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}</Project>
-      <Name>OpenNETCF.IoC</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Schedule.Interface\OpenNETCF.Schedule.Interface.csproj">
-      <Project>{25A2DEE7-1572-4DFB-BF72-E8C08D263331}</Project>
-      <Name>OpenNETCF.Schedule.Interface</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Constants\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
   <ProjectExtensions>

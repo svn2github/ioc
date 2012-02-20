@@ -40,6 +40,14 @@ namespace OpenNETCF.Schedule
             m_single = new List<SingleEvent>();
 
             m_scheduler = new BasicScheduler();
+            //if (Environment.OSVersion.Platform == PlatformID.WinCE)
+            //{
+            //    m_scheduler = new CFScheduler();
+            //}
+            //else
+            //{
+            //    m_scheduler = new FFxScheduler();
+            //}
 
             m_scheduler.StartTimeArrived += new EventHandler<GenericEventArgs<ScheduleEventInfo>>(OnStartTimeArrived);
         }

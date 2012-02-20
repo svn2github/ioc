@@ -58,9 +58,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schedule", "Schedule", "{8C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Module.CF", "Modules\Schedule\Schedule.Module\Schedule.Module.CF.csproj", "{C5C94204-9B2D-4E3C-9856-4E23972B768C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.Schedule.Interface", "Modules\Schedule\Schedule.Interface\OpenNETCF.Schedule.Interface.csproj", "{25A2DEE7-1572-4DFB-BF72-E8C08D263331}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 20
+		SccNumberOfProjects = 21
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -140,6 +142,10 @@ Global
 		SccProjectTopLevelParentUniqueName19 = OpenNETCF.IoC.sln
 		SccProjectName19 = Modules/Schedule/Schedule.Module
 		SccLocalPath19 = Modules\\Schedule\\Schedule.Module
+		SccProjectUniqueName20 = Modules\\Schedule\\Schedule.Interface\\OpenNETCF.Schedule.Interface.csproj
+		SccProjectTopLevelParentUniqueName20 = OpenNETCF.IoC.sln
+		SccProjectName20 = Modules/Schedule/Schedule.Interface
+		SccLocalPath20 = Modules\\Schedule\\Schedule.Interface
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.vsmdi
@@ -245,6 +251,10 @@ Global
 		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5C94204-9B2D-4E3C-9856-4E23972B768C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A2DEE7-1572-4DFB-BF72-E8C08D263331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25A2DEE7-1572-4DFB-BF72-E8C08D263331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25A2DEE7-1572-4DFB-BF72-E8C08D263331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25A2DEE7-1572-4DFB-BF72-E8C08D263331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,5 +282,6 @@ Global
 		{12C1C89A-9824-4ABE-A94B-0408A359A4CF} = {000463F8-B213-4422-9304-0173C9681173}
 		{D50EF70C-7C27-411A-B097-9F4AEC747CDB} = {000463F8-B213-4422-9304-0173C9681173}
 		{C5C94204-9B2D-4E3C-9856-4E23972B768C} = {8CC69C7A-6C4D-4EC3-B7AB-C0EA64A8CFE8}
+		{25A2DEE7-1572-4DFB-BF72-E8C08D263331} = {8CC69C7A-6C4D-4EC3-B7AB-C0EA64A8CFE8}
 	EndGlobalSection
 EndGlobal

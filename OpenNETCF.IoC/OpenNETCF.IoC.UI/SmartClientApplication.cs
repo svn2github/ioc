@@ -22,20 +22,6 @@ using System.Threading;
 
 namespace OpenNETCF.IoC.UI
 {
-    internal static class NativeMethods
-    {
-#if !WindowsCE
-        private const string DLL_NAME = "user32.dll";
-#else
-        private const string DLL_NAME = "coredll.dll";
-#endif
-        [DllImport(DLL_NAME)]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        [DllImport(DLL_NAME)]
-        public static extern bool ShowWindow(IntPtr hwnd, uint windowStyle);
-    }
-
     public abstract class SmartClientApplication<TShell>
         where TShell : Form
     {
@@ -88,6 +74,9 @@ namespace OpenNETCF.IoC.UI
                 var name = Assembly.GetEntryAssembly().GetName().Name;
                 var p = Process.GetProcessesByName(name).FirstOrDefault();
                 NativeMethods.SetForegroundWindow(p.MainWindowHandle);
+
+                // TODO: pass parameters to existing instance
+
                 return true;
             }
         }
