@@ -21,6 +21,8 @@ using System.Diagnostics;
 using TheInvoker = System.Windows.Threading.Dispatcher;
 #elif IPHONE
 using TheInvoker = System.Object;
+#elif ANDROID
+using TheInvoker = OpenNETCF.UIInvoker;
 #else
 using TheInvoker = System.Windows.Forms.Control;
 using System.Windows.Forms;
@@ -269,7 +271,7 @@ namespace OpenNETCF.IoC
                                 // wire up event handlers on the UI thread
                                 if ((ei.EventHandlerType.IsGenericType) && (ei.EventHandlerType.GetGenericTypeDefinition().Name == "EventHandler`1")
                                     || (ei.EventHandlerType == typeof(EventHandler))
-#if !WINDOWS_PHONE
+#if !(WINDOWS_PHONE || ANDROID)
                                     || (ei.EventHandlerType == typeof(KeyEventHandler))
 #endif
                                     )

@@ -20,6 +20,8 @@ using TheInvoker = System.Windows.Threading.Dispatcher;
 using System.Diagnostics;
 #elif IPHONE
 using TheInvoker = System.Object;
+#elif ANDROID
+using TheInvoker = OpenNETCF.UIInvoker;
 #else
 using TheInvoker = System.Windows.Forms.Control;
 #endif
