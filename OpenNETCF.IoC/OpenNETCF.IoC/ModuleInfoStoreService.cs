@@ -141,23 +141,13 @@ namespace OpenNETCF.IoC
 
         internal ModuleInfo LoadAssembly(Assembly assembly)
         {
-            var et = Environment.TickCount;
-
             var assemblyName = assembly.GetName();
             Debug.WriteLine(assemblyName);
 
             Type imodule = FindIModuleType(assembly);
             if (imodule == null) return null;
 
-            et = Environment.TickCount - et;
-            Debug.WriteLine("A: " + et.ToString());
-            et = Environment.TickCount;
-            
             object instance = ObjectFactory.CreateObject(imodule, RootWorkItem.Instance);
-
-            et = Environment.TickCount - et;
-            Debug.WriteLine("B: " + et.ToString());
-            et = Environment.TickCount;
 
             var info = new ModuleInfo
                 {
@@ -167,10 +157,6 @@ namespace OpenNETCF.IoC
                 };
 
             m_loadedModules.Add(info);
-
-            et = Environment.TickCount - et;
-            Debug.WriteLine("C: " + et.ToString());
-            et = Environment.TickCount;
 
             var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
             if (loadMethod != null)
@@ -185,10 +171,6 @@ namespace OpenNETCF.IoC
                 }
             }
 
-            et = Environment.TickCount - et;
-            Debug.WriteLine("D: " + et.ToString());
-            et = Environment.TickCount;
-
             var addServices = imodule.GetMethod("AddServices", BindingFlags.Public | BindingFlags.Instance);
             if (addServices != null)
             {
@@ -202,15 +184,7 @@ namespace OpenNETCF.IoC
                 }
             }
 
-            et = Environment.TickCount - et;
-            Debug.WriteLine("E: " + et.ToString());
-            et = Environment.TickCount;
-
             ModuleLoaded.Fire(this, new GenericEventArgs<IModuleInfo>(info));
-
-            et = Environment.TickCount - et;
-            Debug.WriteLine("F: " + et.ToString());
-            et = Environment.TickCount;
 
             return info;
         }
