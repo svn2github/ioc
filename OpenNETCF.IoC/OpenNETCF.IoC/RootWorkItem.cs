@@ -62,6 +62,11 @@ namespace OpenNETCF.IoC
             get { return m_workItem.Modules; }
         }
 
+        public static void SetModuleInfoStore(IModuleInfoStore store)
+        {
+            m_workItem.Services.Add<IModuleInfoStore>(store);
+        }
+
         public static ServiceCollection Services
         {
             get { return m_workItem.Services; }

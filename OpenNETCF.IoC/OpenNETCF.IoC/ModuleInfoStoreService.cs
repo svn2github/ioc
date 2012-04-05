@@ -128,11 +128,11 @@ namespace OpenNETCF.IoC
                     throw;
                 }
 #else
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                throw;
-            }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                    throw;
+                }
 #endif
             }
 
@@ -196,9 +196,6 @@ namespace OpenNETCF.IoC
                 .IsNotNull(assemblyNames, "assemblyNames")
                 .Check();
 
-            string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            Uri pathasURI = new Uri(rootFolder);
-
             Assembly asm = null;
 
             foreach (var s in assemblyNames)
@@ -221,9 +218,23 @@ namespace OpenNETCF.IoC
 
                 if(tryByPath)
                 {
+                    var rootFolder = string.Empty;
+
+                    if (Environment.OSVersion.Platform == PlatformID.Unix)
+                    {
+                        rootFolder = Path.Combine("/", s);
+                    }
+                    else
+                    {
+                        rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+                        var pathasURI = new Uri(rootFolder);
+                        rootFolder = Path.Combine(pathasURI.LocalPath, s);
+                    }
+
+
                     asm = null;
 
-                    FileInfo fi = new FileInfo(Path.Combine(pathasURI.LocalPath, s));
+                    var fi = new FileInfo(rootFolder);
 
                     if (fi.Exists)
                     {
@@ -249,7 +260,6 @@ namespace OpenNETCF.IoC
                 if (asm == null) continue;
 
                 var info = LoadAssembly(asm);
-//                m_root.Modules.Add(info);
             }
         }
 

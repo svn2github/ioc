@@ -101,6 +101,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PublicationScope.cs" />
+    <Compile Include="ResourceModuleInfoStore.cs" />
     <Compile Include="RootWorkItem.cs" />
     <Compile Include="ManagedObjectCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

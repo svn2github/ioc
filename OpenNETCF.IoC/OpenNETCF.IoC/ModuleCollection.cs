@@ -36,7 +36,7 @@ namespace OpenNETCF.IoC
             get { return RootWorkItem.Services.Get<ModuleInfoStoreService>(); }
         }
 
-        internal void LoadModules()
+        public void LoadModules()
         {
             lock (this)
             {
@@ -45,7 +45,14 @@ namespace OpenNETCF.IoC
                 // see if the service already exists (i.e. a SmartClientApplication already created it)               
                 if (StoreService == null)
                 {
-                    var infoStore = CreateDefaultInfoStore();
+                    var infoStore = m_root.Services.Get<IModuleInfoStore>();
+
+                    if (infoStore == null)
+                    {
+                        infoStore = CreateDefaultInfoStore();
+                        m_root.Services.Add<IModuleInfoStore>(infoStore);
+                    }
+
                     RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
                     StoreService.ModuleLoaded += new EventHandler<GenericEventArgs<IModuleInfo>>(svc_ModuleLoaded);
                     StoreService.LoadModulesFromStore(infoStore);
@@ -63,9 +70,11 @@ namespace OpenNETCF.IoC
 
         internal IModuleInfoStore CreateDefaultInfoStore()
         {
-            // this will change for Mono implementations
-
-            return new DefaultModuleInfoStore(); ;
+#if ANDROID
+            return null;
+#else
+            return new DefaultModuleInfoStore();
+#endif
         }
 
         public IEnumerator<IModuleInfo> GetEnumerator()
