@@ -8,8 +8,8 @@
     <ProjectGuid>{60DFA989-3A25-4EAC-91ED-6FD897F7002E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Schedule.Module.FFx</RootNamespace>
-    <AssemblyName>Schedule.Module.FFx</AssemblyName>
+    <RootNamespace>OpenNETCF.Schedule</RootNamespace>
+    <AssemblyName>OpenNETCF.Schedule.Module</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class2.cs" />
     <Compile Include="Entities\BasicScheduler.cs" />
     <Compile Include="Interfaces\IScheduler.cs" />
     <Compile Include="Module.cs" />

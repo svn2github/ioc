@@ -14,20 +14,18 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml;
+using System.Reflection;
+using System.Xml.Linq;
+using System.IO;
+using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {
-    internal static class Guard
+    public class ModuleInfo : IModuleInfo
     {
-        public static void ArgumentNotNull(object argumentValue, string argumentName)
-        {
-            if (argumentValue == null) throw new ArgumentNullException(argumentName);
-        }
-
-        public static void ArgumentNotNullOrEmptyString(string argumentValue, string argumentName)
-        {
-            if (argumentValue == null) throw new ArgumentNullException(argumentName);
-            if (argumentValue == string.Empty) throw new ArgumentException(string.Format("Argument '{0}' cannot be an empty string.", argumentName));
-        }
+        public string AssemblyFile { get; internal set; }
+        public Assembly Assembly { get; internal set; }
+        internal object Instance { get; set; }
     }
 }

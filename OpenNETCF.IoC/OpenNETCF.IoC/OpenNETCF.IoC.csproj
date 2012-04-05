@@ -79,12 +79,10 @@
     <Compile Include="ExtensionMethods.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Guard.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Interfaces\IModule.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Interfaces\IModuleInfo.cs" />
     <Compile Include="Interfaces\IModuleInfoStore.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -93,6 +91,9 @@
     <Compile Include="Interfaces\ISmartPartInfo.cs" />
     <Compile Include="Interfaces\IWorkItemController.cs" />
     <Compile Include="Interfaces\IWorkspace.cs" />
+    <Compile Include="IoCModuleEntryAttribute.cs" />
+    <Compile Include="ModuleCollection.cs" />
+    <Compile Include="ModuleInfo.cs" />
     <Compile Include="ModuleInfoStoreService.cs">
       <SubType>Code</SubType>
     </Compile>

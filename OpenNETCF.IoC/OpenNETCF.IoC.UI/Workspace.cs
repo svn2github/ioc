@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using OpenNETCF;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -61,8 +62,11 @@ namespace OpenNETCF.IoC.UI
         public void Show(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
-            
-            OnShow(smartPart, smartPartInfo);
+
+            this.InvokeIfRequired(d =>
+                {
+                    OnShow(smartPart, smartPartInfo);
+                });
         }
 
         /// <summary>
@@ -73,16 +77,19 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            var control = smartPart as Control;
-            if (control == null) throw new ArgumentException("smartPart must be a Control");
+            this.InvokeIfRequired(d =>
+                {
+                    var control = smartPart as Control;
+                    if (control == null) throw new ArgumentException("smartPart must be a Control");
 
-            if (!SmartParts.Contains(smartPart))
-            {
-                smartPart.Workspace = this;
-                m_smartParts.Add(smartPart);
-                RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
-                this.Controls.Add(control);
-            }
+                    if (!SmartParts.Contains(smartPart))
+                    {
+                        smartPart.Workspace = this;
+                        m_smartParts.Add(smartPart);
+                        RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
+                        this.Controls.Add(control);
+                    }
+                });
         }
 
         protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
@@ -102,10 +109,13 @@ namespace OpenNETCF.IoC.UI
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
             CheckSmartPartExists(smartPart);
-            
-            OnHide(smartPart);
 
-            RaiseSmartPartDeactivated(smartPart);
+            this.InvokeIfRequired(d =>
+                {
+                    OnHide(smartPart);
+
+                    RaiseSmartPartDeactivated(smartPart);
+                });
         }
 
         protected virtual void OnHide(ISmartPart smartPart)
@@ -121,7 +131,10 @@ namespace OpenNETCF.IoC.UI
 
             CheckSmartPartExists(smartPart);
 
-            OnClose(smartPart);
+            this.InvokeIfRequired(d =>
+                {
+                    OnClose(smartPart);
+                });
         }
 
         protected virtual void OnClose(ISmartPart smartPart)
@@ -151,13 +164,16 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            AddSmartPartToCollectionIfRequired(smartPart);
+            this.InvokeIfRequired(d =>
+                {
+                    AddSmartPartToCollectionIfRequired(smartPart);
 
-            if (smartPart == ActiveSmartPart) return;
+                    if (smartPart == ActiveSmartPart) return;
 
-            if (ActiveSmartPart != null) OnDeactivate(ActiveSmartPart);
-            ActiveSmartPart = smartPart;
-            OnActivate(smartPart);
+                    if (ActiveSmartPart != null) OnDeactivate(ActiveSmartPart);
+                    ActiveSmartPart = smartPart;
+                    OnActivate(smartPart);
+                });
         }
 
         protected virtual void OnActivate(ISmartPart smartPart)
@@ -185,9 +201,12 @@ namespace OpenNETCF.IoC.UI
         {
             if (smartPart == null) throw new ArgumentNullException("smartPart");
 
-            CheckSmartPartExists(smartPart);
+            this.InvokeIfRequired(d =>
+                {
+                    CheckSmartPartExists(smartPart);
 
-            OnDeactivate(smartPart);
+                    OnDeactivate(smartPart);
+                });
         }
 
         protected virtual void OnDeactivate(ISmartPart smartPart)

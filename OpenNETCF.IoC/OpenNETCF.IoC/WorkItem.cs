@@ -22,6 +22,8 @@ namespace OpenNETCF.IoC
 {
     public class WorkItem : IDisposable
     {
+        private ModuleCollection m_modules = null;
+
         public WorkItem()
         {
             WorkItems = new ManagedObjectCollection<WorkItem>(this);
@@ -61,9 +63,27 @@ namespace OpenNETCF.IoC
         public ManagedObjectCollection<ISmartPart> SmartParts { get; private set; }
 
         /// <summary>
-        /// The Workspaces collection contains IWorkspace unique by string ID.  Multiple Components of the same type can be added
+        /// The Workspaces collection contains IWorkspaces unique by string ID.  Multiple Components of the same type can be added
         /// </summary>
         public ManagedObjectCollection<IWorkspace> Workspaces { get; private set; }
+
+        /// <summary>
+        /// The Modules collection contains IModules registered by Type
+        /// </summary>
+        public ModuleCollection Modules 
+        {
+            get
+            {
+                // lazy load to prevent startup perf killer
+                if (m_modules == null)
+                {
+                    m_modules = new ModuleCollection(this);
+                    m_modules.LoadModules();
+                }
+
+                return m_modules;
+            }
+        }
 
         private bool m_disposed = false;
 

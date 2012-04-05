@@ -69,7 +69,11 @@ namespace OpenNETCF.IoC
             get { return m_catalogFilePath; }
             set
             {
-                Guard.ArgumentNotNullOrEmptyString(value, "CatalogFilePath");
+                Validate
+                    .Begin()
+                    .IsNotNullOrEmpty(value)
+                    .Check();
+
                 m_catalogFilePath = value;
             }
         }

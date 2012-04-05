@@ -97,14 +97,13 @@ namespace OpenNETCF.IoC.UI
             // force handle creation
             var handle = invoker.Handle;
             RootWorkItem.Items.Add(invoker, "IOCEventInvoker");
-
             ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
 
             AddServices();
 
             if (store != null)
             {
-                storeService.ModuleLoaded += new EventHandler<GenericEventArgs<string>>(storeService_ModuleLoaded);
+                storeService.ModuleLoaded += new EventHandler<GenericEventArgs<IModuleInfo>>(storeService_ModuleLoaded);
                 storeService.LoadModulesFromStore(store);
             }
 
@@ -118,9 +117,9 @@ namespace OpenNETCF.IoC.UI
             OnApplicationRun(shellForm);
         }
 
-        void storeService_ModuleLoaded(object sender, GenericEventArgs<string> e)
+        void storeService_ModuleLoaded(object sender, GenericEventArgs<IModuleInfo> e)
         {
-            OnModuleLoadComplete(e.Value);
+            OnModuleLoadComplete(e.Value.Assembly.FullName);
         }
 
         public virtual IModuleInfoStore GetModuleInfoStore()

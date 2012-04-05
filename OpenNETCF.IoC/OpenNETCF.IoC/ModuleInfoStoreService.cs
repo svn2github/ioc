@@ -22,32 +22,29 @@ using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {
-    public interface IModuleInfo
-    {
-        string AssemblyFile { get; }
-        Assembly Assembly { get; }
-    }
-
-    public class ModuleInfo : IModuleInfo
-    {
-        public string AssemblyFile { get; internal set; }
-        public Assembly Assembly { get; internal set; }
-        internal object Instance { get; set; }
-    }
-
     public sealed class ModuleInfoStoreService
     {
-        public event EventHandler<GenericEventArgs<string>> ModuleLoaded;
+        public event EventHandler<GenericEventArgs<IModuleInfo>> ModuleLoaded;
 
-        List<IModuleInfo> m_loadedModules = new List<IModuleInfo>();
+        internal List<IModuleInfo> m_loadedModules = new List<IModuleInfo>();
+        private WorkItem m_root;
 
         internal ModuleInfoStoreService()
+            : this(RootWorkItem.Instance)
         {
+        }
+
+        internal ModuleInfoStoreService(WorkItem root)
+        {
+            m_root = root;
         }
 
         internal void LoadModulesFromStore(IModuleInfoStore store)
         {
-            Guard.ArgumentNotNull(store, "store");
+            Validate
+                .Begin()
+                .IsNotNull(store, "store")
+                .Check();
 
             string xml = store.GetModuleListXml();
             if (xml == null) return;
@@ -67,7 +64,7 @@ namespace OpenNETCF.IoC
                              where n.Name == "ModuleInfo"
                              select n.Attribute("AssemblyFile").Value;
 
-            // laod each assembly
+            // load each assembly
             LoadAssemblies(assemblies);
 
             // now notify all assemblies that all other assemblies are loaded (this is useful when there are module interdependencies
@@ -93,23 +90,43 @@ namespace OpenNETCF.IoC
             }
         }
 
-        internal void LoadAssembly(Assembly assembly)
+        private Type FindIModuleType(Assembly assembly)
         {
             Type imodule;
 
-            try
+            // see if we have an explicitly defined entry
+            var attrib = (from a in assembly.GetCustomAttributes(true)
+                          where a is IoCModuleEntryAttribute
+                          select a as IoCModuleEntryAttribute).FirstOrDefault();
+
+            if (attrib != null)
             {
-                imodule = (from t in assembly.GetTypes()
-                           where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
-                           select t).FirstOrDefault();
+                if (!attrib.EntryType.Implements<IModule>())
+                {
+                    throw new Exception(
+                        string.Format("IoCModuleEntry.EntryType in assembly '{0}' doesn't derive from IModule",
+                        assembly.FullName));
+                }
+
+                imodule = attrib.EntryType;
             }
+            else
+            {
+                // default to old behavior - loading will be *much* slower under Mono as we have to call GetTypes()
+                // under CF and FFX this appears negligible
+                try
+                {
+                    imodule = (from t in assembly.GetTypes()
+                               where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
+                               select t).FirstOrDefault();
+                }
 #if !WindowsCE
-            catch (ReflectionTypeLoadException ex)
-            {
-                // this is for debugging
-                Debug.WriteLine(ex.Message);
-                throw;
-            }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    // this is for debugging
+                    Debug.WriteLine(ex.Message);
+                    throw;
+                }
 #else
             catch(Exception ex)
             {
@@ -117,19 +134,43 @@ namespace OpenNETCF.IoC
                 throw;
             }
 #endif
-            if (imodule == null) return;
+            }
 
-            object instance = ObjectFactory.CreateObject(imodule, RootWorkItem.Instance);
+            return imodule;
+        }
+
+        internal ModuleInfo LoadAssembly(Assembly assembly)
+        {
+            var et = Environment.TickCount;
 
             var assemblyName = assembly.GetName();
+            Debug.WriteLine(assemblyName);
 
-            m_loadedModules.Add(
-                new ModuleInfo 
-                { 
+            Type imodule = FindIModuleType(assembly);
+            if (imodule == null) return null;
+
+            et = Environment.TickCount - et;
+            Debug.WriteLine("A: " + et.ToString());
+            et = Environment.TickCount;
+            
+            object instance = ObjectFactory.CreateObject(imodule, RootWorkItem.Instance);
+
+            et = Environment.TickCount - et;
+            Debug.WriteLine("B: " + et.ToString());
+            et = Environment.TickCount;
+
+            var info = new ModuleInfo
+                {
                     Assembly = assembly,
                     AssemblyFile = assemblyName.CodeBase,
                     Instance = instance
-                });
+                };
+
+            m_loadedModules.Add(info);
+
+            et = Environment.TickCount - et;
+            Debug.WriteLine("C: " + et.ToString());
+            et = Environment.TickCount;
 
             var loadMethod = imodule.GetMethod("Load", BindingFlags.Public | BindingFlags.Instance);
             if (loadMethod != null)
@@ -144,6 +185,10 @@ namespace OpenNETCF.IoC
                 }
             }
 
+            et = Environment.TickCount - et;
+            Debug.WriteLine("D: " + et.ToString());
+            et = Environment.TickCount;
+
             var addServices = imodule.GetMethod("AddServices", BindingFlags.Public | BindingFlags.Instance);
             if (addServices != null)
             {
@@ -157,55 +202,80 @@ namespace OpenNETCF.IoC
                 }
             }
 
-            RaiseModuleLoaded(assemblyName.Name);
-        }
+            et = Environment.TickCount - et;
+            Debug.WriteLine("E: " + et.ToString());
+            et = Environment.TickCount;
 
-        private void RaiseModuleLoaded(string moduleName)
-        {
-            EventHandler<GenericEventArgs<string>> handler = ModuleLoaded;
-            if (handler == null) return;
+            ModuleLoaded.Fire(this, new GenericEventArgs<IModuleInfo>(info));
 
-            handler(this, new GenericEventArgs<string>(moduleName));
+            et = Environment.TickCount - et;
+            Debug.WriteLine("F: " + et.ToString());
+            et = Environment.TickCount;
+
+            return info;
         }
 
         private void LoadAssemblies(IEnumerable<string> assemblyNames)
         {
-            Guard.ArgumentNotNull(assemblyNames, "assemblyNames");
+            Validate
+                .Begin()
+                .IsNotNull(assemblyNames, "assemblyNames")
+                .Check();
 
             string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             Uri pathasURI = new Uri(rootFolder);
 
-            Assembly asm;
+            Assembly asm = null;
 
             foreach (var s in assemblyNames)
             {
-                asm = null;
+                var tryByPath = true;
 
-                FileInfo fi = new FileInfo(Path.Combine(pathasURI.LocalPath, s));
+                // avoid excepting by default under the Compact Framework
+                if (Environment.OSVersion.Platform != PlatformID.WinCE)
+                {
+                    try
+                    {
+                        asm = Assembly.Load(s);
+                        tryByPath = false;
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // this will try by path below
+                    }
+                }
 
-                if (fi.Exists)
+                if(tryByPath)
                 {
-                    // local?
-                    asm = Assembly.LoadFrom(fi.FullName);
-                }
-                else if (File.Exists(s))
-                {
-                    // fully qualified path?
-                    asm = Assembly.LoadFrom(s);
-                }
-                else if (File.Exists(Path.Combine("\\Windows", s)))
-                {
-                    // Windows?
-                    asm = Assembly.LoadFrom(Path.Combine("\\Windows", s));
-                }
-                else
-                {
-                    throw new IOException(string.Format("Unable to locate assembly '{0}'", s));
+                    asm = null;
+
+                    FileInfo fi = new FileInfo(Path.Combine(pathasURI.LocalPath, s));
+
+                    if (fi.Exists)
+                    {
+                        // local?
+                        asm = Assembly.LoadFrom(fi.FullName);
+                    }
+                    else if (File.Exists(s))
+                    {
+                        // fully qualified path?
+                        asm = Assembly.LoadFrom(s);
+                    }
+                    else if (File.Exists(Path.Combine("\\Windows", s)))
+                    {
+                        // Windows?
+                        asm = Assembly.LoadFrom(Path.Combine("\\Windows", s));
+                    }
+                    else
+                    {
+                        throw new IOException(string.Format("Unable to locate assembly '{0}'", s));
+                    }
                 }
 
                 if (asm == null) continue;
 
-                LoadAssembly(asm);
+                var info = LoadAssembly(asm);
+//                m_root.Modules.Add(info);
             }
         }
 

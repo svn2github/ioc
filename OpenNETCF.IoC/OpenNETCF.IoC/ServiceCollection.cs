@@ -95,7 +95,7 @@ namespace OpenNETCF.IoC
             }
             else
             {
-                return descriptor.Instance;
+                throw new RegistrationTypeInUseException(string.Format("Service already registered with type '{0}'", serviceType.Name));
             }
         }
 
@@ -241,7 +241,7 @@ namespace OpenNETCF.IoC
             TService instance = Get<TService>(false);
             if (instance != null) return instance;
 
-            return AddNew <TService>();
+            return AddNew<TService>();
         }
 
         public object GetOrCreate(Type serviceType)

@@ -56,7 +56,12 @@ namespace OpenNETCF.IoC
         {
             get { return m_workItem.Workspaces; }
         }
-        
+
+        public static ModuleCollection Modules
+        {
+            get { return m_workItem.Modules; }
+        }
+
         public static ServiceCollection Services
         {
             get { return m_workItem.Services; }
