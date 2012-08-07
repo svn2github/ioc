@@ -87,7 +87,14 @@ namespace OpenNETCF.IoC.UI
             RaiseSmartPartDeactivated(smartPart);
             RaiseSmartPartClosing(smartPart);
             m_smartPartTabs.Remove(ti);
-            ti.Page.Dispose();
+
+            // this call will also call Dispose on any IDisposable items
+            RootWorkItem.SmartParts.Remove(smartPart);
+
+            if (smartPart == ActiveSmartPart)
+            {
+                ActiveSmartPart = null;
+            }
         }
 
         protected override void OnHide(ISmartPart smartPart)

@@ -239,7 +239,7 @@ namespace OpenNETCF.IoC
             var item = Get<TTypeToGet>(id);
             if (item != null) return item;
 
-            return AddNew<TTypeToGet>();
+            return AddNew<TTypeToGet>(id);
         }
 
         public TItem this[string id]
