@@ -118,7 +118,7 @@ namespace OpenNETCF.IoC
                 {
                     imodule = (from t in assembly.GetTypes()
                                where t.GetInterfaces().Count(i => i.Equals(typeof(IModule))) > 0
-                               select t).FirstOrDefault();
+                               select t).FirstOrDefault(m => !m.IsAbstract);
                 }
 #if !WindowsCE
                 catch (ReflectionTypeLoadException ex)
@@ -216,7 +216,7 @@ namespace OpenNETCF.IoC
                     }
                 }
 
-                if(tryByPath)
+                if (tryByPath)
                 {
                     var rootFolder = string.Empty;
 
@@ -259,7 +259,14 @@ namespace OpenNETCF.IoC
 
                 if (asm == null) continue;
 
-                var info = LoadAssembly(asm);
+                try
+                {
+                    var info = LoadAssembly(asm);
+                }
+                catch (Exception ex)
+                {
+                    Trace.WriteLine(string.Format("Exception loading assembly '{0}': {1}", asm.FullName, ex.Message));
+                }
             }
         }
 
