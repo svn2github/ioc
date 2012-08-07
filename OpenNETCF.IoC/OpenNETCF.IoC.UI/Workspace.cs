@@ -149,8 +149,14 @@ namespace OpenNETCF.IoC.UI
 
             this.Controls.Remove(control);
             m_smartParts.Remove(smartPart);
+
+            // this call will also call Dispose on any IDisposable items
             RootWorkItem.SmartParts.Remove(smartPart);
-            smartPart.Dispose();
+
+            if(smartPart == ActiveSmartPart)
+            {
+                ActiveSmartPart = null;
+            }
         }
 
         protected void RaiseSmartPartClosing(ISmartPart smartPart)
@@ -221,6 +227,12 @@ namespace OpenNETCF.IoC.UI
             {
                 smartPart.OnDeactivated();
             }
+
+            if (smartPart == ActiveSmartPart)
+            {
+                ActiveSmartPart = null;
+            }
+
             RaiseSmartPartDeactivated(smartPart);            
         }
 

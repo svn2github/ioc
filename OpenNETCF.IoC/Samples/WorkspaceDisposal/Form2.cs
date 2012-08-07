@@ -55,27 +55,43 @@ namespace WorkspaceDisposal
             switch (state)
             {
                 case 0:
+                    // simple hide
                     view.Hide();
                     hide.Text = "Show";
                     break;
                 case 1:
+                    // simple show
                     view.Show();
                     hide.Text = "visible=false";
                     break;
                 case 2:
+                    // hide with visibility
                     view.Visible = false;
                     hide.Text = "visible=true";
                     break;
                 case 3:
+                    // show with visibility
                     view.Visible = true;
                     hide.Text = "wksp.Hide";
                     break;
                 case 4:
+                    // hide through workspace
                     deckWorkspace1.Hide(view);
                     hide.Text = "wksp.Show";
                     break;
                 case 5:
+                    // show through workspace
                     deckWorkspace1.Show(view);
+                    hide.Text = "Close";
+                    break;
+                case 6:
+                    // close and dispose
+                    deckWorkspace1.Close(view);
+                    hide.Text = "Show";
+                    break;
+                case 7:
+                    // recreate and show
+                    view = deckWorkspace1.Show<ViewA>();
                     state = -1;
                     hide.Text = "Hide";
                     break;

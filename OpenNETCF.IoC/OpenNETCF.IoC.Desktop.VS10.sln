@@ -30,9 +30,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenNETCF.IoC.VS10.Unit.Test", "OpenNETCF.IoC.Unit.Test\OpenNETCF.IoC.VS10.Unit.Test.csproj", "{A66785C0-6986-473F-8EEF-10236FEE0563}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkspaceDisposal.FFx.VS10", "Samples\WorkspaceDisposal\WorkspaceDisposal.FFx.VS10.csproj", "{9AF04D46-D08F-471B-AFE5-A459EC98265B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -63,6 +65,10 @@ Global
 		SccProjectUniqueName7 = OpenNETCF.IoC.Unit.Test\\OpenNETCF.IoC.VS10.Unit.Test.csproj
 		SccProjectName7 = OpenNETCF.IoC.Unit.Test
 		SccLocalPath7 = OpenNETCF.IoC.Unit.Test
+		SccProjectUniqueName8 = Samples\\WorkspaceDisposal\\WorkspaceDisposal.FFx.VS10.csproj
+		SccProjectTopLevelParentUniqueName8 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName8 = Samples/WorkspaceDisposal
+		SccLocalPath8 = Samples\\WorkspaceDisposal
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.Desktop.VS10.vsmdi
@@ -146,6 +152,16 @@ Global
 		{A66785C0-6986-473F-8EEF-10236FEE0563}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A66785C0-6986-473F-8EEF-10236FEE0563}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A66785C0-6986-473F-8EEF-10236FEE0563}.Release|x86.ActiveCfg = Release|Any CPU
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Debug|x86.ActiveCfg = Debug|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Debug|x86.Build.0 = Debug|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Release|Any CPU.ActiveCfg = Release|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Release|x86.ActiveCfg = Release|x86
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,5 +174,6 @@ Global
 		{A94D7990-DAD4-4AE0-B504-EBAC9641C04A} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
 		{D4DD1BB8-9ED4-4707-8DE8-71E963CB59D3} = {EDDBEE23-6CFE-4450-8DDD-993E2495BF68}
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
+		{9AF04D46-D08F-471B-AFE5-A459EC98265B} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
 	EndGlobalSection
 EndGlobal
