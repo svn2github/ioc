@@ -87,13 +87,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.csproj">
+    <ProjectReference Include="..\..\OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.CF.csproj">
       <Project>{45F51EA2-A27F-44BB-B549-FEB3F9E3C887}</Project>
-      <Name>OpenNETCF.IoC.UI</Name>
+      <Name>OpenNETCF.IoC.UI.CF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj">
+    <ProjectReference Include="..\..\OpenNETCF.IoC\OpenNETCF.IoC.CF.csproj">
       <Project>{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}</Project>
-      <Name>OpenNETCF.IoC</Name>
+      <Name>OpenNETCF.IoC.CF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />

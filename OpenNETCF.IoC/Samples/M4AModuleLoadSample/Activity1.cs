@@ -8,9 +8,25 @@ using Android.Widget;
 using Android.OS;
 using OpenNETCF.IoC;
 using System.Reflection;
+using System.Net;
 
 namespace M4AModuleLoadSample
 {
+    public class NICService : Service
+    {
+        public override void OnCreate()
+        {
+            var name = Dns.GetHostName();
+
+            base.OnCreate();
+        }
+
+        public override IBinder OnBind(Intent intent)
+        {
+            return null;
+        }
+    }
+
     [Activity(Label = "M4AModuleLoadSample", MainLauncher = true, Icon = "@drawable/icon")]
     public class Activity1 : Activity
     {
@@ -18,6 +34,10 @@ namespace M4AModuleLoadSample
 
         protected override void OnCreate(Bundle bundle)
         {
+            var intent = new Intent(this, typeof(NICService));
+            StartService(intent);
+
+
             //RootWorkItem.SetModuleInfoStore(new ResourceModuleInfoStore(Assembly.GetExecutingAssembly()));
             RootWorkItem.SetModuleInfoStore(new ResourceModuleInfoStore());
 

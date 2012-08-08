@@ -68,9 +68,9 @@
     <Compile Include="Services\ScheduleService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj">
+    <ProjectReference Include="..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.CF.csproj">
       <Project>{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}</Project>
-      <Name>OpenNETCF.IoC</Name>
+      <Name>OpenNETCF.IoC.CF</Name>
     </ProjectReference>
     <ProjectReference Include="..\Schedule.Interface\OpenNETCF.Schedule.Interface.csproj">
       <Project>{25A2DEE7-1572-4DFB-BF72-E8C08D263331}</Project>

@@ -64,9 +64,9 @@
     <Compile Include="Services\ConfigurationService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.csproj">
+    <ProjectReference Include="..\..\..\..\OpenNETCF.IoC\OpenNETCF.IoC.CF.csproj">
       <Project>{E2095D96-8EC2-4382-AEEF-55D9DF2325C0}</Project>
-      <Name>OpenNETCF.IoC</Name>
+      <Name>OpenNETCF.IoC.CF</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\WiFiSurvey.Infrastructure.Interface\WiFiSurvey.Infrastructure.Interface.csproj">
       <Project>{48D2AFD0-2C29-4467-AAFA-0F31CABD464D}</Project>

@@ -10,6 +10,10 @@
 // submissions of changes, fixes or updates are welcomed but not required
 //
 
+#if WINDOWS_PHONE || ANDROID
+using Trace = System.Diagnostics.Debug;
+#endif
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
