@@ -82,14 +82,24 @@ namespace WorkspaceDisposal
                 case 5:
                     // show through workspace
                     deckWorkspace1.Show(view);
-                    hide.Text = "Close";
+                    hide.Text = "Deactivate";
                     break;
                 case 6:
-                    // close and dispose
-                    deckWorkspace1.Close(view);
-                    hide.Text = "Show";
+                    // deactivate through workspace
+                    deckWorkspace1.Deactivate(view);
+                    hide.Text = "Activate";
                     break;
                 case 7:
+                    // activate through workspace
+                    deckWorkspace1.Activate(view);
+                    hide.Text = "Close";
+                    break;
+                case 8:
+                    // close and dispose
+                    deckWorkspace1.Close(view);
+                    hide.Text = "Show<>";
+                    break;
+                case 9:
                     // recreate and show
                     view = deckWorkspace1.Show<ViewA>();
                     state = -1;
