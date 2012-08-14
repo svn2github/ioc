@@ -84,25 +84,25 @@ namespace OpenNETCF.IoC
 
         public static void BeginInvoke(Delegate method)
         {
-            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            var invoker = Items.Get<TheInvoker>(Constants.EventInvokerName);
             invoker.BeginInvoke(method);
         }
 
         public static void BeginInvoke(Delegate method, params object[] args)
         {
-            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            var invoker = Items.Get<TheInvoker>(Constants.EventInvokerName);
             invoker.BeginInvoke(method, args);
         }
 #if !WINDOWS_PHONE
         public static void Invoke(Delegate method)
         {
-            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            var invoker = Items.Get<TheInvoker>(Constants.EventInvokerName);
             invoker.Invoke(method);
         }
 
         public static void Invoke(Delegate method, params object[] args)
         {
-            var invoker = Items.Get<TheInvoker>("IOCEventInvoker");
+            var invoker = Items.Get<TheInvoker>(Constants.EventInvokerName);
             invoker.Invoke(method, args);
         }
 #endif

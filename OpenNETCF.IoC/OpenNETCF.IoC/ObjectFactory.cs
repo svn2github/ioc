@@ -208,7 +208,7 @@ namespace OpenNETCF.IoC
         {
             if (collection == null) return;
 
-            var invokerControl = RootWorkItem.Items.Get<TheInvoker>("IOCEventInvoker");
+            var invokerControl = RootWorkItem.Items.Get<TheInvoker>(Constants.EventInvokerName);
 
             foreach (var item in collection)
             {

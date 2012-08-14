@@ -70,6 +70,7 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="BasicInvoker.cs" />
     <Compile Include="ComponentDescriptor.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="DataEventArgs.cs" />
     <Compile Include="DefaultModuleInfoStore.cs">
       <SubType>Code</SubType>

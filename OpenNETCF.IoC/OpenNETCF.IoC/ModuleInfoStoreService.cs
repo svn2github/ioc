@@ -127,14 +127,15 @@ namespace OpenNETCF.IoC
 #if !WindowsCE
                 catch (ReflectionTypeLoadException ex)
                 {
-                    // this is for debugging
-                    Debug.WriteLine(ex.Message);
+                    Trace.WriteLine(string.Format("IoC: Exception loading assembly '{0}': {1}", assembly.FullName, ex.Message), Constants.TraceCategoryName);
+
                     throw;
                 }
 #else
                 catch(Exception ex)
                 {
-                    Debug.WriteLine(ex.Message);
+                    Trace.WriteLine(string.Format("IoC: Exception loading assembly '{0}': {1}", assembly.FullName, ex.Message), Constants.TraceCategoryName);
+
                     throw;
                 }
 #endif
@@ -146,7 +147,7 @@ namespace OpenNETCF.IoC
         internal ModuleInfo LoadAssembly(Assembly assembly)
         {
             var assemblyName = assembly.GetName();
-            Debug.WriteLine(assemblyName);
+            Trace.WriteLine(string.Format("IoC: Loading assembly '{0}'", assemblyName), Constants.TraceCategoryName);
 
             Type imodule = FindIModuleType(assembly);
             if (imodule == null) return null;

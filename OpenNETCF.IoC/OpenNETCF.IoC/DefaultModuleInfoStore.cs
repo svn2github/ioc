@@ -28,7 +28,7 @@ namespace OpenNETCF.IoC
         {
             // use a Uri because the desktop will add in the "file//:" prefix
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            path = Path.Combine(path, "ProfileCatalog.xml");
+            path = Path.Combine(path, Constants.DefaultProfileCatalogName);
             Uri uri = new Uri(path);
             CatalogFilePath = uri.LocalPath;
         }
@@ -48,7 +48,7 @@ namespace OpenNETCF.IoC
             {
                 if (!File.Exists(m_catalogFilePath))
                 {
-                    Debug.WriteLine(string.Format("Catalog file '{0}' not found", m_catalogFilePath));
+                    Trace.WriteLine(string.Format("IoC: Catalog file '{0}' not found", m_catalogFilePath), Constants.TraceCategoryName);
                     return null;
 
                 }
@@ -59,7 +59,7 @@ namespace OpenNETCF.IoC
             }
             catch(Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                Trace.WriteLine(string.Format("IoC.DefaultModuleInfoStore: GetModuleListXml exception: '{0}'", ex.Message), Constants.TraceCategoryName);
                 return null;
             }
         }

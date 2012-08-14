@@ -33,6 +33,11 @@ namespace OpenNETCF.IoC.UI
             get { return true; }
         }
 
+        public virtual bool EnableShellReplacement
+        {
+            get { return true; }
+        }
+
         /// <summary>
         /// This method loads the Profile Catalog Modules by calling GetModuleInfoStore which, unless overridden, uses a DefaultModuleInfoStore instance.
         /// It then creates an instance of TShell and calls Application.Run with that instance.
@@ -96,7 +101,7 @@ namespace OpenNETCF.IoC.UI
             var invoker = new Control();
             // force handle creation
             var handle = invoker.Handle;
-            RootWorkItem.Items.Add(invoker, "IOCEventInvoker");
+            RootWorkItem.Items.Add(invoker, Constants.EventInvokerName);
             ModuleInfoStoreService storeService = RootWorkItem.Services.AddNew<ModuleInfoStoreService>();
 
             AddServices();
@@ -110,7 +115,24 @@ namespace OpenNETCF.IoC.UI
             BeforeShellCreated();
 
             // create the shell form after all modules are loaded
-            TShell shellForm = RootWorkItem.Items.AddNew<TShell>();
+            // see if there's a registered shell replacement.
+            Form shellForm = null;
+            ShellReplacement replacement = null;
+
+            if (EnableShellReplacement)
+            {
+                replacement = RootWorkItem.Services.Get<ShellReplacement>();
+            }
+
+            if ((replacement == null) || (!replacement.ShellReplacementEnabled))
+            {
+                shellForm = RootWorkItem.Items.AddNew<TShell>();
+            }
+            else
+            {
+                shellForm = replacement as Form;
+                Trace.WriteLine("Replacement shell found.", Constants.TraceCategoryName);
+            }
 
             AfterShellCreated();
 
@@ -125,6 +147,11 @@ namespace OpenNETCF.IoC.UI
         public virtual IModuleInfoStore GetModuleInfoStore()
         {
             return new DefaultModuleInfoStore();
+        }
+
+        public virtual Type ShellFormType
+        {
+            get { return typeof(TShell); }
         }
 
         protected virtual void AfterShellCreated()

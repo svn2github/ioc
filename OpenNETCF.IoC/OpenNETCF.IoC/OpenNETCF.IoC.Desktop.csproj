@@ -66,6 +66,7 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="BasicInvoker.cs" />
     <Compile Include="ComponentDescriptor.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="IoCModuleEntryAttribute.cs" />
     <Compile Include="ModuleInfo.cs" />
     <Compile Include="Interfaces\IModuleInfo.cs" />
