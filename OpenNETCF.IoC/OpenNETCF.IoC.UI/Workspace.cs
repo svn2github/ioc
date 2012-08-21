@@ -17,21 +17,35 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using OpenNETCF;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace OpenNETCF.IoC.UI
 {
+    public delegate void GestureHandler(IWorkspace workspace, GestureDirection direction);
+
     public class Workspace : ContainerControl, IWorkspace
     {
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartActivated;
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartDeactivated;
         public event EventHandler<DataEventArgs<ISmartPart>> SmartPartClosing;
+        public event GestureHandler GestureReceived;
 
         private SmartPartCollection m_smartParts;
+        private Point m_lastDown;
+        private int m_lastDownTime;
+        private bool m_gestureEnabled;
+        private const int GestureTime = 500;
+        private const int DefaultGestureThreshold = 20;
+
+        public int GestureThreshold { get; set; }
 
         public virtual ISmartPart ActiveSmartPart { get; protected set; }
 
         public Workspace()
         {
+            GesturesEnabled = false;
+            GestureThreshold = DefaultGestureThreshold;
             m_smartParts = new SmartPartCollection();
         }
 
@@ -88,8 +102,17 @@ namespace OpenNETCF.IoC.UI
                         m_smartParts.Add(smartPart);
                         RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
                         this.Controls.Add(control);
-                    }
+
+                        EnableGesturesForControl(smartPart, true);                    }
                 });
+        }
+
+        protected void EnableGesturesForControl(ISmartPart smartPart, bool enable)
+        {
+            if (GesturesEnabled)
+            {
+                HookClicks(smartPart as Control, enable);
+            }
         }
 
         protected virtual void OnShow(ISmartPart smartPart, ISmartPartInfo smartPartInfo)
@@ -148,6 +171,9 @@ namespace OpenNETCF.IoC.UI
             RaiseSmartPartClosing(smartPart);
 
             this.Controls.Remove(control);
+
+            EnableGesturesForControl(smartPart, false);
+
             m_smartParts.Remove(smartPart);
 
             // this call will also call Dispose on any IDisposable items
@@ -318,5 +344,118 @@ namespace OpenNETCF.IoC.UI
                 return false;
             }
         }
+
+        public bool GesturesEnabled 
+        {
+            get { return m_gestureEnabled; }
+            set
+            {
+                if (m_gestureEnabled == value) return;
+
+                // Yes, this would be way easier with an IMEssageFilter, but the CF doesn't support them.
+                // I could get support by adding a reference to the SDF, but I'm trying to keep IoC self-contained
+                HookClicks(this, value);
+
+                m_gestureEnabled = value;
+            }
+        }
+
+        private void HookClicks(Control control, bool hook)
+        {
+            lock (this)
+            {
+                if (hook)
+                {
+                    control.MouseDown += control_MouseDown;
+                    control.MouseUp += control_MouseUp;
+                }
+                else
+                {
+                    control.MouseDown -= control_MouseDown;
+                    control.MouseUp -= control_MouseUp;
+                }
+
+                foreach (var child in control.Controls)
+                {
+                    HookClicks(child as Control, hook);
+                }
+            }
+        }
+        void control_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (GesturesEnabled)
+            {
+                var p = (sender as Control).PointToScreen(new Point(e.X, e.Y));
+                DetectGesture(m_lastDown, p, Environment.TickCount - m_lastDownTime);
+            }
+        }
+
+        void control_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (GesturesEnabled)
+            {
+                m_lastDown = (sender as Control).PointToScreen(new Point(e.X, e.Y));
+                m_lastDownTime = Environment.TickCount;
+            }
+        }
+
+        private void RaiseGestureReceived(GestureDirection direction)
+        {
+            var handler = GestureReceived;
+            if (handler == null) return;
+            handler(this, direction);
+        }
+
+        private void DetectGesture(Point start, Point end, int dt)
+        {
+            // don't bother calculating if no one is listening
+            if (GestureReceived == null) return;
+
+            // does it fit the time domain of a gesture?
+            if (dt > 500) return;
+
+            var dx = end.X - start.X;
+            var dy = end.Y - start.Y;
+
+            if (Math.Abs(dx) >= Math.Abs(dy))
+            {
+                // check for no gesture
+                if (Math.Abs(dx) < GestureThreshold) return;
+
+                // gesture in the X axis
+                if (dx > 0)
+                {
+                    RaiseGestureReceived(GestureDirection.Right);
+                }
+                else
+                {
+                    RaiseGestureReceived(GestureDirection.Left);
+                }
+            }
+            else
+            {
+                // check for no gesture
+                if (Math.Abs(dy) < GestureThreshold) return;
+
+                // gesture in the Y axis
+                if (dy > 0)
+                {
+                    RaiseGestureReceived(GestureDirection.Down);
+                }
+                else
+                {
+                    RaiseGestureReceived(GestureDirection.Up);
+                }
+            }
+        }
     }
+
+    public enum GestureDirection
+    {
+        Left,
+        Right,
+        Up,
+        Down
+    }
+
 }

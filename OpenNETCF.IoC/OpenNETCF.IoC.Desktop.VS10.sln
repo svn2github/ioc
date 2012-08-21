@@ -34,9 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkspaceDisposal.FFx.VS10"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartPartTests.FFx.VS10", "Samples\SmartPartTests\SmartPartTests.FFx.VS10.csproj", "{FEB26C19-56EF-4FD5-9AFC-6D06CF65C84B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabGestureSample", "Samples\TabGestureSample\TabGestureSample.csproj", "{48209503-6F0A-409C-B8C2-34EC7EE6F46E}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -75,6 +77,10 @@ Global
 		SccProjectTopLevelParentUniqueName9 = OpenNETCF.IoC.Desktop.VS10.sln
 		SccProjectName9 = Samples/SmartPartTests
 		SccLocalPath9 = Samples\\SmartPartTests
+		SccProjectUniqueName10 = Samples\\TabGestureSample\\TabGestureSample.csproj
+		SccProjectTopLevelParentUniqueName10 = OpenNETCF.IoC.Desktop.VS10.sln
+		SccProjectName10 = Samples/TabGestureSample
+		SccLocalPath10 = Samples\\TabGestureSample
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = OpenNETCF.IoC.Desktop.VS10.vsmdi
@@ -178,6 +184,16 @@ Global
 		{FEB26C19-56EF-4FD5-9AFC-6D06CF65C84B}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FEB26C19-56EF-4FD5-9AFC-6D06CF65C84B}.Release|x86.ActiveCfg = Release|x86
 		{FEB26C19-56EF-4FD5-9AFC-6D06CF65C84B}.Release|x86.Build.0 = Release|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Debug|x86.ActiveCfg = Debug|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Debug|x86.Build.0 = Debug|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Release|Any CPU.ActiveCfg = Release|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Release|x86.ActiveCfg = Release|x86
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,5 +208,6 @@ Global
 		{22F9D989-E145-4238-9ADF-50A9ED3CDAC2} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
 		{9AF04D46-D08F-471B-AFE5-A459EC98265B} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
 		{FEB26C19-56EF-4FD5-9AFC-6D06CF65C84B} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
+		{48209503-6F0A-409C-B8C2-34EC7EE6F46E} = {5AC7A2F0-6509-4DBC-91FB-1D04C257E536}
 	EndGlobalSection
 EndGlobal

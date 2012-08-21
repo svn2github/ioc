@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SolutionProfile>
+    <Modules>
+        <!-- add your IoC Modules here. For example: -->
+        <!-- <ModuleInfo AssemblyFile="My.Module.dll"/> -->
+        <!-- The path can be just the local DLL name or a fully-qualified path -->
+    </Modules>
+</SolutionProfile>

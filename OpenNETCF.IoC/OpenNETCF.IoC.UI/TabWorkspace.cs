@@ -39,6 +39,7 @@ namespace OpenNETCF.IoC.UI
         public TabWorkspace()
         {
             m_tabs = new TabControl();
+            m_tabs.MouseDown += new MouseEventHandler(m_tabs_MouseDown);
 
 #if !WindowsCE
             m_tabImages = new ImageList()
@@ -54,8 +55,11 @@ namespace OpenNETCF.IoC.UI
             m_tabs.SelectedIndexChanged += new EventHandler(m_tabs_SelectedIndexChanged);
 
             DesktopSetup();
-
             m_smartPartTabs = new List<TabInfo>();
+        }
+
+        void m_tabs_MouseDown(object sender, MouseEventArgs e)
+        {
         }
 
         private void m_tabs_SelectedIndexChanged(object sender, EventArgs e)
@@ -167,6 +171,7 @@ namespace OpenNETCF.IoC.UI
                     ti = new TabInfo { Page = page, SmartPart = smartPart, SmartPartInfo = smartPartInfo };
 
                     m_smartPartTabs.Add(ti);
+                    EnableGesturesForControl(smartPart, true);
                 }
                 int index = m_tabs.TabPages.IndexOf(ti.Page);
                 if (index < 0)
