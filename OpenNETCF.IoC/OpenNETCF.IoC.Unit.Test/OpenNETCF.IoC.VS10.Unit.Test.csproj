@@ -63,14 +63,12 @@
     <Compile Include="ServiceCollectionTest.cs" />
     <Compile Include="ManagedObjectCollectionTest.cs" />
     <Compile Include="DefaultModuleInfoStoreTests.cs" />
-    <Compile Include="MockTypes.cs" />
+    <Compile Include="MockTypes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Constants.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Modules\Schedule\Schedule.Module\Schedule.Module.FFx.csproj">
-      <Project>{60DFA989-3A25-4EAC-91ED-6FD897F7002E}</Project>
-      <Name>Schedule.Module.FFx</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.Desktop.csproj">
       <Project>{BCD73E42-C3CA-4E31-BE73-F583A09A80F6}</Project>
       <Name>OpenNETCF.IoC.UI.Desktop</Name>

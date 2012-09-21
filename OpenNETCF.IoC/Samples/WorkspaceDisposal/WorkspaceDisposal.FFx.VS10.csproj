@@ -77,6 +77,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ViewA.resx">
+      <DependentUpon>ViewA.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenNETCF.IoC.UI\OpenNETCF.IoC.UI.Desktop.csproj">

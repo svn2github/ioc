@@ -37,7 +37,8 @@ namespace OpenNETCF.IoC.UI
         }
 
         public virtual void OnActivated() 
-        { 
+        {
+            this.Focus();
         }
         
         public virtual void OnDeactivated() 

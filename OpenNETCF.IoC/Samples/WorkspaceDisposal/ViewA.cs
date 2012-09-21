@@ -19,6 +19,13 @@ namespace WorkspaceDisposal
             InitializeComponent();
 
 //            this.VisibleChanged += ViewA_VisibleChanged;
+
+        }
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            Debug.WriteLine("Keypress");
+            base.OnKeyPress(e);
         }
 
         void ViewA_VisibleChanged(object sender, EventArgs e)
@@ -28,12 +35,14 @@ namespace WorkspaceDisposal
 
         public override void OnActivated()
         {
+            textBox1.Focus();
             Debug.WriteLine("OnActivated");
             base.OnActivated();
         }
 
         public override void OnDeactivated()
         {
+            textBox2.Focus();
             Debug.WriteLine("OnDeactivated");
             base.OnDeactivated();
         }

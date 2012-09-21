@@ -26,6 +26,8 @@ namespace WorkspaceDisposal
             deckWorkspace1.SmartPartClosing += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartClosing);
 
             deckWorkspace1.Show(view);
+
+            this.KeyPreview = true;
         }
 
         void deckWorkspace1_SmartPartClosing(object sender, DataEventArgs<ISmartPart> e)
