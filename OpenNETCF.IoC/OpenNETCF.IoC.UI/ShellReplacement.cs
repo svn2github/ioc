@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace OpenNETCF.IoC.UI
 {
-    public abstract class ShellReplacement : Form
+    public class ShellReplacement : Form
     {
         public ShellReplacement()
             : this(true)

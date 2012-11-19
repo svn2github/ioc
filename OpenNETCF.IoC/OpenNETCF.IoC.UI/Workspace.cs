@@ -100,8 +100,14 @@ namespace OpenNETCF.IoC.UI
                     {
                         smartPart.Workspace = this;
                         m_smartParts.Add(smartPart);
-                        RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
-                        this.Controls.Add(control);
+                        if (!RootWorkItem.SmartParts.ContainsObject(smartPart))
+                        {
+                            RootWorkItem.SmartParts.Add(smartPart, Guid.NewGuid().ToString());
+                        }
+                        if (!this.Controls.Contains(control))
+                        {
+                            this.Controls.Add(control);
+                        }
 
                         EnableGesturesForControl(smartPart, true);                    }
                 });
@@ -449,13 +455,4 @@ namespace OpenNETCF.IoC.UI
             }
         }
     }
-
-    public enum GestureDirection
-    {
-        Left,
-        Right,
-        Up,
-        Down
-    }
-
 }

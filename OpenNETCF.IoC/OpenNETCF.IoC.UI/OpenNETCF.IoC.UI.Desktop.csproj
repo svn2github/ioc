@@ -67,6 +67,7 @@
     <Compile Include="..\OpenNETCF.IoC.Shared\OpenNETCF.IoC.Version.cs">
       <Link>Properties\OpenNETCF.IoC.Version.cs</Link>
     </Compile>
+    <Compile Include="GestureDirection.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="DeckWorkspace.cs">
       <SubType>Component</SubType>

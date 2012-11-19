@@ -6,4 +6,4 @@ using System.Reflection;
 // see http://amsu.cira.colostate.edu/julian.html
 
 // Aug 2, 2010
-[assembly: AssemblyVersion("1.0.12265.0")]
+[assembly: AssemblyVersion("1.0.12324.0")]
