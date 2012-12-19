@@ -11,9 +11,6 @@
 //
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -25,6 +22,7 @@ namespace OpenNETCF.IoC.UI
 
         void Show(ISmartPart smartPart);
         void Show(ISmartPart smartPart, ISmartPartInfo smartPartInfo);
+        TSmartPart Show<TSmartPart>() where TSmartPart : class, ISmartPart;
         void Hide(ISmartPart smartPart);
         void Close(ISmartPart smartPart);
         void Activate(ISmartPart smartPart);

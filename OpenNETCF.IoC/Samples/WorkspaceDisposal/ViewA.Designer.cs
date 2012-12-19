@@ -64,7 +64,6 @@
             this.Controls.Add(this.label1);
             this.Name = "ViewA";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

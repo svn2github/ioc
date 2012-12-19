@@ -9,9 +9,11 @@
 // OpenNETCF will maintain an "official" version of this software at www.opennetcf.com and public 
 // submissions of changes, fixes or updates are welcomed but not required
 //
+#if WINDOWS_PHONE || ANDROID || CF_20
+using Trace = System.Diagnostics.Debug;
+#endif
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;

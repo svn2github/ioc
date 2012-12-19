@@ -10,9 +10,6 @@
 // submissions of changes, fixes or updates are welcomed but not required
 //
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 #if WINDOWS_PHONE
@@ -40,8 +37,8 @@ namespace OpenNETCF.IoC
         }
 
         public BasicInvoker(TheInvoker invoker, Delegate targetDelegate)
+            : this(invoker)
         {
-            m_invoker = invoker;
             m_targetDelegate = targetDelegate;
         }
 
@@ -58,9 +55,17 @@ namespace OpenNETCF.IoC
 #else
         public void Handler(object source, EventArgs args)
         {
+#if !CF_20
             if (!m_invoker.IsDisposed)
+#endif
             {
-                m_invoker.Invoke(m_targetDelegate, new object[] { source, args });
+                try
+                {
+                    m_invoker.Invoke(m_targetDelegate, new object[] { source, args });
+                }
+                catch (ObjectDisposedException)
+                {
+                }
             }
         }
 #endif

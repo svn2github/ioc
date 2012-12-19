@@ -10,19 +10,17 @@
 // submissions of changes, fixes or updates are welcomed but not required
 //
 
+#if WINDOWS_PHONE || ANDROID || CF_20
+using Trace = System.Diagnostics.Debug;
+#endif
+
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Reflection;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
+using System.Windows.Forms;
 
 namespace OpenNETCF.IoC.UI
 {
-    public abstract class SmartClientApplication<TShell>
+    public abstract class SmartClientApplication<TShell> : SmartClientApplication
         where TShell : Form
     {
         /// <summary>
@@ -36,26 +34,6 @@ namespace OpenNETCF.IoC.UI
         public virtual bool EnableShellReplacement
         {
             get { return true; }
-        }
-
-        /// <summary>
-        /// This method loads the Profile Catalog Modules by calling GetModuleInfoStore which, unless overridden, uses a DefaultModuleInfoStore instance.
-        /// It then creates an instance of TShell and calls Application.Run with that instance.
-        /// </summary>
-        public void Start()
-        {
-            // load up the profile catalog here
-            IModuleInfoStore store = GetModuleInfoStore();
-
-            Start(store);
-        }
-
-        public void Start(string profileCatalog)
-        {
-            // load up the profile catalog here
-            IModuleInfoStore store = new DefaultModuleInfoStore(profileCatalog);
-
-            Start(store);
         }
 
 #if DESKTOP
@@ -87,7 +65,7 @@ namespace OpenNETCF.IoC.UI
         }
 #endif
 
-        private void Start(IModuleInfoStore store)
+        internal override void Start(IModuleInfoStore store)
         {
 
 #if DESKTOP
@@ -139,16 +117,6 @@ namespace OpenNETCF.IoC.UI
             OnApplicationRun(shellForm);
         }
 
-        void storeService_ModuleLoaded(object sender, GenericEventArgs<IModuleInfo> e)
-        {
-            OnModuleLoadComplete(e.Value.Assembly.FullName);
-        }
-
-        public virtual IModuleInfoStore GetModuleInfoStore()
-        {
-            return new DefaultModuleInfoStore();
-        }
-
         public virtual Type ShellFormType
         {
             get { return typeof(TShell); }
@@ -175,17 +143,6 @@ namespace OpenNETCF.IoC.UI
         public virtual void OnApplicationRun(Form form)
         {
             Application.Run(form);
-        }
-
-        public virtual void OnModuleLoadComplete(string moduleName)
-        {
-        }
-
-        /// <summary>
-        /// When overridden, allows an application to add Services to the RootWorkItem before modules are loaded.
-        /// </summary>
-        public virtual void AddServices()
-        {
         }
     }
 }

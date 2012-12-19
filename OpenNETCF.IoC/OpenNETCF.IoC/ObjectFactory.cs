@@ -13,7 +13,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.Diagnostics;
 
@@ -203,7 +202,17 @@ namespace OpenNETCF.IoC
                             select e).ToArray();
             }
         }
-
+#if CF_20
+        // CF 2.0 doesn't support CreateDelegate, therefore event aggregation is not supported in CF 2.0
+        private static void AddCollectionEventHandlers<TKey, TItem>(object instance, IEnumerable<KeyValuePair<TKey, TItem>> collection, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
+        {
+            if (((sourceEvents != null) && (sourceEvents.Length > 0))
+                || ((eventSinks != null) && (eventSinks.Length > 0)))
+            {
+                Debug.WriteLine("EVENT AGGREGATION NOT SUPPORTED IN CF 2.0");
+            }
+        }
+#else
         private static void AddCollectionEventHandlers<TKey, TItem>(object instance, IEnumerable<KeyValuePair<TKey, TItem>> collection, PublicationDescriptor[] sourceEvents, SubscriptionDescriptor[] eventSinks)
         {
             if (collection == null) return;
@@ -304,6 +313,7 @@ namespace OpenNETCF.IoC
                 }
             }
         }
+#endif
     
         internal static void AddEventHandlers(object instance, WorkItem root)
         {

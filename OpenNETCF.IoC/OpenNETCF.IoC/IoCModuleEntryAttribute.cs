@@ -11,14 +11,6 @@
 //
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Reflection;
-using System.Xml.Linq;
-using System.IO;
-using System.Diagnostics;
 
 namespace OpenNETCF.IoC
 {

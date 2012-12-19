@@ -10,19 +10,21 @@
 // submissions of changes, fixes or updates are welcomed but not required
 //
 
-#if WINDOWS_PHONE || ANDROID
+#if WINDOWS_PHONE || ANDROID || CF_20
 using Trace = System.Diagnostics.Debug;
 #endif
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Reflection;
+#if !CF_20
 using System.Xml.Linq;
-using System.IO;
+#endif
+
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Xml;
 
 namespace OpenNETCF.IoC
 {
@@ -58,15 +60,7 @@ namespace OpenNETCF.IoC
             settings.IgnoreWhitespace = true;
             settings.IgnoreComments = true;
 
-            XElement root = XElement.Parse(xml);
-
-            string s = "Modules";
-            var modules = from n in root.Descendants(s)
-                          select n;
-
-            var assemblies = from n in modules.Descendants()
-                             where n.Name == "ModuleInfo"
-                             select n.Attribute("AssemblyFile").Value;
+            var assemblies = GetAssembliesFromXml(xml);
 
             // load each assembly
             LoadAssemblies(assemblies);
@@ -74,6 +68,36 @@ namespace OpenNETCF.IoC
             // now notify all assemblies that all other assemblies are loaded (this is useful when there are module interdependencies
             NotifyAssembliesOfContainerCompletion();
         }
+
+#if CF_20
+        private string[] GetAssembliesFromXml(string xml)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            var modules = new List<string>();
+
+            foreach (XmlNode mi in doc.SelectNodes("/SolutionProfile/Modules/ModuleInfo"))
+            {
+                modules.Add(mi.Attributes["AssemblyFile"].Value);
+            }
+
+            return modules.ToArray();
+        }
+#else
+        private string[] GetAssembliesFromXml(string xml)
+        {
+            var root = XElement.Parse(xml);
+
+            string s = "Modules";
+            var modules = from n in root.Descendants(s)
+                          select n;
+
+            return (from n in modules.Descendants()
+                    where n.Name == "ModuleInfo"
+                    select n.Attribute("AssemblyFile").Value).ToArray();
+        }
+#endif
 
         private void NotifyAssembliesOfContainerCompletion()
         {
@@ -224,12 +248,13 @@ namespace OpenNETCF.IoC
                 if (tryByPath)
                 {
                     var rootFolder = string.Empty;
-
+#if !CF_20
                     if (Environment.OSVersion.Platform == PlatformID.Unix)
                     {
                         rootFolder = Path.Combine("/", s);
                     }
                     else
+#endif
                     {
                         rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
                         var pathasURI = new Uri(rootFolder);

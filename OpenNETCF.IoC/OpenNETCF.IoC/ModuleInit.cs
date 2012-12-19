@@ -10,10 +10,6 @@
 // submissions of changes, fixes or updates are welcomed but not required
 //
 
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenNETCF.IoC
 {

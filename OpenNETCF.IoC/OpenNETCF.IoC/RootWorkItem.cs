@@ -11,9 +11,6 @@
 //
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 using OpenNETCF.IoC.UI;
 
 #if WINDOWS_PHONE

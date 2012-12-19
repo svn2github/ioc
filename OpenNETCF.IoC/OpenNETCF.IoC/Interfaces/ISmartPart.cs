@@ -11,9 +11,6 @@
 //
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -31,7 +28,7 @@ namespace OpenNETCF.IoC.UI
         void Hide();
         IWorkspace Workspace { get; set; }
 
-#if !(WINDOWS_PHONE || IPHONE) 
+#if !(WINDOWS_PHONE || IPHONE || ANDROID) 
         System.Windows.Forms.DockStyle Dock { set; }
         System.Windows.Forms.Control Parent { get; }
 #endif

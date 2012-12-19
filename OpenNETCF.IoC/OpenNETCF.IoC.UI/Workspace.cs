@@ -11,14 +11,9 @@
 //
 
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using OpenNETCF;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -55,7 +50,7 @@ namespace OpenNETCF.IoC.UI
         }
 
         public TSmartPart Show<TSmartPart>()
-            where TSmartPart : SmartPart
+            where TSmartPart : class, ISmartPart
         {
             var existing = SmartParts.FirstOrDefault(s => s is TSmartPart) as TSmartPart;
             if(existing == null)
