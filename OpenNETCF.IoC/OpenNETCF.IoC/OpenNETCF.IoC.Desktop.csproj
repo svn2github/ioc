@@ -92,6 +92,7 @@
     <Compile Include="ResourceModuleInfoStore.cs" />
     <Compile Include="RootWorkItem.cs" />
     <Compile Include="ServiceCollection.cs" />
+    <Compile Include="SmartClientApplication.cs" />
     <Compile Include="WorkItem.cs" />
     <Compile Include="WorkItemController.cs" />
   </ItemGroup>

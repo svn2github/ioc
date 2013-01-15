@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using OpenNETCF.IoC;
+using OpenNETCF;
 
 namespace OpenNETCF.Location
 {

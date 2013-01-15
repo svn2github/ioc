@@ -90,11 +90,29 @@ namespace OpenNETCF.IoC.UI
         {
             if(value)
             {
+                // To "show", all parents must be visible
+                // In the CF, the parent Form's Visible property isn't set until after the ctor has run
+                // so things like Focus and SelectAll on a control inside the SmartPart will fail on first construction
+                // if we don't verify parent visibility
+                SetParentVisibility(this, true);
+
                 base.Show();
             }
             else
             {
                 base.Hide();
+            }
+        }
+
+        private void SetParentVisibility(Control child, bool visible)
+        {
+            if (child.Parent == null)
+            {
+                child.Visible = visible;
+            }
+            else
+            {
+                SetParentVisibility(child.Parent, visible);
             }
         }
 #endif

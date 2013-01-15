@@ -78,15 +78,19 @@
     <Reference Include="mscorlib" />
     <Reference Include="OpenNETCF, Version=2.3.0.10042, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ThirdParty\OpenNETCF.dll</HintPath>
+      <HintPath>..\..\..\ThirdParty\CF\OpenNETCF.dll</HintPath>
     </Reference>
     <Reference Include="OpenNETCF.Configuration, Version=2.3.0.10042, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ThirdParty\OpenNETCF.Configuration.dll</HintPath>
+      <HintPath>..\..\..\ThirdParty\CF\OpenNETCF.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="OpenNETCF.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="OpenNETCF.Drawing, Version=2.3.0.11010, Culture=neutral, PublicKeyToken=e60dbea84bb431b7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\OpenNETCF.IoC.Shared\CF\OpenNETCF.Extensions.dll</HintPath>
+      <HintPath>..\..\..\ThirdParty\CF\OpenNETCF.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenNETCF.Extensions, Version=1.0.11237.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdParty\CF\OpenNETCF.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
