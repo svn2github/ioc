@@ -43,6 +43,11 @@ namespace OpenNETCF.IoC
             CatalogFilePath = uri.LocalPath;
         }
 
+        public Assembly[] GetModuleAssemblies()
+        {
+            return null;
+        }
+
         public string GetModuleListXml()
         {
             try

@@ -11,10 +11,12 @@
 //
 
 
+using System.Reflection;
 namespace OpenNETCF.IoC
 {
     public interface IModuleInfoStore
     {
+        Assembly[] GetModuleAssemblies();
         string GetModuleListXml();
         string CatalogFilePath { get; set; }
     }

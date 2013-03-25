@@ -43,6 +43,11 @@ namespace OpenNETCF.IoC
             CatalogFilePath = resourcePath ?? (m_assembly.GetName().Name + ".ProfileCatalog.xml");
         }
 
+        public Assembly[] GetModuleAssemblies()
+        {
+            return null;
+        }
+
         public string GetModuleListXml()
         {
             var resourceName = ParseResourceName();

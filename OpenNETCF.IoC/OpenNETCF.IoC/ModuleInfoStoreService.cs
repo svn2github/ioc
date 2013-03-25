@@ -52,18 +52,32 @@ namespace OpenNETCF.IoC
                 .IsNotNull(store, "store")
                 .Check();
 
+            // load modules from XML
             string xml = store.GetModuleListXml();
-            if (xml == null) return;
+            if (xml != null)
+            {
 
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.ConformanceLevel = ConformanceLevel.Document;
-            settings.IgnoreWhitespace = true;
-            settings.IgnoreComments = true;
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.ConformanceLevel = ConformanceLevel.Document;
+                settings.IgnoreWhitespace = true;
+                settings.IgnoreComments = true;
 
-            var assemblies = GetAssembliesFromXml(xml);
+                var assemblyNames = GetAssembliesFromXml(xml);
 
-            // load each assembly
-            LoadAssemblies(assemblies);
+                // load each assembly
+                LoadAssemblies(assemblyNames);
+            }
+
+            // now let the IModuleInfoStore directly load assemblies and pass them back
+            var assemblies = store.GetModuleAssemblies();
+
+            if(assemblies != null)
+            {
+                foreach (var assembly in assemblies)
+                {
+                    LoadAssembly(assembly);
+                }
+            }
 
             // now notify all assemblies that all other assemblies are loaded (this is useful when there are module interdependencies
             NotifyAssembliesOfContainerCompletion();

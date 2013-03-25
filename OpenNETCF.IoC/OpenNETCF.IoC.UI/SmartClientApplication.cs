@@ -14,15 +14,23 @@
 using Trace = System.Diagnostics.Debug;
 #endif
 
+#if DESKTOP
+using System.Linq;
+#endif
+
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Threading;
+using System.Reflection;
 
 namespace OpenNETCF.IoC.UI
 {
     public abstract class SmartClientApplication<TShell> : SmartClientApplication
         where TShell : Form
     {
+        public Form ShellForm { get; private set; }
+
         /// <summary>
         /// If <b>true</b>, only one instance of the application will run.  Subsequent attempts will activate the existing app
         /// </summary>
@@ -94,7 +102,6 @@ namespace OpenNETCF.IoC.UI
 
             // create the shell form after all modules are loaded
             // see if there's a registered shell replacement.
-            Form shellForm = null;
             ShellReplacement replacement = null;
 
             if (EnableShellReplacement)
@@ -104,17 +111,19 @@ namespace OpenNETCF.IoC.UI
 
             if ((replacement == null) || (!replacement.ShellReplacementEnabled))
             {
-                shellForm = RootWorkItem.Items.AddNew<TShell>();
+                ShellForm = RootWorkItem.Items.AddNew<TShell>();
             }
             else
             {
-                shellForm = replacement as Form;
+                ShellForm = replacement as Form;
                 Trace.WriteLine("Replacement shell found.", Constants.TraceCategoryName);
             }
 
             AfterShellCreated();
 
-            OnApplicationRun(shellForm);
+            OnApplicationRun(ShellForm);
+
+            OnApplicationClose();
         }
 
         public virtual Type ShellFormType
@@ -128,6 +137,18 @@ namespace OpenNETCF.IoC.UI
 
         protected virtual void BeforeShellCreated()
         {
+        }
+
+        protected virtual void OnApplicationClose()
+        {
+            try
+            {
+                ShellForm.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("ShellForm.Dispose threw: ", ex.Message);
+            }
         }
 
         /// <summary>
