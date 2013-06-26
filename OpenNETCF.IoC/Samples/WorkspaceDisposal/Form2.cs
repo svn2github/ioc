@@ -25,7 +25,7 @@ namespace WorkspaceDisposal
             deckWorkspace1.SmartPartDeactivated += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartDeactivated);
             deckWorkspace1.SmartPartClosing += new EventHandler<DataEventArgs<ISmartPart>>(deckWorkspace1_SmartPartClosing);
 
-            deckWorkspace1.Show(view);
+//            deckWorkspace1.Show(view);
 
             this.KeyPreview = true;
         }
@@ -51,6 +51,28 @@ namespace WorkspaceDisposal
         }
 
         private void hide_Click(object sender, EventArgs e)
+        {
+            var sp = deckWorkspace1.ActiveSmartPart;
+
+            switch (state % 2)
+            {
+                case 1:
+                    // close and dispose
+                    deckWorkspace1.Close(view);
+                    view = null;
+                    hide.Text = "Show<>";
+                    GC.Collect();
+                    break;
+                case 0:
+                    // recreate and show
+                    view = deckWorkspace1.Show<ViewA>();
+                    hide.Text = "Close";
+                    break;
+            }
+
+            state++;
+        }
+        private void hide_Click2(object sender, EventArgs e)
         {
             var sp = deckWorkspace1.ActiveSmartPart;
 

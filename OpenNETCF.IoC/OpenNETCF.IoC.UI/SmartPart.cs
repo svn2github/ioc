@@ -11,6 +11,7 @@
 //
 
 using System.Windows.Forms;
+using System;
 
 namespace OpenNETCF.IoC.UI
 {
@@ -30,6 +31,16 @@ namespace OpenNETCF.IoC.UI
             this.Size = new System.Drawing.Size(171, 169);
             this.ResumeLayout(false);
 #endif
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                GC.ReRegisterForFinalize(this);
+            }
         }
 
         public virtual void OnActivated() 
@@ -73,7 +84,7 @@ namespace OpenNETCF.IoC.UI
                 if (Visible == value) return;
 
                 SetVisibleCore(value);
-
+                
                 if (value)
                 {
                     OnActivated();

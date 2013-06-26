@@ -20,6 +20,11 @@ namespace WorkspaceDisposal
             textBox1.Text = "Foo";
         }
 
+        ~ViewA()
+        {
+            Debug.WriteLine("Finalized");
+        }
+
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
             Debug.WriteLine("Keypress");
